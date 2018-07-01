@@ -109,20 +109,20 @@ cc.Class({
         this.frame.node.runAction(pumpUp) 
 
         if(this.game.getComponent('Game').comboctr >=5 ){
-            this.game.getComponent('Game').burgNum += Math.round (this.game.getComponent('Game').comboctr /2 )
+            this.game.getComponent('Game').score += Math.round (this.game.getComponent('Game').comboctr /2 )
         }
         if(this.level ==0){
         
             switch(this.mode){
                 case 'bu':
-                this.game.getComponent('Game').burgNum+=4*this.game.getComponent('Game').burgEffect
+                this.game.getComponent('Game').score+=4*this.game.getComponent('Game').burgEffect
                 
                     break
                 case 'pa':
-                this.game.getComponent('Game').panNum+=4*this.game.getComponent('Game').panEffect
+                this.game.getComponent('Game').score+=4*this.game.getComponent('Game').panEffect
                     break
                 case 'pi':
-                this.game.getComponent('Game').pizNum+=4*this.game.getComponent('Game').pizEffect
+                this.game.getComponent('Game').score+=4*this.game.getComponent('Game').pizEffect
                     break
             }
         }
@@ -130,13 +130,13 @@ cc.Class({
         
             switch(this.mode){
                 case 'bu':
-                this.game.getComponent('Game').burgNum+=8*this.game.getComponent('Game').burgEffect
+                this.game.getComponent('Game').score+=8*this.game.getComponent('Game').burgEffect
                     break
                 case 'pa':
-                this.game.getComponent('Game').panNum+=8*this.game.getComponent('Game').panEffect
+                this.game.getComponent('Game').score+=8*this.game.getComponent('Game').panEffect
                     break
                 case 'pi':
-                this.game.getComponent('Game').pizNum+=8*this.game.getComponent('Game').pizEffect
+                this.game.getComponent('Game').score+=8*this.game.getComponent('Game').pizEffect
                     break
             }
         }
@@ -144,8 +144,8 @@ cc.Class({
              
             switch(this.mode){
                 case 'bu':
-                    this.game.getComponent('Game').burgNum+=16*this.game.getComponent('Game').burgEffect
                     this.game.getComponent('Game').burgEffect = 2
+                    this.game.getComponent('Game').score+=16*this.game.getComponent('Game').burgEffect 
                     var burgEnd  = function(){this.game.getComponent('Game').burgEffect = 1}
                     var t = this
                     var t1 = cc.sequence( cc.delayTime(5),cc.callFunc( burgEnd, t)  )
@@ -153,16 +153,16 @@ cc.Class({
 
                     break
                 case 'pa':
-                    this.game.getComponent('Game').panNum+=16*this.game.getComponent('Game').panEffect
                     this.game.getComponent('Game').panEffect = 2
+                    this.game.getComponent('Game').score+=16*this.game.getComponent('Game').panEffect 
                     var panEnd  = function(){this.game.getComponent('Game').panEffect = 1}
                     var t = this
                     var t2 = cc.sequence( cc.delayTime(5),cc.callFunc( panEnd, t)  )
                     this.node.runAction(t2 )
                     break
                 case 'pi':
-                    this.game.getComponent('Game').pizNum+=16*this.game.getComponent('Game').pizEffect
                     this.game.getComponent('Game').pizEffect = 2
+                    this.game.getComponent('Game').score+=16*this.game.getComponent('Game').pizEffect 
                     var panEnd  = function(){this.game.getComponent('Game').pizEffect = 1}
                     var t = this
                     var t3 = cc.sequence( cc.delayTime(5),cc.callFunc( panEnd, t)  )
@@ -177,6 +177,15 @@ cc.Class({
            var kill = function(){
             
             this.game.getComponent('Game').showIndic(t)
+            if(this.game.getComponent('Game').pizEffect ==2 && this.game.getComponent('Game').panEffect ==2 &&this.game.getComponent('Game').burgEffect ==2 ){
+
+                this.game.getComponent('Game').frenzying = true
+                var notf = function(){
+                    this.game.getComponent('Game').frenzying = false }
+                var timernotf = cc.sequence (cc.delayTime(4) , cc.callFunc(notf, this))
+                this.node.runAction(timernotf)
+                
+            } 
             
             var barstu = cc.instantiate( this.game.getComponent('Game').threeBurstEffect); 
             prevNode.node.addChild(barstu);  
@@ -215,21 +224,42 @@ cc.Class({
 
 
     }, 
+    levelFrenzy(){
+      //  this.game.getComponent('Game').frenzying = false
+        var frenzyFx =cc.sequence(  cc.scaleTo(0.4 ,0.228 ,0.228)   , cc.scaleTo(0.4 ,0.2 ,0.2)  ).repeat(10)
+        this.frame.node.runAction(frenzyFx)
+        
+        //var frenzyFx =cc.sequence(  cc.scaleTo(0.3 ,0.228 ,0.228)   , cc.scaleTo(0.3 ,0.2 ,0.2)  )
+
+      /**  var frenzyFx =cc.sequence(  cc.scaleTo(0.4 ,0.228 ,0.228)   , cc.scaleTo(0.4 ,0.2 ,0.2)  ).repeat(10)
+        this.frame.node.runAction(frenzyFx)
+         this.game.getComponent('Game').frenzying = true
+         var notf = function(){
+            this.game.getComponent('Game').frenzying = false
+            this.game.getComponent('Game').burgEffect =1
+            this.game.getComponent('Game').pizEffect = 1
+            this.game.getComponent('Game').panEffect = 1}
+        var timernotf = cc.sequence (cc.delayTime(4) , cc.callFunc(notf, this))
+        
+        this.node.runAction(timernotf)
+        this.game.getComponent('Game').burgEffect = 3
+        this.game.getComponent('Game').pizEffect = 3
+       this.game.getComponent('Game').panEffect = 3*/
+
+            
+        //var frenzyFx =cc.sequence(  cc.spawn(cc.scaleTo(0.3 ,0.228 ,0.228) , cc.fadeTo(0.3, 200)) , cc.spawn(cc.scaleTo(0.3 ,0.2 ,0.2) , cc.fadeTo(0.3, 255)))
+        
+
+       
+       
+   
+    },
 
     update (dt) {
-
-        //frenzy
-        if(this.game.getComponent('Game').burgEffect ==2.5 && this.game.getComponent('Game').pizEffect == 2.5 &&this.game.getComponent('Game').panEffect ==2.5){
-            console.log('frenzy')
-            var frenzy = cc.sequence(cc.scaleTo(0.1, 0.225, 0.225) , cc.scaleTo(0.1, 0.2,0.2))
-            //var frenzy = cc.sequence(cc.spawn(cc.scaleTo(0.1 , 0.23 , 0.23 ) ,cc.tintTo( 0.1, 200,255,200) )  , cc.spawn(cc.scaleTo(0.1 , 0.2  , 0.2  )  , cc.tintTo(0.1, 255,255,255)))
-            this.frame.node.runAction(frenzy)
-        }
-         //console.log(this.game.getComponent('Game').lapse) 
-         //last 3 seconds
-        if(this.game.getComponent('Game').lapse >=57 && this.game.getComponent('Game').lapse <60   ){
-            //this.callonce = true
-
+        //if(this.game.getComponent('Game').frenzying){}
+        if(this.game.getComponent('Game').pizEffect ==2 && this.game.getComponent('Game').panEffect ==2 &&this.game.getComponent('Game').burgEffect ==2  &&!this.game.getComponent('Game').frenzying){this.levelFrenzy()}
+        if(this.game.getComponent('Game').frenzying == true)this.levelFrenzy()
+        if(this.game.getComponent('Game').lapse >=57 && this.game.getComponent('Game').lapse <60   ){ 
             var shake = cc.sequence(cc.delayTime(0.7) ,cc.moveBy(0.1 , cc.randomMinus1To1()*1 , cc.randomMinus1To1()*1 )  , cc.moveTo(0.1 , 0,0 ) ) 
             this.frame.node.runAction(shake)
 
