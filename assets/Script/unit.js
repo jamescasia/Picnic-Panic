@@ -177,14 +177,20 @@ cc.Class({
            var kill = function(){
             
             this.game.getComponent('Game').showIndic(t)
-            if(this.game.getComponent('Game').pizEffect ==2 && this.game.getComponent('Game').panEffect ==2 &&this.game.getComponent('Game').burgEffect ==2 ){
+            if(this.game.getComponent('Game').pizEffect ==2 && this.game.getComponent('Game').panEffect ==2 &&this.game.getComponent('Game').burgEffect ==2  &&!this.game.getComponent('Game').frenzying  ){
+                console.log('tzuy is cute')
 
-                this.game.getComponent('Game').frenzying = true 
+                t.game.getComponent('Game').frenzying = true 
                 var notf = function(){
-                    this.game.getComponent('Game').frenzying = false 
+                    console.log('tzuy is cuter')
+                    t.game.getComponent('Game').frenzying = false 
+                    this.game.getComponent('Game').burgEffect =1
+                    this.game.getComponent('Game').pizEffect = 1
+                    this.game.getComponent('Game').panEffect = 1
+
                  }
-                var timernotf = cc.sequence (cc.delayTime(4) , cc.callFunc(notf, this))
-                this.node.runAction(timernotf)
+                var timernotf = cc.sequence (cc.delayTime(4) , cc.callFunc(notf, t))
+                t.node.runAction(timernotf)
                 
             } 
             
@@ -227,10 +233,10 @@ cc.Class({
     }, 
     levelFrenzy(){
       // this.game.getComponent('Game').frenzying = false
-      this.game.getComponent('Game').pizEffect =3
+    this.game.getComponent('Game').pizEffect =3
         this.game.getComponent('Game').panEffect =3
         this.game.getComponent('Game').burgEffect =3
-      var frenzyFx =cc.sequence(  cc.spawn(cc.scaleTo(0.4 ,0.22 ,0.22) , cc.tintTo(0.4, 180,255,223)   ) , cc.spawn(cc.scaleTo(0.4 ,0.2 ,0.2) , cc.tintTo(0.4, 255,255,255)  )) 
+      var frenzyFx =cc.sequence(  cc.scaleTo(0.4 ,0.22 ,0.22)     ,  cc.scaleTo(0.4 ,0.2 ,0.2)   ) 
       //var frenzyFx =cc.sequence( cc.scaleTo(0 , 0.22, 0.22),cc.delayTime(3.5), cc.scaleTo(0.2 , 0.2 , 0.2) ) 
       this.frame.node.runAction(frenzyFx) 
         //var frenzyFx =cc.sequence(  cc.scaleTo(0.3 ,0.228 ,0.228)   , cc.scaleTo(0.3 ,0.2 ,0.2)  )
@@ -263,12 +269,7 @@ cc.Class({
         //if(this.game.getComponent('Game').frenzying){}
        // if(this.game.getComponent('Game').pizEffect ==2 && this.game.getComponent('Game').panEffect ==2 &&this.game.getComponent('Game').burgEffect ==2  &&!this.game.getComponent('Game').frenzying){this.levelFrenzy()}
         if(this.game.getComponent('Game').frenzying == true  )this.levelFrenzy()
-        else {
-            this.game.getComponent('Game').pizEffect =1
-        this.game.getComponent('Game').panEffect =1
-        this.game.getComponent('Game').burgEffect =1
-        }
-       
+        
         if(this.game.getComponent('Game').lapse >=57 && this.game.getComponent('Game').lapse <60   ){ 
             var shake = cc.sequence(cc.skewTo(0.1 , cc.randomMinus1To1()*16 , cc.randomMinus1To1()*16 )  , cc.skewTo(0.1 , 0,0 ) ) 
             this.frame.node.runAction(shake)
