@@ -42,6 +42,7 @@ cc.Class({
         selectAnim:null,
         initctr:0,  
         callonce:false, 
+        spawnFactor:1
 
     },
  
@@ -82,7 +83,7 @@ cc.Class({
 
         this.scheduleOnce(function() {
             this.initialize()
-        },   ( Math.round(cc.rand() )  %3 )+1.35 );
+        },   ( this.spawnFactor*(Math.round(cc.rand() )  %3 )+1.35)  );
             
     },
     fuse(){
@@ -144,9 +145,10 @@ cc.Class({
              
             switch(this.mode){
                 case 'bu':
-                    this.game.getComponent('Game').burgEffect = 2
+                    this.game.getComponent('Game').burgEffect = 2 
                     this.game.getComponent('Game').score+=16*this.game.getComponent('Game').burgEffect 
-                    var burgEnd  = function(){this.game.getComponent('Game').burgEffect = 1}
+                    var burgEnd  = function(){ 
+                        this.game.getComponent('Game').burgEffect = 1}
                     var t = this
                     var t1 = cc.sequence( cc.delayTime(5),cc.callFunc( burgEnd, t)  )
                     this.node.runAction(t1 )
@@ -236,39 +238,21 @@ cc.Class({
     this.game.getComponent('Game').pizEffect =3
         this.game.getComponent('Game').panEffect =3
         this.game.getComponent('Game').burgEffect =3
-      var frenzyFx =cc.sequence(  cc.scaleTo(0.4 ,0.22 ,0.22)     ,  cc.scaleTo(0.4 ,0.2 ,0.2)   ) 
+      //var frenzyFx =cc.sequence(  cc.scaleTo(0.4 ,0.22 ,0.22)     ,  cc.scaleTo(0.4 ,0.2 ,0.2)   ) 
       //var frenzyFx =cc.sequence( cc.scaleTo(0 , 0.22, 0.22),cc.delayTime(3.5), cc.scaleTo(0.2 , 0.2 , 0.2) ) 
-      this.frame.node.runAction(frenzyFx) 
-        //var frenzyFx =cc.sequence(  cc.scaleTo(0.3 ,0.228 ,0.228)   , cc.scaleTo(0.3 ,0.2 ,0.2)  )
-
-      /**  var frenzyFx =cc.sequence(  cc.scaleTo(0.4 ,0.228 ,0.228)   , cc.scaleTo(0.4 ,0.2 ,0.2)  ).repeat(10)
-        this.frame.node.runAction(frenzyFx)
-         this.game.getComponent('Game').frenzying = true
-         var notf = function(){
-            this.game.getComponent('Game').frenzying = false
-            this.game.getComponent('Game').burgEffect =1
-            this.game.getComponent('Game').pizEffect = 1
-            this.game.getComponent('Game').panEffect = 1}
-        var timernotf = cc.sequence (cc.delayTime(4) , cc.callFunc(notf, this))
-        
-        this.node.runAction(timernotf)
-        this.game.getComponent('Game').burgEffect = 3
-        this.game.getComponent('Game').pizEffect = 3
-       this.game.getComponent('Game').panEffect = 3*/
-
-            
-        //var frenzyFx =cc.sequence(  cc.spawn(cc.scaleTo(0.3 ,0.228 ,0.228) , cc.fadeTo(0.3, 200)) , cc.spawn(cc.scaleTo(0.3 ,0.2 ,0.2) , cc.fadeTo(0.3, 255)))
-        
-
+      //this.frame.node.runAction(frenzyFx) 
+      this.frame.node.scale = cc.v2( 0.22, 0.22)
+   
        
        
    
     },
 
     update (dt) {
-        //if(this.game.getComponent('Game').frenzying){}
-       // if(this.game.getComponent('Game').pizEffect ==2 && this.game.getComponent('Game').panEffect ==2 &&this.game.getComponent('Game').burgEffect ==2  &&!this.game.getComponent('Game').frenzying){this.levelFrenzy()}
-        if(this.game.getComponent('Game').frenzying == true  )this.levelFrenzy()
+         if(this.game.getComponent('Game').frenzying )this.levelFrenzy() 
+         else this.frame.node.scale = cc.v2(0.2, 0.2)
+        if(this.game.getComponent('Game').burgEffect >=2) this.spawnFactor = 0.4
+        else this.spawnFactor = 1
         
         if(this.game.getComponent('Game').lapse >=57 && this.game.getComponent('Game').lapse <60   ){ 
             var shake = cc.sequence(cc.skewTo(0.1 , cc.randomMinus1To1()*16 , cc.randomMinus1To1()*16 )  , cc.skewTo(0.1 , 0,0 ) ) 
@@ -283,6 +267,7 @@ cc.Class({
       
         if(this.selected){ 
             this.frame.node.scale = cc.v2(0.23,0.23)
+            this.frame.node.z= 100
             
             if(this.level ===0){
                 switch(this.mode){
@@ -378,8 +363,8 @@ cc.Class({
     },
     addFood(){
         if(this.isEmpty){
-        var rand =  Math.round( cc.rand() )%3 
-        //console.log("random" + rand)
+        var rand =  parseInt( cc.rand() )%3 
+        //console.log("random" + rand) 0 1 2 3 4 5 
         this. frame.spriteFrame = this.choices[rand]
         this.frame.node.scale = cc.v2(0,0) 
         var born =cc.spawn(

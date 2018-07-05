@@ -51,19 +51,29 @@ cc.Class({
         spawnBoosts:0 ,
         freezeBoosts:0,
         frenzying:false,
+        freezing:false,
         frenzyonce:false,
         freezeonce:false,
-        spawnonce:false
+        spawnonce:false,
+        numOfGames:0
  
     }, 
 
     onLoad () {
+        if(cc.sys.localStorage.getItem('numOfGames')!= null ) this.numOfGames = parseInt(cc.sys.localStorage.getItem('highestScore'))
+        else this.numOfGames= 0
         if(cc.sys.localStorage.getItem('highestScore')!= null ) this.highestScore = parseInt(cc.sys.localStorage.getItem('highestScore'))
         else this.highestScore= 0
         if(cc.sys.localStorage.getItem('frenzy') != null) this.frenzyBoosts = parseInt(cc.sys.localStorage.getItem('frenzy'))
         else  this.frenzyBoosts = 0
+        if(cc.sys.localStorage.getItem('freeze') != null) this.freezeBoosts = parseInt(cc.sys.localStorage.getItem('freeze'))
+        else  this.freezeBoosts = 0
+        if(cc.sys.localStorage.getItem('spawn') != null) this.spawnBoosts = parseInt(cc.sys.localStorage.getItem('spawn'))
+        else  this.spawnBoosts = 0
 
-        this.boosters.getChildByName('flabel').getComponent(cc.Label).string =this.frenzyBoosts
+        this.boosters.getChildByName('frenzy').getChildByName('flabel').getComponent(cc.Label).string =this.frenzyBoosts
+        this.boosters.getChildByName('freeze').getChildByName('flabel').getComponent(cc.Label).string =this.freezeBoosts
+        this.boosters.getChildByName('spawn').getChildByName('flabel').getComponent(cc.Label).string =this.spawnBoosts
 
         
     },
@@ -73,32 +83,54 @@ cc.Class({
         this.comboctr  = 0
         var timectr = 0
         var t= this 
+        var pauseAdd = 0
+        var inc = 0.1
+        var left = 60
 
         var gameTimer = t.schedule(function() { 
+            
 
-            timectr+= 0.1
-            var left =  (60- timectr  ).toFixed(2) 
+             
+            
+          
+            
+             if (this.freezing ) { 
+                timectr+= 0.0
+            }
+            else timectr+= 0.1
+            left =  (60- timectr  ).toFixed(2)  
+            t.timebar.getComponent(cc.ProgressBar).progress = left/60
             this.lapse = timectr
 
             if(left <=0 &&!this.gameover){
+                
                 if(this.score >= this.highestScore) this.highestScore = this.score
                 cc.sys.localStorage.setItem('highestScore',  (t.highestScore)); 
                 t.endPanel.getComponent('layoutScript').showPanel(t.score ,t.highestCombo )
                 t.gameover = true
-                t.matrix.destroy() 
+                this.numOfGames+=1
+                t.matrix.destroy()
+                if(this.numOfGames% 3 == 0 && this.numOfGames >=3) {
+                    this.frenzyBoosts+=1
+                    cc.sys.localStorage.setItem('frenzy',  this.frenzyBoosts); 
+
+
+                }
+                cc.sys.localStorage.setItem('numOfGames',  this.numOfGames); 
+
                 
 
                 
             }
            
-            t.timebar.getComponent(cc.ProgressBar).progress = left/60
+            
 
 
 
             t.timeLabel.getComponent(cc.Label).string = String(left).replace("." , ':')
 
 
-        }, 0.1, 600 ,1.5);
+        }, 0.1, 640,1.5);
         
         
          
@@ -120,11 +152,35 @@ cc.Class({
             console.log('sanaouputa')}
         var frenzyTime =cc.sequence( cc.delayTime(3.5)  ,cc.callFunc(ends,t)) 
         t.boosters.runAction(frenzyTime) 
+        this.frenzyonce = true
+        
+        this.boosters.getChildByName('frenzy').getChildByName('flabel').getComponent(cc.Label).string =this.frenzyBoosts
         }
 
 
 
     },
+
+    useFreezeBoost(){
+        if(this.freezeBoosts>=1 && !this.freezeonce){
+            this.freezeBoosts-=1
+            if(this.freezeBoosts <= 0) this.freezeBoosts = 0
+            cc.sys.localStorage.setItem('freeze',  this.freezeBoosts); 
+            this.freezing =true
+            console.log('wtf')
+            this.freezeonce =true
+            var unfreeze = function(){
+                this.freezing = false
+            }
+            this.matrix.runAction(  cc.sequence(cc.delayTime(4), cc.callFunc(unfreeze, this) ))
+            this.boosters.getChildByName('freeze').getChildByName('flabel').getComponent(cc.Label).string =this.freezeBoosts
+        }
+    },
+
+    useSpawnBoost(){
+
+        
+    }, 
     
     showIndic(t){ 
         
@@ -152,6 +208,8 @@ cc.Class({
 
 
    update (dt) { 
+        
+        this.boosters.getChildByName('spawn').getChildByName('flabel').getComponent(cc.Label).string =this.spawnBoosts
        
 
  
@@ -160,8 +218,7 @@ cc.Class({
        
     
        this.scoreLabel.getComponent(cc.Label).string = this.score
-       this.comboLabel.getComponent(cc.Label).string = this.comboctr
-       this.boosters.getChildByName('flabel').getComponent(cc.Label).string =this.frenzyBoosts
+       this.comboLabel.getComponent(cc.Label).string = this.comboctr 
 
         
 
@@ -226,7 +283,7 @@ cc.Class({
 
                 }
                 var t = this
-                var times = cc.sequence( cc.delayTime(1.2),cc.callFunc( comboEnd, t)  )
+                var times = cc.sequence( cc.delayTime(1.25),cc.callFunc( comboEnd, t)  )
                 this.node.runAction(times )
                  
                 
