@@ -18,12 +18,12 @@ cc.Class({
  
     }, 
 
-    onLoad () { 
+    onLoad () {  
         if (cc.sys.localStorage.getItem('frenzy') !=null) this.frenzyBoosts =  parseInt (cc.sys.localStorage.getItem('frenzy'))
         else this.frenzyBoosts = 0, cc.sys.localStorage.setItem('frenzy',  this.frenzyBoosts); 
-        if (cc.sys.localStorage.getItem('freeze') !=null) this.freezeBoosts =  parseInt (cc.sys.localStorage.getItem('frenzy'))
+        if (cc.sys.localStorage.getItem('freeze') !=null) this.freezeBoosts =  parseInt (cc.sys.localStorage.getItem('freeze'))
         else this.freezeBoosts = 0, cc.sys.localStorage.setItem('freeze',  this.freezeBoosts); 
-        if (cc.sys.localStorage.getItem('spawn') !=null) this.spawnBoosts =  parseInt (cc.sys.localStorage.getItem('frenzy'))
+        if (cc.sys.localStorage.getItem('spawn') !=null) this.spawnBoosts =  parseInt (cc.sys.localStorage.getItem('spawn'))
         else this.spawnBoosts = 0, cc.sys.localStorage.setItem('spawn',  this.spawnBoosts); 
         if (cc.sys.localStorage.getItem('coins') !=null) this.coins =  parseInt (cc.sys.localStorage.getItem('coins'))
         else this.coins = 0, cc.sys.localStorage.setItem('coins',  this.coins); 

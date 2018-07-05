@@ -55,7 +55,8 @@ cc.Class({
         frenzyonce:false,
         freezeonce:false,
         spawnonce:false,
-        numOfGames:0
+        spawning:false,
+        numOfGames:0, 
  
     }, 
 
@@ -79,6 +80,7 @@ cc.Class({
     },
 
     start () {
+
         this.highestCombo = 0
         this.comboctr  = 0
         var timectr = 0
@@ -112,7 +114,11 @@ cc.Class({
                 t.matrix.destroy()
                 if(this.numOfGames% 3 == 0 && this.numOfGames >=3) {
                     this.frenzyBoosts+=1
+                    this.freezeBoosts+=1
+                    this.spawnBoosts+=1
                     cc.sys.localStorage.setItem('frenzy',  this.frenzyBoosts); 
+                    cc.sys.localStorage.setItem('freeze',  this.freezeBoosts); 
+                    cc.sys.localStorage.setItem('spawn',  this.spawnBoosts); 
 
 
                 }
@@ -140,34 +146,57 @@ cc.Class({
         this.frenzyBoosts-=1
         if(this.frenzyBoosts <= 0) this.frenzyBoosts = 0
         cc.sys.localStorage.setItem('frenzy',  this.frenzyBoosts); 
-        
-        var t = this
-        t.frenzying = true
-        var ends = function(){
-            this.burgEffect =1 
-            this.panEffect = 1
-            this.pizEffect = 1
-            console.log('sanaouputa')
-            t.frenzying = false
-            console.log('sanaouputa')}
-        var frenzyTime =cc.sequence( cc.delayTime(3.5)  ,cc.callFunc(ends,t)) 
-        t.boosters.runAction(frenzyTime) 
+        this.frenzyEffect()
         this.frenzyonce = true
+        
+        
         
         this.boosters.getChildByName('frenzy').getChildByName('flabel').getComponent(cc.Label).string =this.frenzyBoosts
         }
+        
 
 
 
     },
+    frenzyEffect(){
+        var t = this
+        //t.frenzying = true
+        this.burgEffect =3
+        this.panEffect = 3
+        this.pizEffect = 3
+        var ends = function(){
+            this.burgEffect =1 
+            this.panEffect = 1
+            this.pizEffect = 1 
+        }
+        var frenzyTime =cc.sequence(  cc.delayTime(4) ,cc.callFunc(ends,t)) 
+        this.matrix.runAction(frenzyTime)
+            this.oneone.getComponent('unit').frenzySolo()
+            this.onetwo.getComponent('unit').frenzySolo()
+            this.onethree.getComponent('unit').frenzySolo()
+            this.onefour.getComponent('unit').frenzySolo()
+            this.twoone.getComponent('unit').frenzySolo()
+            this.twotwo.getComponent('unit').frenzySolo()
+            this.twothree.getComponent('unit').frenzySolo()
+            this.twofour.getComponent('unit').frenzySolo()
+            this.threeone.getComponent('unit').frenzySolo()
+            this.threetwo.getComponent('unit').frenzySolo()
+            this.threethree.getComponent('unit').frenzySolo()
+            this.threefour.getComponent('unit').frenzySolo()
+            this.fourone.getComponent('unit').frenzySolo()
+            this.fourtwo.getComponent('unit').frenzySolo()
+            this.fourthree.getComponent('unit').frenzySolo()
+            this.fourfour.getComponent('unit').frenzySolo()
+
+ 
+    }, 
 
     useFreezeBoost(){
         if(this.freezeBoosts>=1 && !this.freezeonce){
             this.freezeBoosts-=1
             if(this.freezeBoosts <= 0) this.freezeBoosts = 0
             cc.sys.localStorage.setItem('freeze',  this.freezeBoosts); 
-            this.freezing =true
-            console.log('wtf')
+            this.freezing =true 
             this.freezeonce =true
             var unfreeze = function(){
                 this.freezing = false
@@ -178,6 +207,21 @@ cc.Class({
     },
 
     useSpawnBoost(){
+
+        if(this.spawnBoosts>=1 && !this.spawnonce){
+            this.spawnBoosts-=1
+            if(this.spawnBoosts <= 0) this.spawnBoosts = 0
+            cc.sys.localStorage.setItem('spawn',  this.spawnBoosts); 
+            this.spawnonce = true
+            this.spawning =true
+            var unspawn = function(){this.spawning = false}
+            this.matrix.runAction(  cc.sequence(cc.delayTime(3), cc.callFunc(unspawn, this) ))
+
+            
+            
+            
+            this.boosters.getChildByName('spawn').getChildByName('flabel').getComponent(cc.Label).string =this.spawnBoosts
+        }
 
         
     }, 
@@ -207,7 +251,7 @@ cc.Class({
     },
 
 
-   update (dt) { 
+   update (dt) {  
         
         this.boosters.getChildByName('spawn').getChildByName('flabel').getComponent(cc.Label).string =this.spawnBoosts
        

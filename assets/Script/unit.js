@@ -42,7 +42,7 @@ cc.Class({
         selectAnim:null,
         initctr:0,  
         callonce:false, 
-        spawnFactor:1
+        spawnFactor:1,
 
     },
  
@@ -86,6 +86,19 @@ cc.Class({
         },   ( this.spawnFactor*(Math.round(cc.rand() )  %3 )+1.35)  );
             
     },
+    frenzySolo(){
+        var effect = cc.sequence(
+            cc.scaleTo(0.1  , 0.22 , 0.22).easing(cc.easeSineIn()) ,
+            cc.spawn (cc.scaleTo(3.8  , 0.225 , 0.225), cc.sequence(cc.fadeTo(0.19 ,170),cc.fadeTo(0.19,255)  )   ),
+            cc.scaleTo(0.1 , 0.2 ,0.2).easing(cc.easeSineOut()) 
+              //cc.spawn ( cc.fadeTo ( 0.4 , 190), cc.scaleTo(0.4, 0.22, 0.22) ).easing(cc.easeSineIn()) , 
+              //cc.spawn ( cc.fadeTo ( 0.4 , 255), cc.scaleTo(0.4, 0.2, 0.2) ).easing(cc.easeSineOut()) 
+            )
+        
+
+
+        this.frame.node.runAction(effect)
+    }, 
     fuse(){
         this.selected = false
         
@@ -179,21 +192,11 @@ cc.Class({
            var kill = function(){
             
             this.game.getComponent('Game').showIndic(t)
-            if(this.game.getComponent('Game').pizEffect ==2 && this.game.getComponent('Game').panEffect ==2 &&this.game.getComponent('Game').burgEffect ==2  &&!this.game.getComponent('Game').frenzying  ){
+            if(this.game.getComponent('Game').pizEffect ==2 && this.game.getComponent('Game').panEffect ==2 &&this.game.getComponent('Game').burgEffect ==2 ){
                 console.log('tzuy is cute')
-
-                t.game.getComponent('Game').frenzying = true 
-                var notf = function(){
-                    console.log('tzuy is cuter')
-                    t.game.getComponent('Game').frenzying = false 
-                    this.game.getComponent('Game').burgEffect =1
-                    this.game.getComponent('Game').pizEffect = 1
-                    this.game.getComponent('Game').panEffect = 1
-
-                 }
-                var timernotf = cc.sequence (cc.delayTime(4) , cc.callFunc(notf, t))
-                t.node.runAction(timernotf)
-                
+                this.game.getComponent('Game').frenzyEffect()
+ 
+            
             } 
             
             var barstu = cc.instantiate( this.game.getComponent('Game').threeBurstEffect); 
@@ -232,25 +235,9 @@ cc.Class({
         this.level+=1
 
 
-    }, 
-    levelFrenzy(){
-      // this.game.getComponent('Game').frenzying = false
-    this.game.getComponent('Game').pizEffect =3
-        this.game.getComponent('Game').panEffect =3
-        this.game.getComponent('Game').burgEffect =3
-      //var frenzyFx =cc.sequence(  cc.scaleTo(0.4 ,0.22 ,0.22)     ,  cc.scaleTo(0.4 ,0.2 ,0.2)   ) 
-      //var frenzyFx =cc.sequence( cc.scaleTo(0 , 0.22, 0.22),cc.delayTime(3.5), cc.scaleTo(0.2 , 0.2 , 0.2) ) 
-      //this.frame.node.runAction(frenzyFx) 
-      this.frame.node.scale = cc.v2( 0.22, 0.22)
-   
-       
-       
-   
-    },
+    },  
 
-    update (dt) {
-         if(this.game.getComponent('Game').frenzying )this.levelFrenzy() 
-         else this.frame.node.scale = cc.v2(0.2, 0.2)
+    update (dt) { 
         if(this.game.getComponent('Game').burgEffect >=2) this.spawnFactor = 0.4
         else this.spawnFactor = 1
         
@@ -363,6 +350,7 @@ cc.Class({
     },
     addFood(){
         if(this.isEmpty){
+            if(this.game.getComponent('Game').spawning) this.level =2
         var rand =  parseInt( cc.rand() )%3 
         //console.log("random" + rand) 0 1 2 3 4 5 
         this. frame.spriteFrame = this.choices[rand]
