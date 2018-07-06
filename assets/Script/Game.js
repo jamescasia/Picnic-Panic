@@ -92,10 +92,7 @@ cc.Class({
         var gameTimer = t.schedule(function() { 
             
 
-             
-            
-          
-            
+              
              if (this.freezing ) { 
                 timectr+= 0.0
             }
@@ -140,7 +137,7 @@ cc.Class({
         
         
          
-    },
+    }, 
     useFrenzyBoost(){
         if(this.frenzyBoosts>=1 && !this.frenzyonce){
         this.frenzyBoosts-=1

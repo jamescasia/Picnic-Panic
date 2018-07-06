@@ -71,6 +71,10 @@ cc.Class({
         this.initctr +=1
 
     },
+    indicated(){
+
+        
+    },
     death(){
         this.level = 0
         if(this.level <2){
@@ -83,7 +87,7 @@ cc.Class({
 
         this.scheduleOnce(function() {
             this.initialize()
-        },   ( this.spawnFactor*(Math.round(cc.rand() )  %3 )+1.35)  );
+        },   ( this.spawnFactor*(Math.round(cc.rand() )  %3 )+ (1.35*this.spawnFactor))   );
             
     },
     frenzySolo(){
@@ -154,7 +158,7 @@ cc.Class({
                     break
             }
         }
-        else if(this.level==2){
+        else if(this.level==2){ 
              
             switch(this.mode){
                 case 'bu':
@@ -165,6 +169,8 @@ cc.Class({
                     var t = this
                     var t1 = cc.sequence( cc.delayTime(5),cc.callFunc( burgEnd, t)  )
                     this.node.runAction(t1 )
+                    
+                    
 
                     break
                 case 'pa':
@@ -209,7 +215,7 @@ cc.Class({
             prevNode.frame.spriteFrame = null
         } 
 
-            var explode = cc.sequence( 
+            var explode = cc.sequence(  
                 cc.spawn(
                     // cc.follow(1, prevNode.node), 
                     cc.moveTo(1.2 ,  (prevNode.node.x -t.node.x)/2, (prevNode.node.y -t.node.y)/2 ).easing(cc.easeExponentialIn()),                  
@@ -218,7 +224,7 @@ cc.Class({
                 
                       cc.callFunc(kill , t)
             ).speed(2)
-            var explode2 = cc.sequence( 
+            var explode2 = cc.sequence(  
                 cc.spawn(
                     cc.moveTo(1.2 ,    0.5*( t.node.x -prevNode.node.x) ,0.5*(t.node.y -prevNode.node.y)).easing(cc.easeExponentialIn()),
                     cc.fadeTo(0.7 ,145)
@@ -238,7 +244,7 @@ cc.Class({
     },  
 
     update (dt) { 
-        if(this.game.getComponent('Game').burgEffect >=2) this.spawnFactor = 0.4
+        if(this.game.getComponent('Game').burgEffect >=2) this.spawnFactor = 0.2
         else this.spawnFactor = 1
         
         if(this.game.getComponent('Game').lapse >=57 && this.game.getComponent('Game').lapse <60   ){ 

@@ -70,7 +70,7 @@
     "_enabled": true,
     "_custom": false,
     "_file": {
-      "__uuid__": "b5d46684-e3fc-416c-b703-32cefc47b4b9"
+      "__uuid__": "db18d411-3ccc-467a-a4e6-87bf50a96f15"
     },
     "_texture": {
       "__uuid__": "0275e94c-56a7-410f-bd1a-fc7483f7d14a"
@@ -136,8 +136,8 @@
     "_emitterMode": 0,
     "_gravity": {
       "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
+      "x": -20,
+      "y": 420
     },
     "_speed": 180,
     "_speedVar": 50,
