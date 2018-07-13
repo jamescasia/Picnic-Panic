@@ -45,90 +45,81 @@ cc.Class({
         indics:cc.Node,
         burstEffect:cc.Prefab,
         threeBurstEffect:cc.Prefab, 
-        lapse:60,
-        boosters:cc.Node,
-        frenzyBoosts:0,
-        spawnBoosts:0 ,
-        freezeBoosts:0,
+        lapse:60,  
         frenzying:false,
-        freezing:false,
-        frenzyonce:false,
-        freezeonce:false,
-        spawnonce:false,
+        freezing:false, 
+        freezeonce:false, 
         spawning:false,
         numOfGames:0, 
+        usingFrenzy:false,
+        usingFreeze:false,
+        usingSpawn:false,
+        boostHeal:cc.Prefab, 
+        pizzing:false,
+        panzing:false,
+        burging:false,
+        everything:cc.Node, 
  
     }, 
+    parseBoolean(x){
+        if(x == 'false') return false
+        if ( x== 'true') return true
+
+    },
 
     onLoad () {
+        if(cc.sys.localStorage.getItem('usingFrenzy')!= null ) this.usingFrenzy = this.parseBoolean(cc.sys.localStorage.getItem('usingFrenzy')) 
+        else this.usingFrenzy= false
+        if(cc.sys.localStorage.getItem('usingFreeze')!= null ) this.usingFreeze = this.parseBoolean(cc.sys.localStorage.getItem('usingFreeze'))
+        else this.usingFreeze= false
+        if(cc.sys.localStorage.getItem('usingSpawn')!= null ) this.usingSpawn = this.parseBoolean(cc.sys.localStorage.getItem('usingSpawn'))
+        else this.usingSpawn= false
         if(cc.sys.localStorage.getItem('numOfGames')!= null ) this.numOfGames = parseInt(cc.sys.localStorage.getItem('highestScore'))
         else this.numOfGames= 0
         if(cc.sys.localStorage.getItem('highestScore')!= null ) this.highestScore = parseInt(cc.sys.localStorage.getItem('highestScore'))
-        else this.highestScore= 0
-        if(cc.sys.localStorage.getItem('frenzy') != null) this.frenzyBoosts = parseInt(cc.sys.localStorage.getItem('frenzy'))
-        else  this.frenzyBoosts = 0
-        if(cc.sys.localStorage.getItem('freeze') != null) this.freezeBoosts = parseInt(cc.sys.localStorage.getItem('freeze'))
-        else  this.freezeBoosts = 0
-        if(cc.sys.localStorage.getItem('spawn') != null) this.spawnBoosts = parseInt(cc.sys.localStorage.getItem('spawn'))
-        else  this.spawnBoosts = 0
+        else this.highestScore= 0 
+        if(this.usingFreeze  ){ 
+            this.useFreezeBoost() 
+        }
 
-        this.boosters.getChildByName('frenzy').getChildByName('flabel').getComponent(cc.Label).string =this.frenzyBoosts
-        this.boosters.getChildByName('freeze').getChildByName('flabel').getComponent(cc.Label).string =this.freezeBoosts
-        this.boosters.getChildByName('spawn').getChildByName('flabel').getComponent(cc.Label).string =this.spawnBoosts
+    
+ 
 
         
     },
 
-    start () {
+    start () {   
 
         this.highestCombo = 0
         this.comboctr  = 0
         var timectr = 0
-        var t= this 
-        var pauseAdd = 0
-        var inc = 0.1
+        var t= this  
         var left = 60
 
         var gameTimer = t.schedule(function() { 
             
 
               
-             if (this.freezing ) { 
-                timectr+= 0.0
-            }
+            if (t.freezing  )   timectr+= 0.0
             else timectr+= 0.1
             left =  (60- timectr  ).toFixed(2)  
             t.timebar.getComponent(cc.ProgressBar).progress = left/60
-            this.lapse = timectr
+            t.lapse = timectr
+            
 
-            if(left <=0 &&!this.gameover){
+            if(left <=0 && !this.gameover  ){ 
                 
-                if(this.score >= this.highestScore) this.highestScore = this.score
+                if(t.score >= t.highestScore) t.highestScore = t.score
                 cc.sys.localStorage.setItem('highestScore',  (t.highestScore)); 
                 t.endPanel.getComponent('layoutScript').showPanel(t.score ,t.highestCombo )
                 t.gameover = true
-                this.numOfGames+=1
-                t.matrix.destroy()
-                if(this.numOfGames% 3 == 0 && this.numOfGames >=3) {
-                    this.frenzyBoosts+=1
-                    this.freezeBoosts+=1
-                    this.spawnBoosts+=1
-                    cc.sys.localStorage.setItem('frenzy',  this.frenzyBoosts); 
-                    cc.sys.localStorage.setItem('freeze',  this.freezeBoosts); 
-                    cc.sys.localStorage.setItem('spawn',  this.spawnBoosts); 
-
-
+                t.numOfGames+=1
+                t.matrix.destroy()  
+                if(t.numOfGames% 3 == 0 && t.numOfGames >=3) {
+                     
                 }
-                cc.sys.localStorage.setItem('numOfGames',  this.numOfGames); 
-
-                
-
-                
-            }
-           
-            
-
-
+                cc.sys.localStorage.setItem('numOfGames',  t.numOfGames);  
+            } 
 
             t.timeLabel.getComponent(cc.Label).string = String(left).replace("." , ':')
 
@@ -137,96 +128,81 @@ cc.Class({
         
         
          
-    }, 
-    useFrenzyBoost(){
-        if(this.frenzyBoosts>=1 && !this.frenzyonce){
-        this.frenzyBoosts-=1
-        if(this.frenzyBoosts <= 0) this.frenzyBoosts = 0
-        cc.sys.localStorage.setItem('frenzy',  this.frenzyBoosts); 
-        this.frenzyEffect()
-        this.frenzyonce = true
-        
-        
-        
-        this.boosters.getChildByName('frenzy').getChildByName('flabel').getComponent(cc.Label).string =this.frenzyBoosts
-        }
-        
+    },  
+    frenzyEffect(){ 
 
-
-
-    },
-    frenzyEffect(){
+        console.log('frenzed')
         var t = this
-        //t.frenzying = true
-        this.burgEffect =3
-        this.panEffect = 3
-        this.pizEffect = 3
-        var ends = function(){
-            this.burgEffect =1 
-            this.panEffect = 1
-            this.pizEffect = 1 
+        t.frenzying = true
+        
+        t.burgEffect =3
+        t.panEffect = 3
+        t.pizEffect = 3
+        if(t.usingFrenzy  ){
+            console.log('frenzy: ' , t.usingFrenzy)
+            t.burgEffect =4
+            t.panEffect = 4
+            t.pizEffect = 4
+
         }
-        var frenzyTime =cc.sequence(  cc.delayTime(4) ,cc.callFunc(ends,t)) 
+        var ends = function(){
+            t.frenzying = false
+            t.burgEffect =1 
+            t.panEffect = 1
+            t.pizEffect = 1 
+            //this.everything.position = cc.v2(0,0)
+
+            t.oneone.getComponent('unit').frenzySoloEnd()
+            t.onetwo.getComponent('unit').frenzySoloEnd()
+            t.onethree.getComponent('unit').frenzySoloEnd()
+            t.onefour.getComponent('unit').frenzySoloEnd()
+            t.twoone.getComponent('unit').frenzySoloEnd()
+            t.twotwo.getComponent('unit').frenzySoloEnd()
+            t.twothree.getComponent('unit').frenzySoloEnd()
+            t.twofour.getComponent('unit').frenzySoloEnd()
+            t.threeone.getComponent('unit').frenzySoloEnd()
+            t.threetwo.getComponent('unit').frenzySoloEnd()
+            t.threethree.getComponent('unit').frenzySoloEnd()
+            t.threefour.getComponent('unit').frenzySoloEnd()
+            t.fourone.getComponent('unit').frenzySoloEnd()
+            t.fourtwo.getComponent('unit').frenzySoloEnd()
+            t.fourthree.getComponent('unit').frenzySoloEnd()
+            t.fourfour.getComponent('unit').frenzySoloEnd()
+        }
+        var frenzyTime =cc.sequence(  cc.delayTime(5) ,cc.callFunc(ends,t)) 
         this.matrix.runAction(frenzyTime)
-            this.oneone.getComponent('unit').frenzySolo()
-            this.onetwo.getComponent('unit').frenzySolo()
-            this.onethree.getComponent('unit').frenzySolo()
-            this.onefour.getComponent('unit').frenzySolo()
-            this.twoone.getComponent('unit').frenzySolo()
-            this.twotwo.getComponent('unit').frenzySolo()
-            this.twothree.getComponent('unit').frenzySolo()
-            this.twofour.getComponent('unit').frenzySolo()
-            this.threeone.getComponent('unit').frenzySolo()
-            this.threetwo.getComponent('unit').frenzySolo()
-            this.threethree.getComponent('unit').frenzySolo()
-            this.threefour.getComponent('unit').frenzySolo()
-            this.fourone.getComponent('unit').frenzySolo()
-            this.fourtwo.getComponent('unit').frenzySolo()
-            this.fourthree.getComponent('unit').frenzySolo()
-            this.fourfour.getComponent('unit').frenzySolo()
+            t.oneone.getComponent('unit').frenzySolo()
+            t.onetwo.getComponent('unit').frenzySolo()
+            t.onethree.getComponent('unit').frenzySolo()
+            t.onefour.getComponent('unit').frenzySolo()
+            t.twoone.getComponent('unit').frenzySolo()
+            t.twotwo.getComponent('unit').frenzySolo()
+            t.twothree.getComponent('unit').frenzySolo()
+            t.twofour.getComponent('unit').frenzySolo()
+            t.threeone.getComponent('unit').frenzySolo()
+            t.threetwo.getComponent('unit').frenzySolo()
+            t.threethree.getComponent('unit').frenzySolo()
+            t.threefour.getComponent('unit').frenzySolo()
+            t.fourone.getComponent('unit').frenzySolo()
+            t.fourtwo.getComponent('unit').frenzySolo()
+            t.fourthree.getComponent('unit').frenzySolo()
+            t.fourfour.getComponent('unit').frenzySolo()
 
  
     }, 
 
-    useFreezeBoost(){
-        if(this.freezeBoosts>=1 && !this.freezeonce){
-            this.freezeBoosts-=1
-            if(this.freezeBoosts <= 0) this.freezeBoosts = 0
-            cc.sys.localStorage.setItem('freeze',  this.freezeBoosts); 
-            this.freezing =true 
-            this.freezeonce =true
-            var unfreeze = function(){
+    useFreezeBoost(){ 
+            this.freezing =true  
+            var unfreeze = function(){ 
                 this.freezing = false
             }
-            this.matrix.runAction(  cc.sequence(cc.delayTime(4), cc.callFunc(unfreeze, this) ))
-            this.boosters.getChildByName('freeze').getChildByName('flabel').getComponent(cc.Label).string =this.freezeBoosts
-        }
+            this.matrix.runAction(  cc.sequence(cc.delayTime(5), cc.callFunc(unfreeze, this) )) 
+         
     },
 
-    useSpawnBoost(){
-
-        if(this.spawnBoosts>=1 && !this.spawnonce){
-            this.spawnBoosts-=1
-            if(this.spawnBoosts <= 0) this.spawnBoosts = 0
-            cc.sys.localStorage.setItem('spawn',  this.spawnBoosts); 
-            this.spawnonce = true
-            this.spawning =true
-            var unspawn = function(){this.spawning = false}
-            this.matrix.runAction(  cc.sequence(cc.delayTime(3), cc.callFunc(unspawn, this) ))
-
-            
-            
-            
-            this.boosters.getChildByName('spawn').getChildByName('flabel').getComponent(cc.Label).string =this.spawnBoosts
-        }
-
-        
-    }, 
+     
     
     showIndic(t){ 
-        
-
-
         
         var fadeInOut =cc.sequence ( cc.fadeIn(0),  cc.fadeOut(4.98)  )
         switch(t.mode){
@@ -246,14 +222,163 @@ cc.Class({
           
     
     },
-
-
-   update (dt) {  
+    pizTwoing(){
+        //  console.log('green tea is green')
+        this.pizzing = true
+        if(!this. frenzying)this.pizEffect = 2
+        var pizEnd  = function(){ 
+            this.pizzing = false
+            if(!this.frenzying) this .pizEffect = 1
+            this.oneone.getComponent('unit').turnOnHeal()
+            this.onetwo.getComponent('unit').turnOnHeal()
+            this.onethree.getComponent('unit').turnOnHeal()
+            this.onefour.getComponent('unit').turnOnHeal()
+            this.twoone.getComponent('unit').turnOnHeal()
+            this.twotwo.getComponent('unit').turnOnHeal()
+            this.twothree.getComponent('unit').turnOnHeal()
+            this.twofour.getComponent('unit').turnOnHeal()
+            this.threeone.getComponent('unit').turnOnHeal()
+            this.threetwo.getComponent('unit').turnOnHeal()
+            this.threethree.getComponent('unit').turnOnHeal()
+            this.threefour.getComponent('unit').turnOnHeal()
+            this.fourone.getComponent('unit').turnOnHeal()
+            this.fourtwo.getComponent('unit').turnOnHeal()
+            this.fourthree.getComponent('unit').turnOnHeal()
+            this.fourfour.getComponent('unit').turnOnHeal()}
+        var t = this
+        var t3 = cc.sequence( cc.delayTime(5),cc.callFunc( pizEnd, t)  )
+        t.matrix.runAction(t3 )
+    },
+    panTwoing(){
+        this.panzing = true 
+        if(!this. frenzying)this.panEffect =2
+        var panEnd  = function(){
+            this.panzing = false
+            if(!this. frenzying)  this. panEffect = 1  
+            this.oneone.getComponent('unit').turnOnHeal()
+            this.onetwo.getComponent('unit').turnOnHeal()
+            this.onethree.getComponent('unit').turnOnHeal()
+            this.onefour.getComponent('unit').turnOnHeal()
+            this.twoone.getComponent('unit').turnOnHeal()
+            this.twotwo.getComponent('unit').turnOnHeal()
+            this.twothree.getComponent('unit').turnOnHeal()
+            this.twofour.getComponent('unit').turnOnHeal()
+            this.threeone.getComponent('unit').turnOnHeal()
+            this.threetwo.getComponent('unit').turnOnHeal()
+            this.threethree.getComponent('unit').turnOnHeal()
+            this.threefour.getComponent('unit').turnOnHeal()
+            this.fourone.getComponent('unit').turnOnHeal()
+            this.fourtwo.getComponent('unit').turnOnHeal()
+            this.fourthree.getComponent('unit').turnOnHeal()
+            this.fourfour.getComponent('unit').turnOnHeal()} 
+        var t = this
+        var t2 = cc.sequence( cc.delayTime(5),cc.callFunc( panEnd, t)  )
+        t.matrix.runAction(t2 )
+    },
+    burgTwoing(){
+            this.burging = true
+       // console.log('sana is pabo')
+        if(!this. frenzying)this.burgEffect =2
+        var burgEnd  = function(){  
+            this.burging = false
+            console.log('dfaa')
+            this.oneone.getComponent('unit').turnOnHeal()
+            this.onetwo.getComponent('unit').turnOnHeal()
+            this.onethree.getComponent('unit').turnOnHeal()
+            this.onefour.getComponent('unit').turnOnHeal()
+            this.twoone.getComponent('unit').turnOnHeal()
+            this.twotwo.getComponent('unit').turnOnHeal()
+            this.twothree.getComponent('unit').turnOnHeal()
+            this.twofour.getComponent('unit').turnOnHeal()
+            this.threeone.getComponent('unit').turnOnHeal()
+            this.threetwo.getComponent('unit').turnOnHeal()
+            this.threethree.getComponent('unit').turnOnHeal()
+            this.threefour.getComponent('unit').turnOnHeal()
+            this.fourone.getComponent('unit').turnOnHeal()
+            this.fourtwo.getComponent('unit').turnOnHeal()
+            this.fourthree.getComponent('unit').turnOnHeal()
+            this.fourfour.getComponent('unit').turnOnHeal()
+            if(!this. frenzying) this  .burgEffect = 1 
+            
         
-        this.boosters.getChildByName('spawn').getChildByName('flabel').getComponent(cc.Label).string =this.spawnBoosts
-       
+        }
+        var t = this
+        var t1 = cc.sequence( cc.delayTime(5),cc.callFunc( burgEnd, t)  )
+        t.matrix.runAction(t1 )
+    },
 
+   
+   update (dt) {   
+        let cameraShake = cc.sequence(cc.moveTo(cc.random0To1()*0.3, cc.randomMinus1To1()*2 , cc.randomMinus1To1()*2) ,cc.moveTo(0.3,0,0))
+       if(this.frenzying){
+        
+           this.everything.runAction(cameraShake)
+       }
+       else{ this.everything.stopAllActions()
+        this.everything.position = cc.v2(0,0)
+       }
+       //console.log(this.burgEffect , this.pizEffect , this.panEffect , this.frenzying)
+        if(!this.frenzying &&   this.pizzing && this.panzing && this.burging) this.frenzyEffect()
+        if(!this.gameover){
+        if(this.burging){ 
+            this.oneone.getComponent('unit').turnOffHeal('bu')
+            this.onetwo.getComponent('unit').turnOffHeal('bu')
+            this.onethree.getComponent('unit').turnOffHeal('bu')
+            this.onefour.getComponent('unit').turnOffHeal('bu')
+            this.twoone.getComponent('unit').turnOffHeal('bu')
+            this.twotwo.getComponent('unit').turnOffHeal('bu')
+            this.twothree.getComponent('unit').turnOffHeal('bu')
+            this.twofour.getComponent('unit').turnOffHeal('bu')
+            this.threeone.getComponent('unit').turnOffHeal('bu')
+            this.threetwo.getComponent('unit').turnOffHeal('bu')
+            this.threethree.getComponent('unit').turnOffHeal('bu')
+            this.threefour.getComponent('unit').turnOffHeal('bu')
+            this.fourone.getComponent('unit').turnOffHeal('bu')
+            this.fourtwo.getComponent('unit').turnOffHeal('bu')
+            this.fourthree.getComponent('unit').turnOffHeal('bu')
+            this.fourfour.getComponent('unit').turnOffHeal('bu')
+        } 
+        if(this.pizzing){ 
+            this.oneone.getComponent('unit').turnOffHeal('pi')
+            this.onetwo.getComponent('unit').turnOffHeal('pi')
+            this.onethree.getComponent('unit').turnOffHeal('pi')
+            this.onefour.getComponent('unit').turnOffHeal('pi')
+            this.twoone.getComponent('unit').turnOffHeal('pi')
+            this.twotwo.getComponent('unit').turnOffHeal('pi')
+            this.twothree.getComponent('unit').turnOffHeal('pi')
+            this.twofour.getComponent('unit').turnOffHeal('pi')
+            this.threeone.getComponent('unit').turnOffHeal('pi')
+            this.threetwo.getComponent('unit').turnOffHeal('pi')
+            this.threethree.getComponent('unit').turnOffHeal('pi')
+            this.threefour.getComponent('unit').turnOffHeal('pi')
+            this.fourone.getComponent('unit').turnOffHeal('pi')
+            this.fourtwo.getComponent('unit').turnOffHeal('pi')
+            this.fourthree.getComponent('unit').turnOffHeal('pi')
+            this.fourfour.getComponent('unit').turnOffHeal('pi')
+        } 
+        if(this.panzing){ 
+            this.oneone.getComponent('unit').turnOffHeal('pa')
+            this.onetwo.getComponent('unit').turnOffHeal('pa')
+            this.onethree.getComponent('unit').turnOffHeal('pa')
+            this.onefour.getComponent('unit').turnOffHeal('pa')
+            this.twoone.getComponent('unit').turnOffHeal('pa')
+            this.twotwo.getComponent('unit').turnOffHeal('pa')
+            this.twothree.getComponent('unit').turnOffHeal('pa')
+            this.twofour.getComponent('unit').turnOffHeal('pa')
+            this.threeone.getComponent('unit').turnOffHeal('pa')
+            this.threetwo.getComponent('unit').turnOffHeal('pa')
+            this.threethree.getComponent('unit').turnOffHeal('pa')
+            this.threefour.getComponent('unit').turnOffHeal('pa')
+            this.fourone.getComponent('unit').turnOffHeal('pa')
+            this.fourtwo.getComponent('unit').turnOffHeal('pa')
+            this.fourthree.getComponent('unit').turnOffHeal('pa')
+            this.fourfour.getComponent('unit').turnOffHeal('pa')
+        } 
+            
  
+    }
+        
+
        if(this.comboctr >= this.highestCombo) this.highestCombo = this.comboctr
 
        
@@ -302,7 +427,7 @@ cc.Class({
                   ass.position = cc.v2(0,0 ) }
 
                   this.comboLabel.position =x.node.position
-                  var comboFade = cc.sequence( cc.fadeIn(0), cc.spawn( cc.moveBy(0.4, 0, 90) , cc.fadeOut(0.4)))
+                  var comboFade = cc.sequence( cc.fadeIn(0), cc.spawn( cc.moveBy(0.6, 0, 90) , cc.fadeOut(0.6)))
                   this.comboLabel.runAction(comboFade)
 
                    

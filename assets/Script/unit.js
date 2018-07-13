@@ -43,14 +43,32 @@ cc.Class({
         initctr:0,  
         callonce:false, 
         spawnFactor:1,
+        addc:false,
+        boostactn:null,
+        frenzySoloFx:null,
+        boostonce:false,
+        healOnce:false,
+        healactn:null
 
     },
  
 
     onLoad () {
+        this.healactn = cc.sequence( cc.fadeTo(0.2, 180) , cc.fadeTo(0.2, 255)).repeat(15)
+        this.frenzySoloFx =   
+            cc.sequence( 
+                cc.scaleTo(0.3, 0.225, 0.225),
+                cc.scaleTo(4.5 , 0.225, 0.225),
+                cc.scaleTo(0.2 , 0.2, 0.2) 
+
+                ) 
         this.choices = [ this.bu1 , this.pa1, this.pi1]
         this.node.on('click', this.clicked, this);
-        
+        this.boostactn = cc.sequence(
+            cc.scaleTo(0.3  , 0.22 , 0.22) ,
+            cc.scaleTo(4.4 , 0.225 , 0.225),
+            cc.scaleTo(0.3 , 0.2 ,0.2)   
+        )  
     },
 
     start () {
@@ -76,6 +94,10 @@ cc.Class({
         
     },
     death(){
+        this.turnOnHeal()
+        
+        this.mode = null
+        
         this.level = 0
         if(this.level <2){
             this.frame.spriteFrame = null
@@ -87,21 +109,15 @@ cc.Class({
 
         this.scheduleOnce(function() {
             this.initialize()
-        },   ( this.spawnFactor*(Math.round(cc.rand() )  %3 )+ (1.35*this.spawnFactor))   );
+        },   ( this.spawnFactor*(Math.round(cc.rand() )  %2 )+ (1.35*this.spawnFactor))   );
             
     },
-    frenzySolo(){
-        var effect = cc.sequence(
-            cc.scaleTo(0.1  , 0.22 , 0.22).easing(cc.easeSineIn()) ,
-            cc.spawn (cc.scaleTo(3.8  , 0.225 , 0.225), cc.sequence(cc.fadeTo(0.19 ,170),cc.fadeTo(0.19,255)  )   ),
-            cc.scaleTo(0.1 , 0.2 ,0.2).easing(cc.easeSineOut()) 
-              //cc.spawn ( cc.fadeTo ( 0.4 , 190), cc.scaleTo(0.4, 0.22, 0.22) ).easing(cc.easeSineIn()) , 
-              //cc.spawn ( cc.fadeTo ( 0.4 , 255), cc.scaleTo(0.4, 0.2, 0.2) ).easing(cc.easeSineOut()) 
-            )
-        
+    frenzySoloEnd(){
+        this.frame.node.stopAction(this.frenzySoloFx)
 
-
-        this.frame.node.runAction(effect)
+    },
+    frenzySolo(){  
+        this.frame.node.runAction(this.frenzySoloFx)
     }, 
     fuse(){
         this.selected = false
@@ -160,50 +176,29 @@ cc.Class({
         }
         else if(this.level==2){ 
              
-            switch(this.mode){
-                case 'bu':
-                    this.game.getComponent('Game').burgEffect = 2 
-                    this.game.getComponent('Game').score+=16*this.game.getComponent('Game').burgEffect 
-                    var burgEnd  = function(){ 
-                        this.game.getComponent('Game').burgEffect = 1}
-                    var t = this
-                    var t1 = cc.sequence( cc.delayTime(5),cc.callFunc( burgEnd, t)  )
-                    this.node.runAction(t1 )
-                    
-                    
+             
 
-                    break
-                case 'pa':
-                    this.game.getComponent('Game').panEffect = 2
-                    this.game.getComponent('Game').score+=16*this.game.getComponent('Game').panEffect 
-                    var panEnd  = function(){this.game.getComponent('Game').panEffect = 1}
-                    var t = this
-                    var t2 = cc.sequence( cc.delayTime(5),cc.callFunc( panEnd, t)  )
-                    this.node.runAction(t2 )
-                    break
-                case 'pi':
-                    this.game.getComponent('Game').pizEffect = 2
-                    this.game.getComponent('Game').score+=16*this.game.getComponent('Game').pizEffect 
-                    var panEnd  = function(){this.game.getComponent('Game').pizEffect = 1}
-                    var t = this
-                    var t3 = cc.sequence( cc.delayTime(5),cc.callFunc( panEnd, t)  )
-                    this.node.runAction(t3 )
-                    break
-            } 
-           //this.game.getComponent('Game').prev
             var prevNode = this.game.getComponent('Game').prev
-
-           
            var t  = this 
-           var kill = function(){
+           var kill = function(){ 
+            switch(this.mode){
+                case 'bu': 
+                    this.game.getComponent('Game').score+=16*this.game.getComponent('Game').burgEffect  
+                    this.game.getComponent('Game').burgTwoing()
+                    
+                    break
+                case 'pa': 
+                    this.game.getComponent('Game').score+=16*this.game.getComponent('Game').panEffect  
+                    this.game.getComponent('Game').panTwoing()
+                    break
+                case 'pi': 
+                    this.game.getComponent('Game').score+=16*this.game.getComponent('Game').pizEffect 
+                    this.game.getComponent('Game').pizTwoing()
+                    break
+            }  
+          
             
-            this.game.getComponent('Game').showIndic(t)
-            if(this.game.getComponent('Game').pizEffect ==2 && this.game.getComponent('Game').panEffect ==2 &&this.game.getComponent('Game').burgEffect ==2 ){
-                console.log('tzuy is cute')
-                this.game.getComponent('Game').frenzyEffect()
- 
-            
-            } 
+            this.game.getComponent('Game').showIndic(t) 
             
             var barstu = cc.instantiate( this.game.getComponent('Game').threeBurstEffect); 
             prevNode.node.addChild(barstu);  
@@ -213,6 +208,9 @@ cc.Class({
             
             t.frame.spriteFrame = null
             prevNode.frame.spriteFrame = null
+
+            //this.game.getComponent('Game').boostEm() 
+
         } 
 
             var explode = cc.sequence(  
@@ -229,7 +227,7 @@ cc.Class({
                     cc.moveTo(1.2 ,    0.5*( t.node.x -prevNode.node.x) ,0.5*(t.node.y -prevNode.node.y)).easing(cc.easeExponentialIn()),
                     cc.fadeTo(0.7 ,145)
                 ) ,
-                    cc.scaleTo(0.3, 0.3, 0.3).easing(cc.easeExponentialIn()),
+                    cc.scaleTo(0.3, 0.3, 0.3).easing(cc.easeExponentialIn()), 
                      //cc.callFunc(kill , t)
             ).speed(2)
             t.frame.node.runAction(explode)
@@ -242,8 +240,35 @@ cc.Class({
 
 
     },  
+    turnOffHeal(x){
+
+        if(x == this.mode&& !this.healOnce) {
+            this.node.runAction(this.healactn)
+            this.healOnce = true
+            var healu = cc.instantiate( this.game.getComponent('Game').boostHeal); 
+            this.node.addChild(healu);  
+            //console.log(this.node.getChildByName('healu'))
+
+        }
+    },
+    turnOnHeal(){
+        this.healOnce = false  
+        if(this.node.getChildByName('boostHeal')!=null)  {
+            this.node.getChildByName('boostHeal').destroy()
+            this.node.stopAction(this.healactn)
+            this.node.opacity =255
+    
+    }
+
+
+    },
+    
+    
+     
+    
 
     update (dt) { 
+       // console.log(this.node.getChildByName('boostHeal') , 'haha')
         if(this.game.getComponent('Game').burgEffect >=2) this.spawnFactor = 0.2
         else this.spawnFactor = 1
         
@@ -355,10 +380,14 @@ cc.Class({
          
     },
     addFood(){
-        if(this.isEmpty){
-            if(this.game.getComponent('Game').spawning) this.level =2
+        if(this.isEmpty){ 
+
         var rand =  parseInt( cc.rand() )%3 
         //console.log("random" + rand) 0 1 2 3 4 5 
+        if (this.game.getComponent('Game').usingSpawn ) {
+            var r= parseInt( cc.rand() )%11
+            if(r ===3) this.level =2
+        }
         this. frame.spriteFrame = this.choices[rand]
         this.frame.node.scale = cc.v2(0,0) 
         var born =cc.spawn(
@@ -405,7 +434,7 @@ cc.Class({
         else{
             this.frame.node.runAction(born)
         }
-        this.frame.node.position = cc.v2(0,0)
+        this.frame.node.position = cc.v2(0,0)   
         
         switch(rand){
             case 0:
@@ -417,10 +446,12 @@ cc.Class({
             case 2:
                 this.mode = 'pi'
                 break
-        }
+        } 
         this.isEmpty = false // not completed the loop gotta make isEmpty true again
 
         }
+        
+        
 
 
     },

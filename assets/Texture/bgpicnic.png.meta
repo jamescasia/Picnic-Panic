@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "e931c428-abcf-4fef-a3a7-a93cc8570225",
+  "uuid": "dae82c1b-5033-499b-89cd-538fd5c21c78",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "table": {
+    "bgpicnic": {
       "ver": "1.0.3",
-      "uuid": "80a4b26e-8b46-453d-8662-46745d7c1d03",
-      "rawTextureUuid": "e931c428-abcf-4fef-a3a7-a93cc8570225",
+      "uuid": "b2d87f9e-d86a-4380-87b4-52ad200b1f09",
+      "rawTextureUuid": "dae82c1b-5033-499b-89cd-538fd5c21c78",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 932,
-      "height": 963,
-      "rawWidth": 932,
-      "rawHeight": 963,
+      "width": 1000,
+      "height": 1000,
+      "rawWidth": 1000,
+      "rawHeight": 1000,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "e931c428-abcf-4fef-a3a7-a93cc8570225",
+  "uuid": "45c0920f-f9f2-49fa-a7f4-f03791aaa2cb",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "table": {
+    "Green-Grass-Seamless-Pattern-1411612": {
       "ver": "1.0.3",
-      "uuid": "80a4b26e-8b46-453d-8662-46745d7c1d03",
-      "rawTextureUuid": "e931c428-abcf-4fef-a3a7-a93cc8570225",
+      "uuid": "ae076c19-251c-41b0-99c6-2d3338046a99",
+      "rawTextureUuid": "45c0920f-f9f2-49fa-a7f4-f03791aaa2cb",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 932,
-      "height": 963,
-      "rawWidth": 932,
-      "rawHeight": 963,
+      "width": 500,
+      "height": 500,
+      "rawWidth": 500,
+      "rawHeight": 500,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,
