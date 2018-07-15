@@ -270,9 +270,9 @@ cc.Class({
     update (dt) { 
        // console.log(this.node.getChildByName('boostHeal') , 'haha')
         if(this.game.getComponent('Game').burgEffect >=2) this.spawnFactor = 0.2
-        else this.spawnFactor = 1
+        else this.spawnFactor = 1  
         
-        if(this.game.getComponent('Game').lapse >=57 && this.game.getComponent('Game').lapse <60   ){ 
+        if(this.game.getComponent('Game').lapse >=   this.game.getComponent('Game').timelmt-3 &&  this.game.getComponent('Game').lapse!=60 ){ 
             var shake = cc.sequence(cc.skewTo(0.1 , cc.randomMinus1To1()*16 , cc.randomMinus1To1()*16 )  , cc.skewTo(0.1 , 0,0 ) ) 
             this.frame.node.runAction(shake)
 
@@ -381,6 +381,7 @@ cc.Class({
     },
     addFood(){
         if(this.isEmpty){ 
+            
 
         var rand =  parseInt( cc.rand() )%3 
         //console.log("random" + rand) 0 1 2 3 4 5 
@@ -388,7 +389,8 @@ cc.Class({
             var r= parseInt( cc.rand() )%11
             if(r ===3) this.level =2
         }
-        this. frame.spriteFrame = this.choices[rand]
+        this. frame.spriteFrame = this.choices[Math.floor(Math.random()*this.choices.length)]
+        // 
         this.frame.node.scale = cc.v2(0,0) 
         var born =cc.spawn(
             cc.scaleTo(0.24 , 0.2)  ,
@@ -456,8 +458,9 @@ cc.Class({
 
     },
     clicked(){
+        console.log(cc.director.isPaused())
            
-        if(!this.gameover && !this.isEmpty) {this.game.getComponent('Game').toggled(this   )}
+        if(!this.gameover && !this.isEmpty && !cc.director.isPaused() ) {this.game.getComponent('Game').toggled(this   )}
         
         
 

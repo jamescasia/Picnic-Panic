@@ -59,6 +59,8 @@ cc.Class({
         panzing:false,
         burging:false,
         everything:cc.Node, 
+        timelmt:60,
+        pauseBtn:cc.Node    
  
     }, 
     parseBoolean(x){
@@ -80,12 +82,19 @@ cc.Class({
         else this.highestScore= 0 
         if(this.usingFreeze  ){ 
             this.useFreezeBoost() 
-        }
+        } 
+        
 
     
  
 
         
+    },
+    onPause(){
+        if(this.pauseBtn.getComponent(cc.Toggle).isChecked) {cc.director.pause() 
+        this.everything.opacity = 150}
+        else {cc.director.resume()
+             this.everything.opacity = 255 }
     },
 
     start () {   
@@ -100,10 +109,13 @@ cc.Class({
             
 
               
-            if (t.freezing  )   timectr+= 0.0
-            else timectr+= 0.1
-            left =  (60- timectr  ).toFixed(2)  
-            t.timebar.getComponent(cc.ProgressBar).progress = left/60
+            if (t.usingFreeze  )   t.timelmt = 70  
+            else t.timelmt = 60
+                 
+            left =  (t.timelmt- timectr  ).toFixed(2)  
+            t.timebar.getComponent(cc.ProgressBar).progress = left/t.timelmt
+            timectr+= 0.1
+            
             t.lapse = timectr
             
 
@@ -124,7 +136,7 @@ cc.Class({
             t.timeLabel.getComponent(cc.Label).string = String(left).replace("." , ':')
 
 
-        }, 0.1, 640,1.5);
+        }, 0.1, 700,1.5);
         
         
          
@@ -191,7 +203,8 @@ cc.Class({
  
     }, 
 
-    useFreezeBoost(){ 
+    useFreezeBoost(){  
+        this.freezeonce = true
             this.freezing =true  
             var unfreeze = function(){ 
                 this.freezing = false
