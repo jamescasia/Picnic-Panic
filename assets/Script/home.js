@@ -25,7 +25,7 @@ cc.Class({
     }, 
 
     onLoad () {  
-        cc.director.loadScene("main");
+        cc.director.preloadScene("main");
         if (   parseInt(cc.sys.localStorage.getItem('frenzy'))  != null ) this.frenzyBoosts =  parseInt (cc.sys.localStorage.getItem('frenzy'))
         else this.frenzyBoosts = 0, cc.sys.localStorage.setItem('frenzy',  this.frenzyBoosts); 
         if ( parseInt(cc.sys.localStorage.getItem('freeze')) != null ) this.freezeBoosts =  parseInt (cc.sys.localStorage.getItem('freeze')) 

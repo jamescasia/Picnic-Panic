@@ -48,7 +48,8 @@ cc.Class({
         frenzySoloFx:null,
         boostonce:false,
         healOnce:false,
-        healactn:null
+        healactn:null,
+        
 
     },
  
@@ -72,6 +73,7 @@ cc.Class({
     },
 
     start () {
+        this.frame.node.opacity = 0
         this.initialize()
         this.actZin =  cc.scaleTo(0.6, 0.24,0.24)
         this.actZout =  cc.scaleTo(0.6, 0.2 ,0.2 )
@@ -94,6 +96,7 @@ cc.Class({
         
     },
     death(){
+        this.isEmpty = true
         this.turnOnHeal()
         
         this.mode = null
@@ -104,7 +107,7 @@ cc.Class({
 
         }
         
-        this.isEmpty = true
+        
         this.mode = null
 
         this.scheduleOnce(function() {
@@ -127,11 +130,11 @@ cc.Class({
         
         var pumpUp = cc.sequence(
             cc.spawn(
-                cc.moveTo(0.2*a , 0 ,a* 8.5).easing(cc.easeExponentialInOut()),
-                cc.scaleTo(0.3, 0.28, 0.28).easing(cc.easeExponentialInOut()),
-                cc.skewTo(0.2 , 0,cc.randomMinus1To1()*6).easing(cc.easeExponentialInOut()),
+                cc.moveTo(0.1*a , 0 ,a* 8.5).easing(cc.easeExponentialInOut()),
+                cc.scaleTo(0.15, 0.28, 0.28).easing(cc.easeExponentialInOut()),
+                cc.skewTo(0.1 , 0,cc.randomMinus1To1()*6).easing(cc.easeExponentialInOut()),
                 //cc.tintTo(0.2 ,300,300  ,300)
-            ).speed(0.5).repeat(1)  ,
+            )   ,
             cc.spawn(
                 //cc.tintTo(0.2 , 255, 255 ,255),
                 cc.moveTo(0.2 , 0 , 0).easing(  cc.easeQuarticActionIn()),
@@ -181,6 +184,7 @@ cc.Class({
             var prevNode = this.game.getComponent('Game').prev
            var t  = this 
            var kill = function(){ 
+               t.isEmpty =true
             switch(this.mode){
                 case 'bu': 
                     this.game.getComponent('Game').score+=16*this.game.getComponent('Game').burgEffect  
@@ -220,7 +224,7 @@ cc.Class({
                     cc.fadeTo(0.7 , 145)
                 ) ,cc.scaleTo(0.3, 0.3, 0.3).easing(cc.easeExponentialIn()),
                 
-                      cc.callFunc(kill , t)
+                      
             ).speed(2)
             var explode2 = cc.sequence(  
                 cc.spawn(
@@ -229,7 +233,9 @@ cc.Class({
                 ) ,
                     cc.scaleTo(0.3, 0.3, 0.3).easing(cc.easeExponentialIn()), 
                      //cc.callFunc(kill , t)
-            ).speed(2)
+                     cc.callFunc(kill , t)
+            ).speed(2) 
+            t.isEmpty = true
             t.frame.node.runAction(explode)
             prevNode.frame.node.runAction(explode2)
             
@@ -396,7 +402,7 @@ cc.Class({
             cc.scaleTo(0.24 , 0.2)  ,
             cc.fadeIn(0.24  ).easing(cc.easeBackIn()),
         
-        )
+        ).speed(1.45)
         var a = Math.random()
         var b = Math.random()
 

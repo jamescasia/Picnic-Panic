@@ -322,8 +322,12 @@ cc.Class({
 
    
    update (dt) {   
-        let cameraShake = cc.sequence(cc.moveTo(cc.random0To1()*0.3, cc.randomMinus1To1()*2 , cc.randomMinus1To1()*2) ,cc.moveTo(0.3,0,0))
+       if(this.gameover){
+        this.everything.position = cc.v2(0,0)
+        return}
+        
        if(this.frenzying){
+        let cameraShake = cc.sequence(cc.moveTo(cc.random0To1()*0.3, cc.randomMinus1To1()*2 , cc.randomMinus1To1()*2) ,cc.moveTo(0.3,0,0))
         
            this.everything.runAction(cameraShake)
        }
@@ -462,7 +466,7 @@ cc.Class({
 
                 }
                 var t = this
-                var times = cc.sequence( cc.delayTime(1.25),cc.callFunc( comboEnd, t)  )
+                var times = cc.sequence( cc.delayTime(1),cc.callFunc( comboEnd, t)  )
                 this.node.runAction(times )
                  
                 
@@ -547,6 +551,7 @@ cc.Class({
 
    },
    toggling(x){ 
+       if(x.isEmpty ) return
     switch(x){
         case this.oneone.getComponent('unit'):
             x.selected = !x.selected 
