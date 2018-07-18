@@ -5,6 +5,7 @@ cc.Class({
 
     properties: {
         matrix:cc.Node, 
+        pausemenu:cc.Node,
         score:0, 
         time:2,
         comboctr:0,
@@ -60,7 +61,14 @@ cc.Class({
         burging:false,
         everything:cc.Node, 
         timelmt:60,
-        pauseBtn:cc.Node    
+        pauseBtn:cc.Node,
+        frenzyburn:cc.Prefab,
+
+        passiveComboBoost:0 , 
+        passiveTimeBoost:0, 
+        passiveFrenzyDuration:0,
+        coins:0,
+        prize:0,
  
     }, 
     parseBoolean(x){
@@ -80,6 +88,15 @@ cc.Class({
         else this.numOfGames= 0
         if(cc.sys.localStorage.getItem('highestScore')!= null ) this.highestScore = parseInt(cc.sys.localStorage.getItem('highestScore'))
         else this.highestScore= 0 
+        if(cc.sys.localStorage.getItem('passiveComboBoost')!= null ) this.passiveComboBoost = parseInt(cc.sys.localStorage.getItem('passiveComboBoost'))
+        else this.passiveComboBoost= 0 
+        if(cc.sys.localStorage.getItem('passiveTimeBoost')!= null ) this.passiveTimeBoost = parseFloat(cc.sys.localStorage.getItem('passiveTimeBoost'))
+        else this.passiveTimeBoost= 0 
+        if(cc.sys.localStorage.getItem('passiveFrenzyDuration')!= null ) this.passiveFrenzyDuration = parseFloat(cc.sys.localStorage.getItem('passiveFrenzyDuration'))
+        else this.passiveFrenzyDuration= 0 
+        if ( parseInt(cc.sys.localStorage.getItem('coins') )!= null ) this.coins =  parseInt (cc.sys.localStorage.getItem('coins'))
+        else this.coins = 0
+
         if(this.usingFreeze  ){ 
             this.useFreezeBoost() 
         } 
@@ -90,10 +107,18 @@ cc.Class({
 
         
     },
+    onHome(){
+        cc.director.resume()
+        cc.director.loadScene('home');
+    },
     onPause(){
+        this.pausemenu.opacity=255
+        this.pausemenu.position = cc.v2(-42, 110)
         if(this.pauseBtn.getComponent(cc.Toggle).isChecked) {cc.director.pause() 
         this.everything.opacity = 150}
         else {cc.director.resume()
+            this.pausemenu.opacity=0
+            this.pausemenu.position = cc.v2(400, 110)
              this.everything.opacity = 255 }
     },
 
@@ -109,8 +134,8 @@ cc.Class({
             
 
               
-            if (t.usingFreeze  )   t.timelmt = 70  
-            else t.timelmt = 60
+            if (t.usingFreeze  )   t.timelmt = 70  +t.passiveTimeBoost
+            else t.timelmt = 60+t.passiveTimeBoost 
                  
             left =  (t.timelmt- timectr  ).toFixed(2)  
             t.timebar.getComponent(cc.ProgressBar).progress = left/t.timelmt
@@ -120,10 +145,20 @@ cc.Class({
             
 
             if(left <=0 && !this.gameover  ){ 
+                var prize =  Math.round(Math.random()*200) 
+                if(prize <= 100) prize = 100+ Math.floor(Math.random()*22)
                 
-                if(t.score >= t.highestScore) t.highestScore = t.score
+                if(t.score >= t.highestScore){ t.highestScore = t.score
+                    prize+= 80
+
+
+                }
+                t.coins +=prize
+                this.prize = prize
+                console.log("prize", prize  ,"running: " , t.coins)
+                cc.sys.localStorage.setItem('coins',   t.coins)
                 cc.sys.localStorage.setItem('highestScore',  (t.highestScore)); 
-                t.endPanel.getComponent('layoutScript').showPanel(t.score ,t.highestCombo )
+                t.endPanel.getComponent('layoutScript').showPanel(t.score ,t.highestCombo,t.prize )
                 t.gameover = true
                 t.numOfGames+=1
                 t.matrix.destroy()  
@@ -136,12 +171,20 @@ cc.Class({
             t.timeLabel.getComponent(cc.Label).string = String(left).replace("." , ':')
 
 
-        }, 0.1, 700,1.5);
+        }, 0.1, 750,1.5);
         
         
          
     },  
     frenzyEffect(){ 
+        this.cameraShake()
+        var frenzyburn = cc.instantiate( this.frenzyburn); 
+        this.node.addChild(frenzyburn);  
+        
+        var slowburn =   cc.moveTo(4.8,0, -1200 ) .easing(cc.easeQuarticActionIn())
+        //this.node.getChildByName('frenzyburn').runAction(slowburn)
+
+        
 
         console.log('frenzed')
         var t = this
@@ -158,6 +201,8 @@ cc.Class({
 
         }
         var ends = function(){
+            this.node.getChildByName('frenzyburn').stopAllActions()
+            this.node.getChildByName('frenzyburn').destroy()
             t.frenzying = false
             t.burgEffect =1 
             t.panEffect = 1
@@ -181,7 +226,7 @@ cc.Class({
             t.fourthree.getComponent('unit').frenzySoloEnd()
             t.fourfour.getComponent('unit').frenzySoloEnd()
         }
-        var frenzyTime =cc.sequence(  cc.delayTime(5) ,cc.callFunc(ends,t)) 
+        var frenzyTime =cc.sequence(  cc.delayTime(5+t.passiveFrenzyDuration) ,cc.callFunc(ends,t)) 
         this.matrix.runAction(frenzyTime)
             t.oneone.getComponent('unit').frenzySolo()
             t.onetwo.getComponent('unit').frenzySolo()
@@ -319,21 +364,14 @@ cc.Class({
         var t1 = cc.sequence( cc.delayTime(5),cc.callFunc( burgEnd, t)  )
         t.matrix.runAction(t1 )
     },
+    cameraShake(){
+        //let cameraShakeA = cc.sequence(cc.moveTo( 0.1, 0, cc.randomMinus1To1()*24) ,cc.moveTo(0.1, 0, -cc.random0To1()*24)).repeat(10)
+        //this.everything.runAction(cameraShakeA)
+    }, 
 
    
    update (dt) {   
-       if(this.gameover){
-        this.everything.position = cc.v2(0,0)
-        return}
         
-       if(this.frenzying){
-        let cameraShake = cc.sequence(cc.moveTo(cc.random0To1()*0.3, cc.randomMinus1To1()*2 , cc.randomMinus1To1()*2) ,cc.moveTo(0.3,0,0))
-        
-           this.everything.runAction(cameraShake)
-       }
-       else{ this.everything.stopAllActions()
-        this.everything.position = cc.v2(0,0)
-       }
        //console.log(this.burgEffect , this.pizEffect , this.panEffect , this.frenzying)
         if(!this.frenzying &&   this.pizzing && this.panzing && this.burging) this.frenzyEffect()
         if(!this.gameover){
@@ -407,7 +445,6 @@ cc.Class({
 
       
     //console.log(this.panEffect , this.pizEffect , this.burgEffect)
-       
     
    },
    toggled(x ){   

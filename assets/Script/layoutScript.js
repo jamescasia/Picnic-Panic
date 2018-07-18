@@ -7,6 +7,7 @@ cc.Class({
         scoreLabel:cc.Node,
         highScoreLabel:cc.Node,
         highComboLabel:cc.Node,
+        prizeLable:cc.Node,
         resetBtn:cc.Node,
         homeBtn:cc.Node
  
@@ -21,7 +22,7 @@ cc.Class({
     start () {
 
     },
-    showPanel(score, highCombo    ){
+    showPanel(score, highCombo  ,prize  ){
         var show = cc.spawn(
             cc.moveTo(0.4, 0,-92 ),
             cc.fadeIn(0.2)
@@ -29,6 +30,7 @@ cc.Class({
         )
 
        this.node.runAction(show)
+       this.prizeLable.getComponent(cc.Label).string = "PRIZE: "  + String(prize) 
 
         this.scoreLabel.getComponent(cc.Label).string = "SCORE: "  + String(score) 
         var highestScore = (cc.sys.localStorage.getItem('highestScore')); 

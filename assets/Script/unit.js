@@ -146,7 +146,7 @@ cc.Class({
         this.frame.node.runAction(pumpUp) 
 
         if(this.game.getComponent('Game').comboctr >=5 ){
-            this.game.getComponent('Game').score += Math.round (this.game.getComponent('Game').comboctr /2 )
+            this.game.getComponent('Game').score += this.game.getComponent('Game').passiveComboBoost + Math.round (this.game.getComponent('Game').comboctr /2 )
         }
         if(this.level ==0){
         
@@ -225,7 +225,7 @@ cc.Class({
                 ) ,cc.scaleTo(0.3, 0.3, 0.3).easing(cc.easeExponentialIn()),
                 
                       
-            ).speed(2)
+            ).speed(2.33 )
             var explode2 = cc.sequence(  
                 cc.spawn(
                     cc.moveTo(1.2 ,    0.5*( t.node.x -prevNode.node.x) ,0.5*(t.node.y -prevNode.node.y)).easing(cc.easeExponentialIn()),
@@ -234,7 +234,7 @@ cc.Class({
                     cc.scaleTo(0.3, 0.3, 0.3).easing(cc.easeExponentialIn()), 
                      //cc.callFunc(kill , t)
                      cc.callFunc(kill , t)
-            ).speed(2) 
+            ).speed(2.33) 
             t.isEmpty = true
             t.frame.node.runAction(explode)
             prevNode.frame.node.runAction(explode2)
@@ -393,9 +393,9 @@ cc.Class({
         //console.log("random" + rand) 0 1 2 3 4 5 
         if (this.game.getComponent('Game').usingSpawn ) {
             var r= parseInt( cc.rand() )%11
-            if(r ===3) this.level =2
+            if(r===3) this.level =2
         }
-        this. frame.spriteFrame = this.choices[Math.floor(Math.random()*this.choices.length)]
+        this. frame.spriteFrame = this.choices[Math.floor(cc.rand())%this.choices.length]
         // 
         this.frame.node.scale = cc.v2(0,0) 
         var born =cc.spawn(
