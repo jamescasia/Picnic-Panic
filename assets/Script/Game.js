@@ -148,6 +148,8 @@ cc.Class({
                 var prize =  Math.round(Math.random()*200) 
                 if(prize <= 100) prize = 100+ Math.floor(Math.random()*22)
                 
+                if(this.comboctr >= this.highestCombo) this.highestCombo = this.comboctr
+                
                 if(t.score >= t.highestScore){ t.highestScore = t.score
                     prize+= 80
 
@@ -434,7 +436,6 @@ cc.Class({
     }
         
 
-       if(this.comboctr >= this.highestCombo) this.highestCombo = this.comboctr
 
        
     
@@ -546,7 +547,7 @@ cc.Class({
             cc.tintTo(0.3 , 222 , 0 ,0 ),
             cc.fadeTo(0.3, 144), 
             
-            cc.scaleTo(0.3, 0.24, 0.24).easing(cc.easeExponentialIn()),
+            cc.scaleTo(0.3, 1.2, 1.2).easing(cc.easeExponentialIn()),
             cc.sequence(
                 cc.moveTo(0.1 , 3 , 4).easing(cc.easeExponentialIn()),
                 cc.moveTo(0.1 , -2 , -3).easing(cc.easeExponentialIn()),
@@ -566,7 +567,7 @@ cc.Class({
             cc.tintTo(0.3 , 222 , 0 ,0 ),
             cc.fadeTo(0.3, 144), 
             
-            cc.scaleTo(0.3, 0.24, 0.24).easing(cc.easeExponentialIn()),
+            cc.scaleTo(0.3, 1.2, 1.2).easing(cc.easeExponentialIn()),
             cc.sequence(
                 cc.moveTo(0.1 , 3 , 4).easing(cc.easeExponentialIn()),
                 cc.moveTo(0.1 , -2 , -3).easing(cc.easeExponentialIn()),

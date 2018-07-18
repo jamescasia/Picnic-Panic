@@ -58,17 +58,17 @@ cc.Class({
         this.healactn = cc.sequence( cc.fadeTo(0.2, 180) , cc.fadeTo(0.2, 255)).repeat(15)
         this.frenzySoloFx =   
             cc.sequence( 
-                cc.scaleTo(0.3, 0.225, 0.225),
-                cc.scaleTo(4.5 , 0.225, 0.225),
-                cc.scaleTo(0.2 , 0.2, 0.2) 
+                cc.scaleTo(0.3, 1.125, 1.125),
+                cc.scaleTo(4.5 , 1.125, 1.125),
+                cc.scaleTo(0.2 , 1,1) 
 
                 ) 
         this.choices = [ this.bu1 , this.pa1, this.pi1]
         this.node.on('click', this.clicked, this);
         this.boostactn = cc.sequence(
-            cc.scaleTo(0.3  , 0.22 , 0.22) ,
-            cc.scaleTo(4.4 , 0.225 , 0.225),
-            cc.scaleTo(0.3 , 0.2 ,0.2)   
+            cc.scaleTo(0.3  , 1.1 , 1.1) ,
+            cc.scaleTo(4.4 , 1.125 , 1.125),
+            cc.scaleTo(0.3 , 1 ,1)   
         )  
     },
 
@@ -131,14 +131,14 @@ cc.Class({
         var pumpUp = cc.sequence(
             cc.spawn(
                 cc.moveTo(0.1*a , 0 ,a* 8.5).easing(cc.easeExponentialInOut()),
-                cc.scaleTo(0.15, 0.28, 0.28).easing(cc.easeExponentialInOut()),
+                cc.scaleTo(0.15, 1.4, 1.4).easing(cc.easeExponentialInOut()),
                 cc.skewTo(0.1 , 0,cc.randomMinus1To1()*6).easing(cc.easeExponentialInOut()),
                 //cc.tintTo(0.2 ,300,300  ,300)
             )   ,
             cc.spawn(
                 //cc.tintTo(0.2 , 255, 255 ,255),
                 cc.moveTo(0.2 , 0 , 0).easing(  cc.easeQuarticActionIn()),
-                cc.scaleTo(0.3, 0.2 , 0.2 ).easing(cc.easeExponentialOut())  , 
+                cc.scaleTo(0.3, 1 , 1 ).easing(cc.easeExponentialOut())  , 
                 cc.skewTo(0.2 , 0,0).easing(  cc.easeQuarticActionIn()), 
             ).speed(1)
                 //cc.delayTime(0.5),  
@@ -222,7 +222,7 @@ cc.Class({
                     // cc.follow(1, prevNode.node), 
                     cc.moveTo(1.2 ,  (prevNode.node.x -t.node.x)/2, (prevNode.node.y -t.node.y)/2 ).easing(cc.easeExponentialIn()),                  
                     cc.fadeTo(0.7 , 145)
-                ) ,cc.scaleTo(0.3, 0.3, 0.3).easing(cc.easeExponentialIn()),
+                ) ,cc.scaleTo(0.3, 1.5, 1.5).easing(cc.easeExponentialIn()),
                 
                       
             ).speed(2.33 )
@@ -231,7 +231,7 @@ cc.Class({
                     cc.moveTo(1.2 ,    0.5*( t.node.x -prevNode.node.x) ,0.5*(t.node.y -prevNode.node.y)).easing(cc.easeExponentialIn()),
                     cc.fadeTo(0.7 ,145)
                 ) ,
-                    cc.scaleTo(0.3, 0.3, 0.3).easing(cc.easeExponentialIn()), 
+                    cc.scaleTo(0.3, 1.5 ,1.5).easing(cc.easeExponentialIn()), 
                      //cc.callFunc(kill , t)
                      cc.callFunc(kill , t)
             ).speed(2.33) 
@@ -290,7 +290,7 @@ cc.Class({
          
       
         if(this.selected){ 
-            this.frame.node.scale = cc.v2(0.23,0.23)
+            this.frame.node.scale = cc.v2(1.15,1.15)
             this.frame.node.z= 100
             
             if(this.level ===0){
@@ -338,7 +338,7 @@ cc.Class({
         }
         else {
             
-            this.frame.node.scale = cc.v2(0.2 ,0.2 )
+            this.frame.node.scale = cc.v2(1 ,1 )
             if(this.level ===0){
                 switch(this.mode){
                     case 'bu': 
@@ -399,7 +399,7 @@ cc.Class({
         // 
         this.frame.node.scale = cc.v2(0,0) 
         var born =cc.spawn(
-            cc.scaleTo(0.24 , 0.2)  ,
+            cc.scaleTo(0.24 , 1,1)  ,
             cc.fadeIn(0.24  ).easing(cc.easeBackIn()),
         
         ).speed(1.45)
