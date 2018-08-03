@@ -133,21 +133,17 @@ cc.Class({
     },
      
     
-     
-
-   Init(){ 
-        if (typeof firebase === 'undefined'||typeof FBInstant === 'undefined') return; 
-        
-        //Saving name, image, playerID, to ldrbrd. gotta do this every context change, not necessarily on load.   
-        var userId =FBInstant.player.getID()
-        global.global_userID = userId 
-        FBInstant.getLeaderboardAsync('cntxtLdrbrd.'+FBInstant.context.getID())
-                        .then(leaderboard => {    leaderboard.setScoreAsync(cc.random0To1()); }) 
-                        .catch(error => console.error(error));
-        var t = this
-        firebase.database().ref('/users/'+userId).on("value",function(snapshot ){
-            if(!snapshot.exists() ) {
-                firebase.database().ref('/users/'+userId).set({
+    /**
+     * to do in init
+     * -> new context -> automaticall ldrbr save Score for player Data submission
+     * -> listen to player User Data to populate active contests -> if nonexistent, push
+     *          -> what happens here kay get user/activeContests then check if exists in global/activeContests
+     *              then global/activeContests/contet/scores/playerIDs , get image and name thru leaderboard(playerID)
+     * 
+     * postLeaderboard as well
+     *  
+     * 
+     * format {
                     activeContests:{
                         pushID:'ctxID'
                     },
@@ -163,86 +159,24 @@ cc.Class({
                          },
 
                     },
-                    name: FBInstant.player.getName()},function(){console.log('new user is initialized')}) 
-                    
-   
-            }
-            else {
-                global.global_userData = snapshot 
-                t.ialize(snapshot) 
-            }
-        });
+                    name: FBInstant.player.getName()}
 
+                    toppers = [ [player,playerID],[player,playerID], ]
+                    TOP = [toppers_ctx1, toppers_ctx2, toppers_ctx3]
+     */
 
-
-   },
-   ialize(s){ 
-       var t =this
-       firebase.database().ref('/activeContests/' ).on("value",function(snapshot ){
-        global.global_activeContests = snapshot
-    
-    s.child('activeContests').forEach(function(ctxID,index ){  
-           // console.log('each ', ctxID.val() , 'blogo',global.global_activeContests)
-             
-                if( global.global_activeContests.val()[ctxID.val()]== undefined) console.log('D.N.E!')
-                else {
-                    t.retrieveLeaderboard(global.global_activeContests.child(ctxID.val() ),ctxID,index) 
-                } 
-
-
-        }) 
-    })
-
-
-
-
+    Init(){
+        this.savePlayerData()
         
-   },
+
+
+
+
+
+     },
+     savePlayerData(){},
 
    
-   //snapshot, referece of the contest in global activeGames , ctxId = context
-   retrieveLeaderboard(snapshot,ctxID,index){
-       console.log('eacchtx', ctxID.val())
-       var t = this 
-        var playerIDs = []//the players in each contest. the plan is to unify active contests and leaderboard
-        var playerScores = []
-
-        if(snapshot.child('ongoing').val() == true){
-            snapshot.child('scores').forEach(function(vals){
-                playerIDs.push( (vals.key))
-                playerScores.push(vals.val())
-               // console.log(playerIDs, playerScores)
-              
-
-             
-            })
-
-        
-        }//get entries   
-        ( this.ldrbrdAsync(ctxID,index,playerIDs,playerScores))
-   },
-   ldrbrdAsync(ctxID,index,playerIDs,playerScores){
-       var t = this
-    FBInstant.getLeaderboardAsync('cntxtLdrbrd.'+ parseInt(ctxID.val() ))
-    .then(leaderboard => leaderboard.getEntriesAsync())
-    .then(entries => {
-        console.log('wtf',index)
-        if(entries == [] ) return  
-        var toppers = [] 
-        for(var i=0;i<entries.length ;i++){ 
-            if(  playerIDs.includes( (entries[i].getPlayer().getID()) )   ){ 
-                toppers.push([entries[i].getPlayer(),playerScores[playerIDs.indexOf( (entries[i].getPlayer().getID()) )] ])  
-            } 
-        } 
-        t.CTX.push(ctxID.val())
-        t.TOP.push(toppers) 
-        t.postLeaderBoard(ctxID.val())
-        t.showActiveContests() 
-}).catch(error => console.error(error));
-   },
-   showFinishedContestPrompt(){
-
-   },
    postLeaderBoard(context){
        //toppers = [   [{player details} , score  ] , [{player details} , score  ] ]
       
