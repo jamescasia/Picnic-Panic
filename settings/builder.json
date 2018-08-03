@@ -1,10 +1,8 @@
 {
   "appKey": "",
   "appSecret": "",
-  "encryptJs": true,
-  "excludeScenes": [
-    "2d2f792f-a40c-49bb-a189-ed176a246e49"
-  ],
+  "encryptJs": false,
+  "excludeScenes": [],
   "fb-instant-games": {},
   "includeAnySDK": false,
   "includeSDKBox": false,
@@ -16,19 +14,19 @@
   "oauthLoginServer": "",
   "optimizeHotUpdate": false,
   "orientation": {
-    "landscapeLeft": true,
-    "landscapeRight": true,
-    "portrait": false,
+    "landscapeLeft": false,
+    "landscapeRight": false,
+    "portrait": true,
     "upsideDown": false
   },
-  "packageName": "org.cocos2d.helloworld",
+  "packageName": "aether.picnic.panic",
   "privateKey": "",
   "qqplay": {
     "REMOTE_SERVER_ROOT": "",
     "orientation": "portrait"
   },
   "renderMode": "2",
-  "startScene": "faf70c39-0aa5-4bc7-bfb8-55efce6cad5b",
+  "startScene": "ae4a6f37-5380-4e17-96a5-87b8034109bc",
   "title": "PizzaBugePan",
   "webOrientation": "portrait",
   "wechatgame": {

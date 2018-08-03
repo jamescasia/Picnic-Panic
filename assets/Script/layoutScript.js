@@ -22,7 +22,7 @@ cc.Class({
     start () {
 
     },
-    showPanel(score, highCombo  ,prize  ){
+    showPanel(score, highCombo  ,prize ,highest ){
         var show = cc.spawn(
             cc.moveTo(0.4, 0,-92 ),
             cc.fadeIn(0.2)
@@ -33,12 +33,12 @@ cc.Class({
        this.prizeLable.getComponent(cc.Label).string = "PRIZE: "  + String(prize) 
 
         this.scoreLabel.getComponent(cc.Label).string = "SCORE: "  + String(score) 
-        var highestScore = (cc.sys.localStorage.getItem('highestScore')); 
+        var highestScore =highest
           this.highScoreLabel.getComponent(cc.Label).string = "HIGHSCORE: " + String(highestScore  ) 
         this.highComboLabel.getComponent(cc.Label).string = "HIGH COMBO: " + String(highCombo) 
     },
     onHome(){
-        cc.director.loadScene('home');
+        cc.director.loadScene('shop');
     },
     onReset(){
 

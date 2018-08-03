@@ -7,29 +7,7 @@ cc.Class({
         game:cc.Node,
         choices:[], 
         frame:cc.Sprite,
-        bu1:cc.SpriteFrame,
-        pa1:cc.SpriteFrame,
-        pi1:cc.SpriteFrame,
-
-        bu1s:cc.SpriteFrame,
-        pa1s:cc.SpriteFrame,
-        pi1s:cc.SpriteFrame,
-
-        bu2:cc.SpriteFrame,
-        pa2:cc.SpriteFrame,
-        pi2:cc.SpriteFrame,
-
-        bu2s:cc.SpriteFrame,
-        pa2s:cc.SpriteFrame,
-        pi2s:cc.SpriteFrame,
-
-        bu3:cc.SpriteFrame,
-        pa3:cc.SpriteFrame,
-        pi3:cc.SpriteFrame,
-
-        bu3s:cc.SpriteFrame,
-        pa3s:cc.SpriteFrame,
-        pi3s:cc.SpriteFrame,
+         
          
 
         level:2,
@@ -55,15 +33,15 @@ cc.Class({
  
 
     onLoad () {
-        this.healactn = cc.sequence( cc.fadeTo(0.2, 180) , cc.fadeTo(0.2, 255)).repeat(15)
+        this.healactn = cc.sequence( cc.fadeTo(0.2, 150) , cc.fadeTo(0.2, 255)).repeat(15)
         this.frenzySoloFx =   
             cc.sequence( 
-                cc.scaleTo(0.3, 1.125, 1.125),
+                cc.scaleTo(0.3, 1.125, 1.125),  
                 cc.scaleTo(4.5 , 1.125, 1.125),
                 cc.scaleTo(0.2 , 1,1) 
 
                 ) 
-        this.choices = [ this.bu1 , this.pa1, this.pi1]
+        this.choices = [ this.game.getComponent('Game').bu1 , this.game.getComponent('Game').pa1, this.game.getComponent('Game').pi1]
         this.node.on('click', this.clicked, this);
         this.boostactn = cc.sequence(
             cc.scaleTo(0.3  , 1.1 , 1.1) ,
@@ -112,7 +90,7 @@ cc.Class({
 
         this.scheduleOnce(function() {
             this.initialize()
-        },   ( this.spawnFactor*(Math.round(cc.rand() )  %2 )+ (1.35*this.spawnFactor))   );
+        },   ( this.spawnFactor*(Math.round(cc.rand() )  %3 )+ (1.8*this.spawnFactor))   );
             
     },
     frenzySoloEnd(){
@@ -241,8 +219,10 @@ cc.Class({
             
             
             
-        }
+        } 
+        
         this.level+=1
+
 
 
     },  
@@ -296,26 +276,26 @@ cc.Class({
             if(this.level ===0){
                 switch(this.mode){
                     case 'bu': 
-                        this.frame.spriteFrame = this.bu1s
+                        this.frame.spriteFrame = this.game.getComponent('Game').bu1s
                         break
                     case 'pa': 
-                        this.frame.spriteFrame = this.pa1s
+                        this.frame.spriteFrame = this.game.getComponent('Game').pa1s
                         break
                     case 'pi': 
-                        this.frame.spriteFrame = this.pi1s
+                        this.frame.spriteFrame = this.game.getComponent('Game').pi1s
                         break
                 }
             }
                 if(this.level ===1){
                     switch(this.mode){
                         case 'bu': 
-                            this.frame.spriteFrame = this.bu2s
+                            this.frame.spriteFrame = this.game.getComponent('Game').bu2s
                             break
                         case 'pa': 
-                            this.frame.spriteFrame = this.pa2s
+                            this.frame.spriteFrame = this.game.getComponent('Game').pa2s
                             break
                         case 'pi': 
-                            this.frame.spriteFrame = this.pi2s
+                            this.frame.spriteFrame = this.game.getComponent('Game').pi2s
                             break
                     }
         
@@ -324,13 +304,13 @@ cc.Class({
                     
                     switch(this.mode){
                         case 'bu': 
-                            this.frame.spriteFrame = this.bu3s
+                            this.frame.spriteFrame = this.game.getComponent('Game').bu3s
                             break
                         case 'pa': 
-                            this.frame.spriteFrame = this.pa3s
+                            this.frame.spriteFrame = this.game.getComponent('Game').pa3s
                             break
                         case 'pi': 
-                            this.frame.spriteFrame = this.pi3s
+                            this.frame.spriteFrame = this.game.getComponent('Game').pi3s
                             break
                     }
         
@@ -342,26 +322,26 @@ cc.Class({
             if(this.level ===0){
                 switch(this.mode){
                     case 'bu': 
-                        this.frame.spriteFrame = this.bu1
+                        this.frame.spriteFrame = this.game.getComponent('Game').bu1
                         break
                     case 'pa': 
-                        this.frame.spriteFrame = this.pa1
+                        this.frame.spriteFrame = this.game.getComponent('Game').pa1
                         break
                     case 'pi': 
-                        this.frame.spriteFrame = this.pi1
+                        this.frame.spriteFrame = this.game.getComponent('Game').pi1
                         break
                 }
             }
                 if(this.level ===1){
                     switch(this.mode){
                         case 'bu': 
-                            this.frame.spriteFrame = this.bu2
+                            this.frame.spriteFrame = this.game.getComponent('Game').bu2
                             break
                         case 'pa': 
-                            this.frame.spriteFrame = this.pa2
+                            this.frame.spriteFrame = this.game.getComponent('Game').pa2
                             break
                         case 'pi': 
-                            this.frame.spriteFrame = this.pi2
+                            this.frame.spriteFrame = this.game.getComponent('Game').pi2
                             break
                     }
         
@@ -370,13 +350,13 @@ cc.Class({
                     
                     switch(this.mode){
                         case 'bu': 
-                            this.frame.spriteFrame = this.bu3
+                            this.frame.spriteFrame = this.game.getComponent('Game').bu3
                             break
                         case 'pa': 
-                            this.frame.spriteFrame = this.pa3
+                            this.frame.spriteFrame = this.game.getComponent('Game').pa3
                             break
                         case 'pi': 
-                            this.frame.spriteFrame = this.pi3
+                            this.frame.spriteFrame = this.game.getComponent('Game').pi3
                             break
                     }
         
@@ -395,7 +375,7 @@ cc.Class({
             var r= parseInt( cc.rand() )%11
             if(r===3) this.level =2
         }
-        this. frame.spriteFrame = this.choices[Math.floor(cc.rand())%this.choices.length]
+        this. frame.spriteFrame = this.choices[Math.floor(cc.rand()) % (this.choices.length)]
         // 
         this.frame.node.scale = cc.v2(0,0) 
         var born =cc.spawn(
@@ -456,6 +436,11 @@ cc.Class({
                 break
         } 
         this.isEmpty = false // not completed the loop gotta make isEmpty true again
+        
+        if(this.game.getComponent('Game').panzing )this.turnOffHeal('pa')
+        else if(this.game.getComponent('Game').pizzing )this.turnOffHeal('pi')
+        else if(this.game.getComponent('Game').burging )this.turnOffHeal('bu')
+
 
         }
         

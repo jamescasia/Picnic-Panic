@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "cf592851-1e9f-492b-8411-61be915742f5",
+  "uuid": "f77aa9ec-72fc-489e-b9f5-6dcc2c2b64db",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "bg": {
+    "TMHAsset 4": {
       "ver": "1.0.3",
-      "uuid": "698b84f7-c276-4343-a704-8925c3da98ba",
-      "rawTextureUuid": "cf592851-1e9f-492b-8411-61be915742f5",
+      "uuid": "df90f6bb-21aa-40a2-8297-334c4782299f",
+      "rawTextureUuid": "f77aa9ec-72fc-489e-b9f5-6dcc2c2b64db",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 1065,
-      "height": 1597,
-      "rawWidth": 1065,
-      "rawHeight": 1597,
+      "width": 2773,
+      "height": 1048,
+      "rawWidth": 2773,
+      "rawHeight": 1048,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

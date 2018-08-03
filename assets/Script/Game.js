@@ -1,5 +1,5 @@
  
-
+var global = require('global')  
 cc.Class({
     extends: cc.Component,
 
@@ -66,9 +66,43 @@ cc.Class({
 
         passiveComboBoost:0 , 
         passiveTimeBoost:0, 
-        passiveFrenzyDuration:0,
+        passiveFrenzyBoost:0,
         coins:0,
         prize:0,
+        enemyPic:cc.Node,
+
+        bu1:cc.SpriteFrame,
+        pa1:cc.SpriteFrame,
+        pi1:cc.SpriteFrame,
+
+        bu1s:cc.SpriteFrame,
+        pa1s:cc.SpriteFrame,
+        pi1s:cc.SpriteFrame,
+
+        bu2:cc.SpriteFrame,
+        pa2:cc.SpriteFrame,
+        pi2:cc.SpriteFrame,
+
+        bu2s:cc.SpriteFrame,
+        pa2s:cc.SpriteFrame,
+        pi2s:cc.SpriteFrame,
+
+        bu3:cc.SpriteFrame,
+        pa3:cc.SpriteFrame,
+        pi3:cc.SpriteFrame,
+
+        bu3s:cc.SpriteFrame,
+        pa3s:cc.SpriteFrame,
+        pi3s:cc.SpriteFrame,
+        storage: null ,
+        ampopo:null,
+
+        timeBoostSprt:cc.Prefab,
+        spawnBoostSpr:cc.Prefab,
+        frenzyBoostSprt:cc.Prefab,
+        boostersPanel:cc.Node,
+        abText:cc.Node,
+        d:cc.Node
  
     }, 
     parseBoolean(x){
@@ -76,30 +110,100 @@ cc.Class({
         if ( x== 'true') return true
 
     },
+    retry(){
+        //cc.director.loadScene('main')
+    },
+    setEnemy(){
+        if (typeof FBInstant === 'undefined') return;  
 
-    onLoad () {
-        if(cc.sys.localStorage.getItem('usingFrenzy')!= null ) this.usingFrenzy = this.parseBoolean(cc.sys.localStorage.getItem('usingFrenzy')) 
-        else this.usingFrenzy= false
-        if(cc.sys.localStorage.getItem('usingFreeze')!= null ) this.usingFreeze = this.parseBoolean(cc.sys.localStorage.getItem('usingFreeze'))
-        else this.usingFreeze= false
-        if(cc.sys.localStorage.getItem('usingSpawn')!= null ) this.usingSpawn = this.parseBoolean(cc.sys.localStorage.getItem('usingSpawn'))
-        else this.usingSpawn= false
-        if(cc.sys.localStorage.getItem('numOfGames')!= null ) this.numOfGames = parseInt(cc.sys.localStorage.getItem('highestScore'))
-        else this.numOfGames= 0
-        if(cc.sys.localStorage.getItem('highestScore')!= null ) this.highestScore = parseInt(cc.sys.localStorage.getItem('highestScore'))
-        else this.highestScore= 0 
-        if(cc.sys.localStorage.getItem('passiveComboBoost')!= null ) this.passiveComboBoost = parseInt(cc.sys.localStorage.getItem('passiveComboBoost'))
-        else this.passiveComboBoost= 0 
-        if(cc.sys.localStorage.getItem('passiveTimeBoost')!= null ) this.passiveTimeBoost = parseFloat(cc.sys.localStorage.getItem('passiveTimeBoost'))
-        else this.passiveTimeBoost= 0 
-        if(cc.sys.localStorage.getItem('passiveFrenzyDuration')!= null ) this.passiveFrenzyDuration = parseFloat(cc.sys.localStorage.getItem('passiveFrenzyDuration'))
-        else this.passiveFrenzyDuration= 0 
-        if ( parseInt(cc.sys.localStorage.getItem('coins') )!= null ) this.coins =  parseInt (cc.sys.localStorage.getItem('coins'))
-        else this.coins = 0
+        var enemyImage = new Image( );
+        enemyImage.crossOrigin = 'anonymous'; 
+        enemyImage.src =FBInstant.player.getPhoto();  
+        cc.loader.load(enemyImage.src, (err, texture) => {
+        this.enemyPic.getChildByName('pic').getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(texture);
+        this.enemyPic.getChildByName('pic').width = 100 
+        this.enemyPic.getChildByName('pic').height = 100 
+        //this.enemyPic.getComponent(cc.Mask).type =  cc.Mask.Type.ELLIPSE 
+    })
 
-        if(this.usingFreeze  ){ 
-            this.useFreezeBoost() 
+    },
+    saveToDB(data){
+        if (typeof firebase === 'undefined'||typeof FBInstant === 'undefined') return;  
+        FBInstant.context.getID()
+        
+        var database = firebase.database();
+        database.ref('twice/').set('NaJeongMoSaJiMiDaChaeTzu!')
+    },
+    readDB(){},
+
+    onLoad () {        
+        //firebase.database().ref('/users/'+global.global_userID+'/activeContests/'+key).set(FBInstant.context.getID()) 
+        
+        this.saveToDB()
+        this.setEnemy() 
+        //console.log('globo here' , global.global_userID , global.global_userData.val().activeContests)
+        //console.log('gonoing',global.global_activeContests.val()[FBInstant.context.getID()].ongoing )
+        
+
+        cc.director.setDisplayStats ( false )  
+        
+        this.storage = JSON.parse (cc.sys.localStorage.getItem('ampopo'))  
+        console.log('fiiirst ' , this.storage)
+      /*   this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
+                usingSpawn:false , coins:22222 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
+                passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
+                passiveTimeLvl:0
+                        }
+                        cc.sys.localStorage.setItem('ampopo',JSON.stringify( this.storage)) */
+                        
+                        
+                        
+                
+       
+        if(  this.storage == null  ){
+            this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
+                usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
+                passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
+                passiveTimeLvl:0
+                        }
+                    
+        cc.sys.localStorage.setItem('ampopo',JSON.stringify( this.storage)) 
         } 
+     console.log(this.storage)
+     /*
+      this.ampopo = ( JSON.parse (cc.sys.localStorage.getItem('ampopo')) )
+      console.log(this.ampopo)
+      this.ampopo.tangina = 'd1231'
+      cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.ampopo) )
+      this.ampopo = ( JSON.parse (cc.sys.localStorage.getItem('ampopo')) )
+      console.log('babababbaboyka' , this.ampopo)
+      //console.log  (JSON.parse(this.ampopo.tangina))
+       console.log( JSON.parse (cc.sys.localStorage.getItem('ampopo')) ) */
+
+ 
+      
+        
+ 
+        this.usingFreeze = JSON.parse ( this.storage.usingFreeze)
+        this.usingFrenzy =    JSON.parse(this.storage.usingFrenzy)
+        this.usingSpawn =    JSON.parse(this.storage.usingSpawn)
+        console.log(this.usingSpawn, "TBGIII", this.usingFreeze, this.usingFrenzy)
+        this.coins =  JSON.parse(parseInt( this.storage.coins) )
+        this.passiveComboBoost = JSON.parse (parseInt(this.storage.passiveComboBoost))
+        this.passiveTimeBoost = JSON.parse( parseInt(this.storage.passiveTimeBoost))
+        this.passiveFrenzyBoost = (parseInt( this.storage.passiveFrenzyBoost))
+        this.highestCombo =JSON.parse  (parseInt(this.storage.highestCombo))
+        this.highestScore =JSON.parse (parseInt( this.storage.highestScore))
+        this.ss()
+        this.boosterShow()
+ 
+
+        
+        
+
+       // this.storage.numOfGames = 23;
+        
+ 
         
 
     
@@ -107,22 +211,74 @@ cc.Class({
 
         
     },
+    boosterShow(){
+            var aa = cc.sequence(cc.delayTime(0.15) ,cc.spawn (cc.fadeIn(1),  cc.moveBy(1, 0, 155)).easing(cc.easeCubicActionOut()) ,
+                cc.moveBy(1, 0 , 0),cc.spawn (cc.fadeOut(1) , cc.moveBy(1, 0, -155)).easing(cc.easeQuinticActionIn()) 
+                ).speed(2)
+            var ssf = cc.sequence(cc.delayTime(0.3), cc.spawn (cc.fadeIn(1),  cc.moveBy(1, 0, 155)).easing(cc.easeCubicActionOut()) ,
+                cc.moveBy(1, 0 , 0), cc.spawn (cc.fadeOut(1) , cc.moveBy(1, 0, -155)).easing(cc.easeQuinticActionIn()) 
+                ).speed(2)
+            var bb = cc.sequence( cc.spawn (cc.fadeIn(1),  cc.moveBy(1, 0, 155)).easing(cc.easeCubicActionOut()) ,
+                cc.moveBy(1, 0 , 0),cc.spawn (cc.fadeOut(1) , cc.moveBy(1, 0, -155)).easing(cc.easeQuinticActionIn()) 
+                ).speed(2)
+            var flash = cc.sequence( cc.spawn (cc.fadeIn(1),  cc.moveBy(1, 759, 0)).easing(cc.easeCubicActionOut()) ,
+                cc.moveBy(1, 0 , 0),cc.spawn (cc.fadeOut(1) , cc.moveBy(1, 759, 0)).easing(cc.easeQuinticActionIn()) 
+                ).speed(2)
+            let children = []
+            if(this.usingFrenzy){
+            
+                var frenzyBoostSprt = cc.instantiate( this.frenzyBoostSprt); 
+                this.boostersPanel.addChild(frenzyBoostSprt);
+                children.push(frenzyBoostSprt)
+            } 
+        
+            if (this.usingFreeze){
+            var timeBoostSprt = cc.instantiate( this.timeBoostSprt); 
+            this.boostersPanel.addChild(timeBoostSprt);  
+            this.useFreezeBoost() 
+            children.push(timeBoostSprt)
+        
+        }
+             
+            if(this.usingSpawn){
+            var spawnBoostSpr = cc.instantiate( this.spawnBoostSpr); 
+            this.boostersPanel.addChild(spawnBoostSpr); 
+            children.push(spawnBoostSpr)
+         }
+         if(children.length>=1)this.abText.runAction(flash)
+         if(children.length==1 ) children[0].position = cc.v2(0,0)
+         if(children.length==2 ) children[0].position = cc.v2(-80,0), children[1].position = cc.v2(80,0)
+         if(children.length==3 ) children[0].position = cc.v2(-160,0), children[1].position = cc.v2(0,0), children[2].position = cc.v2(160,0)
+
+            
+        
+        if (this.usingFrenzy) frenzyBoostSprt.runAction(bb) 
+        if(this.usingSpawn)spawnBoostSpr.runAction(ssf)
+        if(this.usingFreeze)timeBoostSprt.runAction(aa)
+
+        
+        console.log('my child', this.boostersPanel.childrenCount )
+    },
     onHome(){
         cc.director.resume()
-        cc.director.loadScene('home');
+        cc.director.loadScene('shop');
     },
     onPause(){
         this.pausemenu.opacity=255
         this.pausemenu.position = cc.v2(-42, 110)
-        if(this.pauseBtn.getComponent(cc.Toggle).isChecked) {cc.director.pause() 
-        this.everything.opacity = 150}
-        else {cc.director.resume()
+        if(this.pauseBtn.getComponent(cc.Toggle).isChecked) {
+            cc.director.pause()  
+        }
+        else {
+            cc.director.resume()
             this.pausemenu.opacity=0
             this.pausemenu.position = cc.v2(400, 110)
-             this.everything.opacity = 255 }
+             
+        }
     },
 
     start () {   
+        console.log("GAME" , this.storage  )
 
         this.highestCombo = 0
         this.comboctr  = 0
@@ -145,6 +301,7 @@ cc.Class({
             
 
             if(left <=0 && !this.gameover  ){ 
+                t.sdkWork() 
                 var prize =  Math.round(Math.random()*200) 
                 if(prize <= 100) prize = 100+ Math.floor(Math.random()*22)
                 
@@ -152,22 +309,26 @@ cc.Class({
                 
                 if(t.score >= t.highestScore){ t.highestScore = t.score
                     prize+= 80
-
-
+ 
                 }
                 t.coins +=prize
-                this.prize = prize
-                console.log("prize", prize  ,"running: " , t.coins)
-                cc.sys.localStorage.setItem('coins',   t.coins)
-                cc.sys.localStorage.setItem('highestScore',  (t.highestScore)); 
-                t.endPanel.getComponent('layoutScript').showPanel(t.score ,t.highestCombo,t.prize )
+                this.prize = prize 
+                this.storage.coins = t.coins
+                this.storage.highestScore = t.highestScore
+                t.endPanel.getComponent('layoutScript').showPanel(t.score ,t.highestCombo,t.prize ,t.highestScore)
                 t.gameover = true
                 t.numOfGames+=1
                 t.matrix.destroy()  
-                if(t.numOfGames% 3 == 0 && t.numOfGames >=3) {
-                     
-                }
-                cc.sys.localStorage.setItem('numOfGames',  t.numOfGames);  
+                this.usingFrenzy = false
+                this.usingFreeze = false
+                this.usingSpawn = false
+                this.storage.usingFrenzy = false
+                this.storage.usingFreeze = false
+                this.storage.usingSpawn = false
+
+                this.storage.numOfGames = t.numOfGames 
+                this.ss()
+                
             } 
 
             t.timeLabel.getComponent(cc.Label).string = String(left).replace("." , ':')
@@ -179,6 +340,7 @@ cc.Class({
          
     },  
     frenzyEffect(){ 
+        console.log('whyy')
         this.cameraShake()
         var frenzyburn = cc.instantiate( this.frenzyburn); 
         this.node.addChild(frenzyburn);  
@@ -187,19 +349,17 @@ cc.Class({
         //this.node.getChildByName('frenzyburn').runAction(slowburn)
 
         
-
-        console.log('frenzed')
+ 
         var t = this
         t.frenzying = true
         
-        t.burgEffect =3
-        t.panEffect = 3
-        t.pizEffect = 3
-        if(t.usingFrenzy  ){
-            console.log('frenzy: ' , t.usingFrenzy)
-            t.burgEffect =4
-            t.panEffect = 4
-            t.pizEffect = 4
+        t.burgEffect =3+t.passiveFrenzyBoost
+        t.panEffect = 3+t.passiveFrenzyBoost
+        t.pizEffect = 3+t.passiveFrenzyBoost
+        if(t.usingFrenzy  ){ 
+            t.burgEffect =4+t.passiveFrenzyBoost
+            t.panEffect = 4+t.passiveFrenzyBoost
+            t.pizEffect = 4+t.passiveFrenzyBoost
 
         }
         var ends = function(){
@@ -228,7 +388,7 @@ cc.Class({
             t.fourthree.getComponent('unit').frenzySoloEnd()
             t.fourfour.getComponent('unit').frenzySoloEnd()
         }
-        var frenzyTime =cc.sequence(  cc.delayTime(5+t.passiveFrenzyDuration) ,cc.callFunc(ends,t)) 
+        var frenzyTime =cc.sequence(  cc.delayTime(5 ) ,cc.callFunc(ends,t)) 
         this.matrix.runAction(frenzyTime)
             t.oneone.getComponent('unit').frenzySolo()
             t.onetwo.getComponent('unit').frenzySolo()
@@ -279,12 +439,18 @@ cc.Class({
 
 
         } 
+        
           
     
     },
-    pizTwoing(){
-        //  console.log('green tea is green')
+    ss(){
+        cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )
+        this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
+    },
+    pizTwoing(){ 
         this.pizzing = true
+        this.healPizz()
+        if(!this.frenzying &&   this.pizzing && this.panzing && this.burging) this.frenzyEffect()
         if(!this. frenzying)this.pizEffect = 2
         var pizEnd  = function(){ 
             this.pizzing = false
@@ -311,6 +477,8 @@ cc.Class({
     },
     panTwoing(){
         this.panzing = true 
+        this.healPan()
+        if(!this.frenzying &&   this.pizzing && this.panzing && this.burging) this.frenzyEffect()
         if(!this. frenzying)this.panEffect =2
         var panEnd  = function(){
             this.panzing = false
@@ -336,12 +504,14 @@ cc.Class({
         t.matrix.runAction(t2 )
     },
     burgTwoing(){
+        console.log('fuckk')
             this.burging = true
+            this.healBurg()
+            if(!this.frenzying &&   this.pizzing && this.panzing && this.burging) this.frenzyEffect()
        // console.log('sana is pabo')
         if(!this. frenzying)this.burgEffect =2
         var burgEnd  = function(){  
-            this.burging = false
-            console.log('dfaa')
+            this.burging = false 
             this.oneone.getComponent('unit').turnOnHeal()
             this.onetwo.getComponent('unit').turnOnHeal()
             this.onethree.getComponent('unit').turnOnHeal()
@@ -370,50 +540,7 @@ cc.Class({
         //let cameraShakeA = cc.sequence(cc.moveTo( 0.1, 0, cc.randomMinus1To1()*24) ,cc.moveTo(0.1, 0, -cc.random0To1()*24)).repeat(10)
         //this.everything.runAction(cameraShakeA)
     }, 
-
-   
-   update (dt) {   
-        
-       //console.log(this.burgEffect , this.pizEffect , this.panEffect , this.frenzying)
-        if(!this.frenzying &&   this.pizzing && this.panzing && this.burging) this.frenzyEffect()
-        if(!this.gameover){
-        if(this.burging){ 
-            this.oneone.getComponent('unit').turnOffHeal('bu')
-            this.onetwo.getComponent('unit').turnOffHeal('bu')
-            this.onethree.getComponent('unit').turnOffHeal('bu')
-            this.onefour.getComponent('unit').turnOffHeal('bu')
-            this.twoone.getComponent('unit').turnOffHeal('bu')
-            this.twotwo.getComponent('unit').turnOffHeal('bu')
-            this.twothree.getComponent('unit').turnOffHeal('bu')
-            this.twofour.getComponent('unit').turnOffHeal('bu')
-            this.threeone.getComponent('unit').turnOffHeal('bu')
-            this.threetwo.getComponent('unit').turnOffHeal('bu')
-            this.threethree.getComponent('unit').turnOffHeal('bu')
-            this.threefour.getComponent('unit').turnOffHeal('bu')
-            this.fourone.getComponent('unit').turnOffHeal('bu')
-            this.fourtwo.getComponent('unit').turnOffHeal('bu')
-            this.fourthree.getComponent('unit').turnOffHeal('bu')
-            this.fourfour.getComponent('unit').turnOffHeal('bu')
-        } 
-        if(this.pizzing){ 
-            this.oneone.getComponent('unit').turnOffHeal('pi')
-            this.onetwo.getComponent('unit').turnOffHeal('pi')
-            this.onethree.getComponent('unit').turnOffHeal('pi')
-            this.onefour.getComponent('unit').turnOffHeal('pi')
-            this.twoone.getComponent('unit').turnOffHeal('pi')
-            this.twotwo.getComponent('unit').turnOffHeal('pi')
-            this.twothree.getComponent('unit').turnOffHeal('pi')
-            this.twofour.getComponent('unit').turnOffHeal('pi')
-            this.threeone.getComponent('unit').turnOffHeal('pi')
-            this.threetwo.getComponent('unit').turnOffHeal('pi')
-            this.threethree.getComponent('unit').turnOffHeal('pi')
-            this.threefour.getComponent('unit').turnOffHeal('pi')
-            this.fourone.getComponent('unit').turnOffHeal('pi')
-            this.fourtwo.getComponent('unit').turnOffHeal('pi')
-            this.fourthree.getComponent('unit').turnOffHeal('pi')
-            this.fourfour.getComponent('unit').turnOffHeal('pi')
-        } 
-        if(this.panzing){ 
+    healPan(){ 
             this.oneone.getComponent('unit').turnOffHeal('pa')
             this.onetwo.getComponent('unit').turnOffHeal('pa')
             this.onethree.getComponent('unit').turnOffHeal('pa')
@@ -430,15 +557,57 @@ cc.Class({
             this.fourtwo.getComponent('unit').turnOffHeal('pa')
             this.fourthree.getComponent('unit').turnOffHeal('pa')
             this.fourfour.getComponent('unit').turnOffHeal('pa')
-        } 
-            
- 
-    }
+         
+    },
+    healPizz(){ 
+            this.oneone.getComponent('unit').turnOffHeal('pi')
+            this.onetwo.getComponent('unit').turnOffHeal('pi')
+            this.onethree.getComponent('unit').turnOffHeal('pi')
+            this.onefour.getComponent('unit').turnOffHeal('pi')
+            this.twoone.getComponent('unit').turnOffHeal('pi')
+            this.twotwo.getComponent('unit').turnOffHeal('pi')
+            this.twothree.getComponent('unit').turnOffHeal('pi')
+            this.twofour.getComponent('unit').turnOffHeal('pi')
+            this.threeone.getComponent('unit').turnOffHeal('pi')
+            this.threetwo.getComponent('unit').turnOffHeal('pi')
+            this.threethree.getComponent('unit').turnOffHeal('pi')
+            this.threefour.getComponent('unit').turnOffHeal('pi')
+            this.fourone.getComponent('unit').turnOffHeal('pi')
+            this.fourtwo.getComponent('unit').turnOffHeal('pi')
+            this.fourthree.getComponent('unit').turnOffHeal('pi')
+            this.fourfour.getComponent('unit').turnOffHeal('pi') 
+    },
+    healBurg(){  
+        this.oneone.getComponent('unit').turnOffHeal('bu')
+        this.onetwo.getComponent('unit').turnOffHeal('bu')
+        this.onethree.getComponent('unit').turnOffHeal('bu')
+        this.onefour.getComponent('unit').turnOffHeal('bu')
+        this.twoone.getComponent('unit').turnOffHeal('bu')
+        this.twotwo.getComponent('unit').turnOffHeal('bu')
+        this.twothree.getComponent('unit').turnOffHeal('bu')
+        this.twofour.getComponent('unit').turnOffHeal('bu')
+        this.threeone.getComponent('unit').turnOffHeal('bu')
+        this.threetwo.getComponent('unit').turnOffHeal('bu')
+        this.threethree.getComponent('unit').turnOffHeal('bu')
+        this.threefour.getComponent('unit').turnOffHeal('bu')
+        this.fourone.getComponent('unit').turnOffHeal('bu')
+        this.fourtwo.getComponent('unit').turnOffHeal('bu')
+        this.fourthree.getComponent('unit').turnOffHeal('bu')
+        this.fourfour.getComponent('unit').turnOffHeal('bu') 
+    
+     
+},
+
+   
+   update (dt) {    
+       this.d.getComponent(cc.Label).string =Math.round(1/dt, 2)
+        
+       //console.log(this.burgEffect , this.pizEffect , this.panEffect , this.frenzying)
+        
+         
         
 
-
-       
-    
+ 
        this.scoreLabel.getComponent(cc.Label).string = this.score
        this.comboLabel.getComponent(cc.Label).string = this.comboctr 
 
@@ -588,6 +757,107 @@ cc.Class({
 
 
    },
+   setScoreBoardCntxtfl(score)
+   { //worked for global contexts
+       if (typeof FBInstant === 'undefined') return;  
+       FBInstant
+           .getLeaderboardAsync('cntxtLdrbrd.'+FBInstant.context.getID())
+           .then(leaderboard => {
+               console.log(leaderboard.getName());
+               return leaderboard.setScoreAsync(  score  );
+                               })
+           .then(() => console.log('Score saveds'))
+           .catch(error => console.error(error));
+   },
+   postBoard(){ //worked
+    if (typeof FBInstant === 'undefined') return; 
+    FBInstant.updateAsync({
+        action: 'LEADERBOARD',
+        name: 'cntxtLdrbrd.' + FBInstant.context.getID()
+      })
+        .then(() => console.log('Update Posted'))
+        .catch(error => console.error(error));
+},
+getIMG(){
+
+    let canvas = document.createElement('canvas');
+    canvas.width = 200;
+    canvas.height = 200;
+    let ctx = canvas.getContext('2d');      
+    return canvas.toDataURL('image/png');
+
+},
+onChallenge(){ //first gotta send in the image your score!
+    if (typeof FBInstant === 'undefined') return;
+    var t = this 
+    FBInstant.updateAsync({
+        action: 'CUSTOM',
+        cta: 'CHALLENGE',
+        image: this.getIMG(),
+        text: {
+          default: FBInstant.player.getName() + 'has started a FOOD FIGHT!!',
+            
+        },
+        template: 'CHALLENGE',
+        data: { myReplayData: FBInstant.context.getID() },
+        strategy: 'IMMEDIATE',
+        notification: 'NO_PUSH',
+      }).then(function() {
+          t.activeContexts.push(FBInstant.context.getID())
+          t.saveData()
+        // closes the game after the update is posted.
+        //FBInstant.quit();
+      });
+},
+sdkWork(){
+    //listen to player's active games. If this context is already an active game => proceed 
+    console.log('globo here' ,global.global_activeContests.val()[FBInstant.context.getID()]) 
+    if(global.global_activeContests.val()[FBInstant.context.getID()] == undefined  ){ 
+       // this.onChallenge()
+        var key = global.pushKey()
+        firebase.database().ref('/users/'+global.global_userID+'/activeContests/'+key).set(FBInstant.context.getID())
+        var updates = {}
+        updates[ global.global_userID] = this.score
+        console.log('oopdates', updates)
+       firebase.database().ref('/activeContests/'+ FBInstant.context.getID()).set({
+
+           ongoing:'PENDING',
+           scores:updates,   
+           timeEnd:2313,
+           timeStart:1231,
+           timeLeft:2313
+       })
+    }
+    else if(global.global_activeContests.val()[FBInstant.context.getID()].ongoing == 'PENDING' ||!global.global_activeContests.val()[FBInstant.context.getID()].ongoing   ){ 
+       // this.onChallenge()
+        var key = global.pushKey()
+        firebase.database().ref('/users/'+global.global_userID+'/activeContests/'+key).set(FBInstant.context.getID())
+        var updates = {}
+        updates[ global.global_userID] = this.score
+        console.log('oopdates', updates)
+       firebase.database().ref('/activeContests/'+ FBInstant.context.getID()).set({
+
+           ongoing:'PENDING',
+           scores:updates,   
+           timeEnd:2313,
+           timeStart:1231,
+           timeLeft:2313
+       })
+    }
+  
+    else {
+
+        return firebase.database().ref('/activeContests/'+FBInstant.context.getID()+'/scores/'+global.global_userID).set(this.score) 
+
+        
+        //push active contest to own ref and globalAC
+
+
+    }
+    
+
+   // })
+},
    toggling(x){ 
        if(x.isEmpty ) return
     switch(x){

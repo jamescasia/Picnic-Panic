@@ -1,0 +1,32 @@
+onOpen: 
+    if Users/{userID} == null => firedb push Users/{userID} 
+    Users/{userID}.ActiveContests => get {contextID} of active contests
+    => populate ongoing games tab => fetch top3 players thru ActiveContests/{contextID}/scores/{userID}
+    => iterate thru ActiveContests/{contextID}/scores/ at most 3 times
+        => get name and picture through leaderboard.entry.{userID}
+        set Pictures top1 with crown, top1 name and switchCOntext btn
+ 	if on context=>
+        pushLeaderboard(contextID, 0)
+		ActiveContests/{contextID}.listener => 
+			
+        Play():
+            chooseAsync()=> go to context and the context leaderboard
+                rejected => continue on current context => play => gameover 
+                    if .onWrite('activegames'/{contextID}.ongoing) => 
+                        
+                        True: The player's face and score in updateAsync()
+                        context.score is posted. His highest score is uploaded to activecontests.ranking.{userID}:score
+                        
+                        Pending: 
+PlayingOnAContext():
+    showLeaderboard()  
+
+    
+
+
+
+
+
+			
+									  
+   
