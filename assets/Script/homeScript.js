@@ -167,6 +167,32 @@ cc.Class({
 
     Init(){
         this.savePlayerData()
+        let t = this
+
+        global.global_userID = FBInstant.player.getID()
+        firebase.database().ref('/users/' + global.global_userID).once('value').then(function(snapshot) { 
+            if(snapshot.exists()) global.global_userData = snapshot
+            else { //snapshot nonexistent
+                firebase.database().ref('/users/' + global.global_userID).set({activeContests:{pushID:'ctxID'},finishedContests:{
+                    contextID:{timeStart:'timestamp',timeEnd:'timeEnd', timeLeft:'timestamp',ongoing:false, scores:{ userID:23  } }, },
+                    name: FBInstant.player.getName()})  }
+            
+            firebase.database().ref('/activeContests/').once('value').then(function(snapshot) { 
+            global.global_activeContests = snapshot
+            console.log('user active contets' ,global.global_userData.val())
+            console.log('active contets' , global.global_activeContests.val())
+            global.global_userData.child('/activeContests/').forEach(function(contestID){
+                console.log('ctstID', contestID.val())
+                t.CTX.push(contestID.val())
+                console.log('toppers', global.global_activeContests.child(contestID.val()).child('scores').val() )
+
+
+            })
+            });
+
+          });
+        
+        
         
 
 
@@ -174,7 +200,15 @@ cc.Class({
 
 
      },
-     savePlayerData(){},
+     ldrbrdAsync(contestID){
+         
+     },
+     savePlayerData(){
+        FBInstant.getLeaderboardAsync('cntxtLdrbrd.'+FBInstant.context.getID())
+        .then(leaderboard => {    leaderboard.setScoreAsync(cc.random0To1()); }) 
+        .catch(error => console.error(error));
+ 
+     },
 
    
    postLeaderBoard(context){
