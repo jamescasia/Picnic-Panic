@@ -30,8 +30,9 @@ cc.Class({
  
 
     onLoad () {   
-        this.Init()
-         
+        
+ 
+         this.Init(  this.showActiveContests) 
       //this.switchCntxt()
       //this.chooseContext()  
       //this.setScoreBoardCntxtfl()  
@@ -43,7 +44,7 @@ cc.Class({
       
         }, 
 
-    start () {  
+    start () {   
         var x= function(){ 
             this.postBoard()
         }
@@ -65,8 +66,11 @@ cc.Class({
             .then(() => console.log())
             .catch(error => console.error(error));
     },
-    firstPlay(){ 
-        this.chooseContext()    
+    firstPlay(){  
+         this.chooseContext()  
+         this.showActiveContests()
+      // cc.director.loadScene('main')
+        
         
         
         
@@ -125,6 +129,7 @@ cc.Class({
             .then(function() {   
                 
                 t.showPanel() 
+                t.postLeaderBoard(FBInstant.context.getID())
                 
                 
  
@@ -161,11 +166,11 @@ cc.Class({
                     },
                     name: FBInstant.player.getName()}
 
-                    toppers = [ [player,playerID],[player,playerID], ]
+                    toppers = [ [player,score],[player,score], ]
                     TOP = [toppers_ctx1, toppers_ctx2, toppers_ctx3]
      */
 
-    Init(){
+    Init(   ){
         this.savePlayerData()
         let t = this
 
@@ -179,31 +184,54 @@ cc.Class({
             
             firebase.database().ref('/activeContests/').once('value').then(function(snapshot) { 
             global.global_activeContests = snapshot
-            console.log('user active contets' ,global.global_userData.val())
-            console.log('active contets' , global.global_activeContests.val())
-            global.global_userData.child('/activeContests/').forEach(function(contestID){
-                console.log('ctstID', contestID.val())
+            console.log('1 user active contets' ,global.global_userData.val())
+            console.log('2 active contets' , global.global_activeContests.val())
+            global.global_userData.child('activeContests').forEach(function(contestID){
+                console.log('3 ctstID', contestID.val())
                 t.CTX.push(contestID.val())
-                console.log('toppers', global.global_activeContests.child(contestID.val()).child('scores').val() )
+                console.log('4 toppers', global.global_activeContests.child(contestID.val()).child('scores').val() )
+                t.ldrbrdAsync(contestID )
 
 
             })
-            });
-
-          });
-        
-        
-        
+            
 
 
+            });  
+            
+           
+            
 
-
+          });  
+         
 
      },
-     ldrbrdAsync(contestID){
+     ldrbrdAsync(contestID){ 
+        var t = this
+        var x  = Object.keys(global.global_activeContests.child(contestID.val()).child('scores').val())
+        console.log('5 SDA',x,)
+        return FBInstant.getLeaderboardAsync('cntxtLdrbrd.'+ parseInt( contestID.val()))
+            .then(leaderboard => leaderboard.getEntriesAsync())
+            .then(entries => {
+                if(entries == [] ) return  
+                var toppers = [] 
+                
+                for(var i=0;i<entries.length ;i++){ 
+                    console.log(' 6 asd' , entries[i].getPlayer().getID())
+                  
+                 
+                if(  x.includes( String(entries[i].getPlayer().getID())  )   ){ 
+                    var a= [entries[i].getPlayer(),    global.global_activeContests.child(contestID.val()).child('scores').val() [entries[i].getPlayer().getID() ] ]
+                    console.log('7 tpper', a)
+                    toppers.push( a )  
+                 }    
+            }t.TOP.push(toppers) 
+        }) 
+            
          
      },
      savePlayerData(){
+        if(FBInstant.context.getID() == null) return
         FBInstant.getLeaderboardAsync('cntxtLdrbrd.'+FBInstant.context.getID())
         .then(leaderboard => {    leaderboard.setScoreAsync(cc.random0To1()); }) 
         .catch(error => console.error(error));
@@ -228,8 +256,12 @@ cc.Class({
 
    },
    showActiveContests(){  
+    
+       console.log('show')
        var t = this
-        this.TOP.forEach(function(topper){
+       console.log('ctx' , t.CTX , 'TOP', t.TOP )
+        t.TOP.forEach(function(topper){
+            console.log('amputaworkk')
             var people = [] 
             var ctr = 0 
             var pos = -200

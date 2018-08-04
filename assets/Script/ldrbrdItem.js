@@ -26,6 +26,7 @@ cc.Class({
             playerImage.crossOrigin = 'anonymous'; 
             playerImage.src =people[p].getPhoto();  
             cc.loader.load(playerImage.src, (err, texture) => { 
+            
             t.picFrame.getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(texture)
             this.pics.push(texture)
             })

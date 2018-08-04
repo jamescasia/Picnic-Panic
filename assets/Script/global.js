@@ -10,7 +10,7 @@ var global = {
         return money;
     },
     pushKey:function(){
-        var a ='abcdefghijklmnopqrstuvwxyz1234567890'
+        var a ='abcd78efghij6klmn12opqr90stuv3w4xyz5'
         var key =""
         for(var ctr = 0;ctr<=9;ctr++){
             key+= a[ Math.floor(Math.random()*36 )] 

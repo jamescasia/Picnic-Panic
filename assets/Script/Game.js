@@ -808,10 +808,9 @@ onChallenge(){ //first gotta send in the image your score!
         // closes the game after the update is posted.
         //FBInstant.quit();
       });
-},
+},  
 sdkWork(){
-    //listen to player's active games. If this context is already an active game => proceed 
-    console.log('globo here' ,global.global_activeContests.val()[FBInstant.context.getID()]) 
+    //listen to player's active games. If this context is already an active game => proceed  
     if(global.global_activeContests.val()[FBInstant.context.getID()] == undefined  ){ 
        // this.onChallenge()
         var key = global.pushKey()
