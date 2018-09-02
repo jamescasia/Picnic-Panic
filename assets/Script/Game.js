@@ -7,6 +7,7 @@ cc.Class({
         matrix:cc.Node, 
         pausemenu:cc.Node,
         score:0, 
+        hsLabel:cc.Node,
         time:2,
         comboctr:0,
         gameTimer:0,
@@ -126,21 +127,15 @@ cc.Class({
         //this.enemyPic.getComponent(cc.Mask).type =  cc.Mask.Type.ELLIPSE 
     })
 
-    },
-    saveToDB(data){
-        if (typeof firebase === 'undefined'||typeof FBInstant === 'undefined') return;  
-        FBInstant.context.getID()
-        
-        var database = firebase.database();
-        database.ref('twice/').set('NaJeongMoSaJiMiDaChaeTzu!')
-    },
+    }, 
     readDB(){},
 
     onLoad () {        
+        
         //firebase.database().ref('/users/'+global.global_userID+'/activeContests/'+key).set(FBInstant.context.getID()) 
         
-        this.saveToDB()
-        this.setEnemy() 
+        //this.saveToDB()
+        //this.setEnemy() 
         //console.log('globo here' , global.global_userID , global.global_userData.val().activeContests)
         //console.log('gonoing',global.global_activeContests.val()[FBInstant.context.getID()].ongoing )
         
@@ -194,8 +189,11 @@ cc.Class({
         this.passiveFrenzyBoost = (parseInt( this.storage.passiveFrenzyBoost))
         this.highestCombo =JSON.parse  (parseInt(this.storage.highestCombo))
         this.highestScore =JSON.parse (parseInt( this.storage.highestScore))
+        this.hsLabel.getComponent(cc.Label).string =  String(this.highestScore)
+        console.log('HIGHESST', this.highestScore)
         this.ss()
         this.boosterShow()
+        
  
 
         
@@ -276,6 +274,10 @@ cc.Class({
              
         }
     },
+    retry(){ 
+        cc.director.resume()
+         cc.director.loadScene('main')
+    },
 
     start () {   
         console.log("GAME" , this.storage  )
@@ -301,7 +303,7 @@ cc.Class({
             
 
             if(left <=0 && !this.gameover  ){ 
-                t.sdkWork() 
+               // t.sdkWork() 
                 var prize =  Math.round(Math.random()*200) 
                 if(prize <= 100) prize = 100+ Math.floor(Math.random()*22)
                 
@@ -808,55 +810,14 @@ onChallenge(){ //first gotta send in the image your score!
         // closes the game after the update is posted.
         //FBInstant.quit();
       });
-},  
-sdkWork(){
-    //listen to player's active games. If this context is already an active game => proceed  
-    if(global.global_activeContests.val()[FBInstant.context.getID()] == undefined  ){ 
-       // this.onChallenge()
-        var key = global.pushKey()
-        firebase.database().ref('/users/'+global.global_userID+'/activeContests/'+key).set(FBInstant.context.getID())
-        var updates = {}
-        updates[ global.global_userID] = this.score
-        console.log('oopdates', updates)
-       firebase.database().ref('/activeContests/'+ FBInstant.context.getID()).set({
+},   
+    resume(){cc.director.resume()
 
-           ongoing:'PENDING',
-           scores:updates,   
-           timeEnd:2313,
-           timeStart:1231,
-           timeLeft:2313
-       })
-    }
-    else if(global.global_activeContests.val()[FBInstant.context.getID()].ongoing == 'PENDING' ||!global.global_activeContests.val()[FBInstant.context.getID()].ongoing   ){ 
-       // this.onChallenge()
-        var key = global.pushKey()
-        firebase.database().ref('/users/'+global.global_userID+'/activeContests/'+key).set(FBInstant.context.getID())
-        var updates = {}
-        updates[ global.global_userID] = this.score
-        console.log('oopdates', updates)
-       firebase.database().ref('/activeContests/'+ FBInstant.context.getID()).set({
-
-           ongoing:'PENDING',
-           scores:updates,   
-           timeEnd:2313,
-           timeStart:1231,
-           timeLeft:2313
-       })
-    }
-  
-    else {
-
-        return firebase.database().ref('/activeContests/'+FBInstant.context.getID()+'/scores/'+global.global_userID).set(this.score) 
-
-        
-        //push active contest to own ref and globalAC
+        this.pausemenu.opacity=255
+        this.pausemenu.position=cc.v2(-800, -800)
 
 
-    }
-    
-
-   // })
-},
+    },
    toggling(x){ 
        if(x.isEmpty ) return
     switch(x){

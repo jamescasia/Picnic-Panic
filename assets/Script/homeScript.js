@@ -17,28 +17,11 @@ cc.Class({
         scoreboards:[],
         CTX:[],
         TOP:[]
-    },
-    switchCntxt(){
-        FBInstant.context
-  .switchAsync('2019607021444886')
-  .then(function() { 
-    // 1234567890
-  });
-
-      //  2019607021444886    
-    },
+    }, 
  
 
     onLoad () {   
-        
- 
-         this.Init(  this.showActiveContests) 
-      //this.switchCntxt()
-      //this.chooseContext()  
-      //this.setScoreBoardCntxtfl()  
-      //  this.getConnectedPlayers()
-      //this.saveData()  
-     //  console.log('current player' , FBInstant.player.getID())
+         
  
        
       
@@ -56,16 +39,7 @@ cc.Class({
             window.addEventListener("pagehide", x); 
            
 
-    }, 
-    postBoard(){ //worked
-        if (typeof FBInstant === 'undefined') return; 
-        FBInstant.updateAsync({
-            action: 'LEADERBOARD',
-            name: 'cntxtLdrbrd.' + FBInstant.context.getID()
-          })
-            .then(() => console.log())
-            .catch(error => console.error(error));
-    },
+    },  
     firstPlay(){  
          this.chooseContext()  
          this.showActiveContests()
@@ -89,26 +63,8 @@ cc.Class({
     secondPlay(){
         cc.director.loadScene('main')
         
-    },
-//'cntxtLdrbrd.'+FBInstant.context.getID()
-//'cntxtLdrbrd.2019607021444886'
-    
-    
-     onShare() {  
-        if (typeof FBInstant === 'undefined') return;
-        var t  = this
-         
-        FBInstant.shareAsync({
-            intent: 'CHALLENGE',
-            image:   this.getIMG(), 
-            text:  FBInstant.player.getName()  +' challenges you into a Picnic Shokugeki!',
-            data: {myReplayData: FBInstant.context.getID()},
-        }).then(() => {
-           
-                // continue with the game.
-        });
-    },
-    
+    }, 
+      
     getIMG(){
 
         let canvas = document.createElement('canvas');
@@ -118,171 +74,8 @@ cc.Class({
         return canvas.toDataURL('image/png');
 
     }, 
-    chooseContext(){//you can't call two shit or this.ranking value only accesible insuide retrieveScoreBoard func
-        if (typeof FBInstant === 'undefined') return;
-        var t = this
-        if(FBInstant.context.getID()!= null)return
-
-        FBInstant.context
-            .chooseAsync({ 
-              })
-            .then(function() {   
-                
-                t.showPanel() 
-                t.postLeaderBoard(FBInstant.context.getID())
-                
-                
- 
-  });
-    
-    },
+  
      
-    
-    /**
-     * to do in init
-     * -> new context -> automaticall ldrbr save Score for player Data submission
-     * -> listen to player User Data to populate active contests -> if nonexistent, push
-     *          -> what happens here kay get user/activeContests then check if exists in global/activeContests
-     *              then global/activeContests/contet/scores/playerIDs , get image and name thru leaderboard(playerID)
-     * 
-     * postLeaderboard as well
-     *  
-     * 
-     * format {
-                    activeContests:{
-                        pushID:'ctxID'
-                    },
-                    finishedContests:{
-                         contextID:{
-                             timeStart:'timestamp',
-                             timeEnd:'timeEnd',
-                             timeLeft:'timestamp',
-                             ongoing:false,
-                             scores:{
-                                 userID:23
-                             }
-                         },
-
-                    },
-                    name: FBInstant.player.getName()}
-
-                    toppers = [ [player,score],[player,score], ]
-                    TOP = [toppers_ctx1, toppers_ctx2, toppers_ctx3]
-     */
-
-    Init(   ){
-        this.savePlayerData()
-        let t = this
-
-        global.global_userID = FBInstant.player.getID()
-        firebase.database().ref('/users/' + global.global_userID).once('value').then(function(snapshot) { 
-            if(snapshot.exists()) global.global_userData = snapshot
-            else { //snapshot nonexistent
-                firebase.database().ref('/users/' + global.global_userID).set({activeContests:{pushID:'ctxID'},finishedContests:{
-                    contextID:{timeStart:'timestamp',timeEnd:'timeEnd', timeLeft:'timestamp',ongoing:false, scores:{ userID:23  } }, },
-                    name: FBInstant.player.getName()})  }
-            
-            firebase.database().ref('/activeContests/').once('value').then(function(snapshot) { 
-            global.global_activeContests = snapshot
-            console.log('1 user active contets' ,global.global_userData.val())
-            console.log('2 active contets' , global.global_activeContests.val())
-            global.global_userData.child('activeContests').forEach(function(contestID){
-                console.log('3 ctstID', contestID.val())
-                t.CTX.push(contestID.val())
-                console.log('4 toppers', global.global_activeContests.child(contestID.val()).child('scores').val() )
-                t.ldrbrdAsync(contestID )
-
-
-            })
-            
-
-
-            });  
-            
-           
-            
-
-          });  
-         
-
-     },
-     ldrbrdAsync(contestID){ 
-        var t = this
-        var x  = Object.keys(global.global_activeContests.child(contestID.val()).child('scores').val())
-        console.log('5 SDA',x,)
-        return FBInstant.getLeaderboardAsync('cntxtLdrbrd.'+ parseInt( contestID.val()))
-            .then(leaderboard => leaderboard.getEntriesAsync())
-            .then(entries => {
-                if(entries == [] ) return  
-                var toppers = [] 
-                
-                for(var i=0;i<entries.length ;i++){ 
-                    console.log(' 6 asd' , entries[i].getPlayer().getID())
-                  
-                 
-                if(  x.includes( String(entries[i].getPlayer().getID())  )   ){ 
-                    var a= [entries[i].getPlayer(),    global.global_activeContests.child(contestID.val()).child('scores').val() [entries[i].getPlayer().getID() ] ]
-                    console.log('7 tpper', a)
-                    toppers.push( a )  
-                 }    
-            }t.TOP.push(toppers) 
-        }) 
-            
-         
-     },
-     savePlayerData(){
-        if(FBInstant.context.getID() == null) return
-        FBInstant.getLeaderboardAsync('cntxtLdrbrd.'+FBInstant.context.getID())
-        .then(leaderboard => {    leaderboard.setScoreAsync(cc.random0To1()); }) 
-        .catch(error => console.error(error));
- 
-     },
-
-   
-   postLeaderBoard(context){
-       //toppers = [   [{player details} , score  ] , [{player details} , score  ] ]
-      
-       //this.scoreboards.context
-        //first get toppers thru this.scoreboards.context
-        //
-
-        var toppers = this.TOP[this.CTX.indexOf(context)] 
-        let lstring = ''
-        for(var i=0; i<toppers.length;i++){
-        lstring+= i+1+'. '+ toppers[i][0].getName()+' '+ toppers[i][1] +'\n'
-        } 
-        this.leaderboard.getComponent(cc.Label).string = lstring
-
-
-   },
-   showActiveContests(){  
-    
-       console.log('show')
-       var t = this
-       console.log('ctx' , t.CTX , 'TOP', t.TOP )
-        t.TOP.forEach(function(topper){
-            console.log('amputaworkk')
-            var people = [] 
-            var ctr = 0 
-            var pos = -200
-            for(var a = 0 ; a<topper.length ;a++){ 
-               if(topper[a][0].getID()!=FBInstant.player.getID()){
-                    people.push(topper[a][0])
-                    ctr+=1 
-                }
-                if(ctr ==3) break
-
-                var item = cc.instantiate( t.itemPrefab); 
-                t.contextsBox.addChild(item);
-                item.position = cc.v2(0 , pos)
-              //  console.log('cotnextes' , t.CTX)
-                item.getComponent('ldrbrdItem').onSummon(t.CTX[t.TOP.indexOf(topper)] ,people )
-                pos-=90
-            }
-            
- 
-       })
-
-   },
+     
  
 });

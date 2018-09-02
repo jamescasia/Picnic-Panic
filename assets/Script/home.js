@@ -1,4 +1,4 @@
-var global = require('global')
+ 
 cc.Class({
     extends: cc.Component, 
 
@@ -104,7 +104,7 @@ cc.Class({
     },
  
     play(){
-        cc.director.loadScene('home');
+        cc.director.loadScene('main');
     
         
     },
@@ -138,7 +138,7 @@ cc.Class({
  
     },
     addFrenzyBoost(){ 
-        if(this.coins <50) {this.showerrorPrompt('Insufficient Funds') 
+        if(this.coins <=50) {this.showerrorPrompt('Insufficient Funds') 
         return}
         if(!this.confirmPrompt("frenzyBoost" , 50))return
 
@@ -154,7 +154,7 @@ cc.Class({
 
     },
     addSpawnBoost(){
-        if(this.coins <50) {this.showerrorPrompt('Insufficient Funds') 
+        if(this.coins <=50) {this.showerrorPrompt('Insufficient Funds') 
         return}
         if(!this.confirmPrompt("spawnBoost" , 50))return
         
@@ -170,7 +170,7 @@ cc.Class({
     },
 
     addFreezeBoost(){
-        if(this.coins <50) {this.showerrorPrompt('Insufficient Funds') 
+        if(this.coins <=50) {this.showerrorPrompt('Insufficient Funds') 
         return}
         if(!this.confirmPrompt("freezeBoost" , 50)) return
         
@@ -348,9 +348,10 @@ cc.Class({
     upgradedFRENZY(){
         this.passiveFrenzyBoost+=1
         this.storage.passiveFrenzyBoost = this.passiveFrenzyBoost
-        this.passiveFrenzyLvl+=1  
+        
         this.storage.passiveFrenzyLvl = this.passiveFrenzyLvl
         this.coins-= this.upgradePrice( this.passiveFrenzyLvl , 'frenzy')
+        this.passiveFrenzyLvl+=1  
         this.storage.coins = this.coins
         this.setLabels()
         this.ss()
@@ -368,9 +369,10 @@ cc.Class({
     upgradedTIME(){
         this.passiveTimeBoost+=0.5
         this.storage.passiveTimeBoost = this.passiveTimeBoost
-        this.passiveTimeLvl+=1  
+        
         this.storage.passiveTimeLvl = this.passiveTimeLvl
         this.coins-= this.upgradePrice( this.passiveTimeLvl , 'time')
+        this.passiveTimeLvl+=1  
         this.storage.coins = this.coins
         this.setLabels()
         this.ss()
@@ -387,9 +389,10 @@ cc.Class({
     upgradedCOMBO(){
         this.passiveComboBoost+=2
         this.storage.passiveComboBoost = this.passiveComboBoost
-        this.passiveComboLvl+=1  
+        
         this.storage.passiveComboLvl = this.passiveComboLvl
         this.coins-= this.upgradePrice( this.passiveComboLvl , 'combo')
+        this.passiveComboLvl+=1  
         this.storage.coins = this.coins
         this.setLabels()
         this.ss()
