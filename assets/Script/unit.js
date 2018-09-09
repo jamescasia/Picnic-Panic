@@ -13,9 +13,7 @@ cc.Class({
         level:2,
         isEmpty:true,
         mode:'a',
-        selected:false,
-        actZin:null,
-        actZout:null,
+        selected:false, 
         gameover:false,
         selectAnim:null,
         initctr:0,  
@@ -52,10 +50,7 @@ cc.Class({
 
     start () {
         this.frame.node.opacity = 0
-        this.initialize()
-        this.actZin =  cc.scaleTo(0.6, 0.24,0.24)
-        this.actZout =  cc.scaleTo(0.6, 0.2 ,0.2 )
-        this.selectAnim = (cc.sequence(this.actZin, this.actZout)).repeatForever();
+        this.initialize() 
         
         
 
@@ -103,7 +98,7 @@ cc.Class({
     fuse(){
         this.selected = false
         
-        var a = Math.random()
+        var a = Math. abs(cc.randomMinus1To1() )
 
         
         var pumpUp = cc.sequence(
@@ -113,6 +108,7 @@ cc.Class({
                 cc.skewTo(0.1 , 0,cc.randomMinus1To1()*6).easing(cc.easeExponentialInOut()),
                 //cc.tintTo(0.2 ,300,300  ,300)
             )   ,
+            cc.moveBy(0,0,0),
             cc.spawn(
                 //cc.tintTo(0.2 , 255, 255 ,255),
                 cc.moveTo(0.2 , 0 , 0).easing(  cc.easeQuarticActionIn()),
@@ -121,6 +117,11 @@ cc.Class({
             ).speed(1)
                 //cc.delayTime(0.5),  
         ).speed(2 ).repeat(1); 
+
+ 
+ 
+
+
         this.frame.node.runAction(pumpUp) 
 
         if(this.game.getComponent('Game').comboctr >=5 ){
@@ -375,16 +376,30 @@ cc.Class({
             var r= parseInt( cc.rand() )%11
             if(r===3) this.level =2
         }
-        this. frame.spriteFrame = this.choices[Math.floor(cc.rand()) % (this.choices.length)]
-        // 
-        this.frame.node.scale = cc.v2(0,0) 
+        //this. frame.spriteFrame = this.choices[Math.floor(cc.rand()) % (this.choices.length)]
+        switch(rand){
+            case 0:
+                this.mode = 'bu'
+                break
+            case 1:
+                this.mode = 'pa'
+                break
+            case 2:
+                this.mode = 'pi'
+                break
+        } 
+        this.isEmpty = false
+        this.frame.node.scale = cc.v2(0,0)
+    
+        
         var born =cc.spawn(
             cc.scaleTo(0.24 , 1,1)  ,
             cc.fadeIn(0.24  ).easing(cc.easeBackIn()),
-        
+             
         ).speed(1.45)
-        var a = Math.random()
-        var b = Math.random()
+        var a =    Math.abs(   cc.randomMinus1To1())
+        var b =   Math.abs(cc.randomMinus1To1())
+         
 
         var firstborn =cc.sequence(
             cc.fadeTo(0, 0),
@@ -394,6 +409,7 @@ cc.Class({
                 cc.fadeIn(0),
                 cc.moveTo(0.2 , 0,0).easing(cc.easeSineIn()), 
             ),
+            cc.moveBy(0,0,0),
             
             
             cc.spawn(
@@ -406,40 +422,30 @@ cc.Class({
                 cc.skewTo(  0.2 , 0,cc.randomMinus1To1()*3.5  ).easing(cc.easeCircleActionOut()),
                 cc.moveBy(b *0.06 , 0 , b *55).easing(cc.easeCircleActionOut()), 
             ),
+            cc.moveBy(0,0,0),
             cc.spawn(   
                 cc.moveTo(0.05*b  , 0 , 0).easing(cc.easeSineIn()), 
                 cc.skewTo(0.1*b , 0,0).easing(cc.easeSineIn()), 
-            ).speed(1.2)
+            ).speed(1.2) 
             
 
             
         ).speed(1)
 
         if(this.initctr == 0){  
-            this.frame.node.runAction(firstborn)
+             this.frame.node.runAction(firstborn)
+          // this.frame.node.runAction(born)
 
         }
         else{
             this.frame.node.runAction(born)
-        }
-        this.frame.node.position = cc.v2(0,0)   
-        
-        switch(rand){
-            case 0:
-                this.mode = 'bu'
-                break
-            case 1:
-                this.mode = 'pa'
-                break
-            case 2:
-                this.mode = 'pi'
-                break
         } 
-        this.isEmpty = false // not completed the loop gotta make isEmpty true again
+         // not completed the loop gotta make isEmpty true again
         
-        if(this.game.getComponent('Game').panzing )this.turnOffHeal('pa')
-        else if(this.game.getComponent('Game').pizzing )this.turnOffHeal('pi')
-        else if(this.game.getComponent('Game').burging )this.turnOffHeal('bu')
+         if(this.game.getComponent('Game').panzing )this.turnOffHeal('pa')
+         else if(this.game.getComponent('Game').pizzing )this.turnOffHeal('pi')
+         else if(this.game.getComponent('Game').burging )this.turnOffHeal('bu')
+        
 
 
         }

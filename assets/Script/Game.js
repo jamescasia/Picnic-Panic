@@ -140,7 +140,7 @@ cc.Class({
         //console.log('gonoing',global.global_activeContests.val()[FBInstant.context.getID()].ongoing )
         
 
-        cc.director.setDisplayStats ( false )  
+       // cc.director.setDisplayStats ( false )  
         
         this.storage = JSON.parse (cc.sys.localStorage.getItem('ampopo'))  
         console.log('fiiirst ' , this.storage)
@@ -602,7 +602,7 @@ cc.Class({
 
    
    update (dt) {    
-       this.d.getComponent(cc.Label).string =Math.round(1/dt, 2)
+  
         
        //console.log(this.burgEffect , this.pizEffect , this.panEffect , this.frenzying)
         
@@ -788,29 +788,7 @@ getIMG(){
     let ctx = canvas.getContext('2d');      
     return canvas.toDataURL('image/png');
 
-},
-onChallenge(){ //first gotta send in the image your score!
-    if (typeof FBInstant === 'undefined') return;
-    var t = this 
-    FBInstant.updateAsync({
-        action: 'CUSTOM',
-        cta: 'CHALLENGE',
-        image: this.getIMG(),
-        text: {
-          default: FBInstant.player.getName() + 'has started a FOOD FIGHT!!',
-            
-        },
-        template: 'CHALLENGE',
-        data: { myReplayData: FBInstant.context.getID() },
-        strategy: 'IMMEDIATE',
-        notification: 'NO_PUSH',
-      }).then(function() {
-          t.activeContexts.push(FBInstant.context.getID())
-          t.saveData()
-        // closes the game after the update is posted.
-        //FBInstant.quit();
-      });
-},   
+}, 
     resume(){cc.director.resume()
 
         this.pausemenu.opacity=255
