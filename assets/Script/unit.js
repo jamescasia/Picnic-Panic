@@ -203,7 +203,7 @@ cc.Class({
                 ) ,cc.scaleTo(0.3, 1.5, 1.5).easing(cc.easeExponentialIn()),
                 
                       
-            ).speed(2 )
+            ).speed(2.33 )
             var explode2 = cc.sequence(  
                 cc.spawn(
                     cc.moveTo(1.2 ,    0.5*( t.node.x -prevNode.node.x) ,0.5*(t.node.y -prevNode.node.y)).easing(cc.easeExponentialIn()),
@@ -212,7 +212,7 @@ cc.Class({
                     cc.scaleTo(0.3, 1.5 ,1.5).easing(cc.easeExponentialIn()), 
                      //cc.callFunc(kill , t)
                      cc.callFunc(kill , t)
-            ).speed(2 ) 
+            ).speed(2.33 ) 
             t.isEmpty = true
             t.frame.node.runAction(explode)
             prevNode.frame.node.runAction(explode2)
@@ -396,7 +396,7 @@ cc.Class({
             cc.scaleTo(0.24 , 1,1)  ,
             cc.fadeIn(0.24  ).easing(cc.easeBackIn()),
              
-        ) 
+        ) .speed(1.45)
         var a =    Math.abs(   cc.randomMinus1To1())
         var b =   Math.abs(cc.randomMinus1To1())
          
@@ -416,12 +416,12 @@ cc.Class({
                 
                 cc.skewTo(0.1 , 0,cc.randomMinus1To1()*7 ).easing(cc.easeCircleActionOut()),
                 cc.moveBy(a *0.1 , 0 , a *80).easing(cc.easeCircleActionOut()),
-            ),
+            ).speed(1.2),
             cc.moveTo(0.1 *a , 0 , 0).easing(cc.easeSineIn()) , 
             cc.spawn( 
                 cc.skewTo(  0.2 , 0,cc.randomMinus1To1()*3.5  ).easing(cc.easeCircleActionOut()),
                 cc.moveBy(b *0.06 , 0 , b *55).easing(cc.easeCircleActionOut()), 
-            ),
+            ).speed(1.2),
             cc.moveBy(0,0,0),
             cc.spawn(   
                 cc.moveTo(0.05*b  , 0 , 0).easing(cc.easeSineIn()), 
