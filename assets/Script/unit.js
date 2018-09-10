@@ -103,20 +103,19 @@ cc.Class({
         
         var pumpUp = cc.sequence(
             cc.spawn(
-                cc.moveTo(0.1*a , 0 ,a* 8.5).easing(cc.easeCircleActionOut()),
-                cc.scaleTo(0.15, 1.4, 1.4).easing(cc.easeCircleActionOut()),
-                cc.skewTo(0.1 , 0,cc.randomMinus1To1()*6).easing(cc.easeCircleActionOut()),
+                cc.moveTo(0.1*a , 0 ,a* 8.5).easing(cc.easeExponentialInOut()),
+                cc.scaleTo(0.15, 1.4, 1.4).easing(cc.easeExponentialInOut()),
+                cc.skewTo(0.1 , 0,cc.randomMinus1To1()*6).easing(cc.easeExponentialInOut()),
                 //cc.tintTo(0.2 ,300,300  ,300)
             )   ,
-            cc.moveBy(0,0,0),
             cc.spawn(
                 //cc.tintTo(0.2 , 255, 255 ,255),
-                cc.moveTo(0.2 , 0 , 0).easing(  cc.easeCircleActionOut()),
-                cc.scaleTo(0.3, 1 , 1 ).easing(cc.easeCircleActionOut())  , 
-                cc.skewTo(0.2 , 0,0).easing(  cc.easeCircleActionOut()), 
-            ) 
+                cc.moveTo(0.2 , 0 , 0).easing(  cc.easeQuarticActionIn()),
+                cc.scaleTo(0.3, 1 , 1 ).easing(cc.easeExponentialOut())  , 
+                cc.skewTo(0.2 , 0,0).easing(  cc.easeQuarticActionIn()), 
+            ).speed(1)
                 //cc.delayTime(0.5),  
-        ).speed(3) ; 
+        ).speed(2 ).repeat(1); 
 
  
  
