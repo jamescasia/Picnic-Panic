@@ -103,20 +103,20 @@ cc.Class({
         
         var pumpUp = cc.sequence(
             cc.spawn(
-                cc.moveTo(0.1*a , 0 ,a* 8.5).easing(cc.easeExponentialInOut()),
-                cc.scaleTo(0.15, 1.4, 1.4).easing(cc.easeExponentialInOut()),
-                cc.skewTo(0.1 , 0,cc.randomMinus1To1()*6).easing(cc.easeExponentialInOut()),
+                cc.moveTo(0.1*a , 0 ,a* 8.5).easing(cc.easeCircleActionOut()),
+                cc.scaleTo(0.15, 1.4, 1.4).easing(cc.easeCircleActionOut()),
+                cc.skewTo(0.1 , 0,cc.randomMinus1To1()*6).easing(cc.easeCircleActionOut()),
                 //cc.tintTo(0.2 ,300,300  ,300)
             )   ,
             cc.moveBy(0,0,0),
             cc.spawn(
                 //cc.tintTo(0.2 , 255, 255 ,255),
-                cc.moveTo(0.2 , 0 , 0).easing(  cc.easeQuarticActionIn()),
-                cc.scaleTo(0.3, 1 , 1 ).easing(cc.easeExponentialOut())  , 
-                cc.skewTo(0.2 , 0,0).easing(  cc.easeQuarticActionIn()), 
-            ).speed(1)
+                cc.moveTo(0.2 , 0 , 0).easing(  cc.easeCircleActionOut()),
+                cc.scaleTo(0.3, 1 , 1 ).easing(cc.easeCircleActionOut())  , 
+                cc.skewTo(0.2 , 0,0).easing(  cc.easeCircleActionOut()), 
+            ) 
                 //cc.delayTime(0.5),  
-        ).speed(2 ).repeat(1); 
+        ).speed(3) ; 
 
  
  
@@ -204,7 +204,7 @@ cc.Class({
                 ) ,cc.scaleTo(0.3, 1.5, 1.5).easing(cc.easeExponentialIn()),
                 
                       
-            ).speed(2.33 )
+            ).speed(2 )
             var explode2 = cc.sequence(  
                 cc.spawn(
                     cc.moveTo(1.2 ,    0.5*( t.node.x -prevNode.node.x) ,0.5*(t.node.y -prevNode.node.y)).easing(cc.easeExponentialIn()),
@@ -213,7 +213,7 @@ cc.Class({
                     cc.scaleTo(0.3, 1.5 ,1.5).easing(cc.easeExponentialIn()), 
                      //cc.callFunc(kill , t)
                      cc.callFunc(kill , t)
-            ).speed(2.33) 
+            ).speed(2 ) 
             t.isEmpty = true
             t.frame.node.runAction(explode)
             prevNode.frame.node.runAction(explode2)
@@ -390,13 +390,14 @@ cc.Class({
         } 
         this.isEmpty = false
         this.frame.node.scale = cc.v2(0,0)
+        this.frame.node.position = cc.v2(0,0)
     
         
         var born =cc.spawn(
             cc.scaleTo(0.24 , 1,1)  ,
             cc.fadeIn(0.24  ).easing(cc.easeBackIn()),
              
-        ).speed(1.45)
+        ) 
         var a =    Math.abs(   cc.randomMinus1To1())
         var b =   Math.abs(cc.randomMinus1To1())
          
@@ -417,7 +418,7 @@ cc.Class({
                 cc.skewTo(0.1 , 0,cc.randomMinus1To1()*7 ).easing(cc.easeCircleActionOut()),
                 cc.moveBy(a *0.1 , 0 , a *80).easing(cc.easeCircleActionOut()),
             ),
-            cc.moveTo(0.1 *a , 0 , 0).easing(cc.easeSineIn()).speed(1.2), 
+            cc.moveTo(0.1 *a , 0 , 0).easing(cc.easeSineIn()) , 
             cc.spawn( 
                 cc.skewTo(  0.2 , 0,cc.randomMinus1To1()*3.5  ).easing(cc.easeCircleActionOut()),
                 cc.moveBy(b *0.06 , 0 , b *55).easing(cc.easeCircleActionOut()), 
@@ -426,19 +427,25 @@ cc.Class({
             cc.spawn(   
                 cc.moveTo(0.05*b  , 0 , 0).easing(cc.easeSineIn()), 
                 cc.skewTo(0.1*b , 0,0).easing(cc.easeSineIn()), 
-            ).speed(1.2) 
+            )  
             
 
             
-        ).speed(1)
+        ) 
 
         if(this.initctr == 0){  
              this.frame.node.runAction(firstborn)
+            // this.frame.node.position =cc.v2(0,0)       
+            // this.frame.node.opacity = 256;             
+            // this.frame.node.scale =cc.v2(1,1)    
           // this.frame.node.runAction(born)
 
         }
         else{
             this.frame.node.runAction(born)
+            // this.frame.node.position =cc.v2(0,0)       
+            // this.frame.node.opacity = 256;             
+            // this.frame.node.scale =cc.v2(1,1)  
         } 
          // not completed the loop gotta make isEmpty true again
         
