@@ -527,8 +527,7 @@ cc.Class({
         var t2 = cc.sequence( cc.delayTime(5),cc.callFunc( panEnd, t)  )
         t.matrix.runAction(t2 )
     },
-    burgTwoing(){
-        console.log('fuckk')
+    burgTwoing(){ 
             this.burging = true
             this.healBurg()
             if(!this.frenzying &&   this.pizzing && this.panzing && this.burging) this.frenzyEffect()
@@ -735,46 +734,44 @@ cc.Class({
    
 
     
-    var wrong = cc.sequence(
+    var wrong = cc.sequence( 
         cc.spawn(
+        cc.tintTo(0.3 , 222 , 0 ,0 ),
+        cc.fadeTo(0.3, 144), 
+        cc.scaleTo(0.3, 1.2, 1.2).easing(cc.easeExponentialIn()),
+        ),
+
+        cc.sequence(
+            cc.moveTo(0.1 , 3 , 4).easing(cc.easeExponentialIn()),
+            cc.moveTo(0.1 , -2 , -3).easing(cc.easeExponentialIn()),
+            cc.moveTo(0.1 , 3 , -4).easing(cc.easeExponentialIn()),
+            cc.moveTo(0.1 , -2 , 2).easing(cc.easeExponentialIn()), ),
+    cc.moveTo(0.1 , 0,0),
+    cc.fadeTo(0.3 , 255),
+    cc.tintTo(0.3 , 255 , 255 ,255 ),
+    
+     
+        //callabck func
+)
+    var wrongs = cc.sequence( 
+            cc.spawn(
             cc.tintTo(0.3 , 222 , 0 ,0 ),
             cc.fadeTo(0.3, 144), 
-            
             cc.scaleTo(0.3, 1.2, 1.2).easing(cc.easeExponentialIn()),
+            ),
+
             cc.sequence(
                 cc.moveTo(0.1 , 3 , 4).easing(cc.easeExponentialIn()),
                 cc.moveTo(0.1 , -2 , -3).easing(cc.easeExponentialIn()),
                 cc.moveTo(0.1 , 3 , -4).easing(cc.easeExponentialIn()),
-                cc.moveTo(0.1 , -2 , 2).easing(cc.easeExponentialIn()),
-            ).speed(3).repeat(3)
-        ) ,
+                cc.moveTo(0.1 , -2 , 2).easing(cc.easeExponentialIn()), ),
         cc.moveTo(0.1 , 0,0),
         cc.fadeTo(0.3 , 255),
         cc.tintTo(0.3 , 255 , 255 ,255 ),
         
          
             //callabck func
-    ).speed(1).repeat(1); 
-    var wrongs = cc.sequence(
-        cc.spawn(
-            cc.tintTo(0.3 , 222 , 0 ,0 ),
-            cc.fadeTo(0.3, 144), 
-            
-            cc.scaleTo(0.3, 1.2, 1.2).easing(cc.easeExponentialIn()),
-            cc.sequence(
-                cc.moveTo(0.1 , 3 , 4).easing(cc.easeExponentialIn()),
-                cc.moveTo(0.1 , -2 , -3).easing(cc.easeExponentialIn()),
-                cc.moveTo(0.1 , 3 , -4).easing(cc.easeExponentialIn()),
-                cc.moveTo(0.1 , -2 , 2).easing(cc.easeExponentialIn()),
-            ).speed(3).repeat(3)
-        ) ,
-        cc.moveTo(0.1 , 0,0),
-        cc.fadeTo(0.3 , 255),
-        cc.tintTo(0.3 , 255 , 255 ,255 ),
-        
-         
-            //callabck func
-    ).speed(1).repeat(1); 
+    )
     this.prev.frame.node.runAction(wrong) 
     x.frame.node.runAction(wrongs)
     
