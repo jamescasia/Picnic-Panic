@@ -19,7 +19,7 @@ cc.Class({
 
     onLoad () {
 
-       // this.admobInit();
+     //  this.admobInit();
     },
 
     start () {
@@ -40,7 +40,7 @@ cc.Class({
                 },
                 adViewWillPresentScreen: function(name) {
                     self.showInfo('adViewWillPresentScreen name=' + name);
-                },
+                },  
                 adViewDidDismissScreen: function(name) {
                     self.showInfo('adViewDidDismissScreen name=' + name);
                 },

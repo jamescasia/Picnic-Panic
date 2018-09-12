@@ -24,6 +24,16 @@ cc.Class({
  
     }, 
     onLoad () {      
+        cc.EventListener.create({
+            event: cc.EventListener.KEYBOARD,
+            onKeyPressed: function (keyCode, event) {
+                console.log('pressed key: ' + keyCode);
+            },
+            onKeyReleased: function (keyCode, event) {
+                if(keyCode ===cc.KEY.back) this.closePrompt()
+                console.log('released key: ' + keyCode);
+            }
+        });
         this.setLabels()
         this.preloadScenes()
         
