@@ -1,5 +1,6 @@
  
 var global = require('global')  
+
 cc.Class({
     extends: cc.Component,
 
@@ -106,11 +107,14 @@ cc.Class({
         d:cc.Node
  
     }, 
+
+    
     parseBoolean(x){
         if(x == 'false') return false
         if ( x== 'true') return true
 
     },
+    
     retry(){
         //cc.director.loadScene('main')
     },
@@ -128,9 +132,16 @@ cc.Class({
     })
 
     }, 
-    readDB(){},
+    log(){
+        
+    },
+    
 
-    onLoad () {        
+    onLoad () {   
+        
+         
+
+
         
         //firebase.database().ref('/users/'+global.global_userID+'/activeContests/'+key).set(FBInstant.context.getID()) 
         
@@ -259,7 +270,7 @@ cc.Class({
     },
     onHome(){
         cc.director.resume()
-        cc.director.loadScene('shop');
+        cc.director.loadScene('realhome');
     },
     onPause(){
         this.pausemenu.opacity=255
@@ -280,6 +291,17 @@ cc.Class({
     },
 
     start () {   
+        
+        cc.EventListener.create({
+            event: cc.EventListener.KEYBOARD,
+            onKeyPressed: function (keyCode, event) {
+                console.log('pressed key: ' + keyCode);
+            },
+            onKeyReleased: function (keyCode, event) {
+                console.log('released key: ' + keyCode);
+            }
+        });
+
         console.log("GAME" , this.storage  )
 
         this.highestCombo = 0

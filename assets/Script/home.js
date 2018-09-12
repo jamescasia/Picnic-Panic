@@ -104,7 +104,7 @@ cc.Class({
     },
  
     play(){
-        cc.director.loadScene('main');
+        cc.director.loadScene('realhome');
     
         
     },
@@ -140,7 +140,7 @@ cc.Class({
     addFrenzyBoost(){ 
         if(this.coins <=50) {this.showerrorPrompt('Insufficient Funds') 
         return}
-        if(!this.confirmPrompt("frenzyBoost" , 50))return
+        if(!this.confirmPrompt("Frenzy Booster" , 50))return
 
     },
     addedFrenzy(){
@@ -156,7 +156,7 @@ cc.Class({
     addSpawnBoost(){
         if(this.coins <=50) {this.showerrorPrompt('Insufficient Funds') 
         return}
-        if(!this.confirmPrompt("spawnBoost" , 50))return
+        if(!this.confirmPrompt("Spawn Booster" , 50))return
         
     },
     addedSpawn(){
@@ -172,7 +172,7 @@ cc.Class({
     addFreezeBoost(){
         if(this.coins <=50) {this.showerrorPrompt('Insufficient Funds') 
         return}
-        if(!this.confirmPrompt("freezeBoost" , 50)) return
+        if(!this.confirmPrompt("Freeze Booster" , 50)) return
         
     },
     addedFreeze(){
@@ -258,7 +258,11 @@ cc.Class({
     confirmPrompt(name, price){
         
         this.promptLayout.opacity = 255
-        this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Are you sure you want to buy "+ name+" for " + price
+        if(  name.includes("bonus" )){
+            this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Are you sure you want to upgrade "+ name+" for " + price
+        
+        }
+        else this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Are you sure you want to buy "+ name+" for " + price
         this.promptLayout.position = cc.v2( 7, 30)
         this.buying = name
 
@@ -267,7 +271,7 @@ cc.Class({
     },
     closePrompt(){
         this.promptLayout.opacity = 0
-        this.promptLayout.position = cc.v2(-300 , -300)
+        this.promptLayout.position = cc.v2(-900 , -900)
     },
     reject(){   
         this.closePrompt()
@@ -275,13 +279,13 @@ cc.Class({
     },
     accept(){ 
         switch (this.buying){
-            case "freezeBoost":
+            case "Freeze Booster":
                 this.addedFreeze()
                 break
-            case "frenzyBoost":
+            case "Frenzy Booster":
             this.addedFrenzy()
                 break
-            case "spawnBoost":
+            case "Spawn Booster":
                 this.addedSpawn()
                 break
             case "upgradeTime":
@@ -305,7 +309,7 @@ cc.Class({
         this.errorPrompt.getChildByName('text').getComponent(cc.Label).string = text
     },
     oked(){
-        this.errorPrompt.position = cc.v2(-300 , -300)
+        this.errorPrompt.position = cc.v2(-900 , -900)
 
         this.errorPrompt.opacity = 0
     },
@@ -342,7 +346,7 @@ cc.Class({
         if(this.coins < this.upgradePrice(this.passiveFrenzyLvl , 'frenzy'))   this.showerrorPrompt('Insufficient Funds') 
         else if(!(this.passiveFrenzyLvl <3) )   this.showerrorPrompt('Maxed Out') 
          
-        else if(!this.confirmPrompt("upgradeFrenzy" , this.upgradePrice(this.passiveFrenzyLvl , 'frenzy')))return
+        else if(!this.confirmPrompt("frenzy bonus score" , this.upgradePrice(this.passiveFrenzyLvl , 'frenzy')))return
 
     },
     upgradedFRENZY(){
@@ -363,7 +367,7 @@ cc.Class({
         if(this.coins <  this.upgradePrice(this.passiveTimeLvl , 'time') )   this.showerrorPrompt('Insufficient Funds') 
         else if(!(this.passiveTimeLvl <10) )   this.showerrorPrompt('Maxed Out') 
         
-        else if(!this.confirmPrompt("upgradeTime" , this.upgradePrice(this.passiveTimeLvl , 'time')))return
+        else if(!this.confirmPrompt("time bonus" , this.upgradePrice(this.passiveTimeLvl , 'time')))return
 
     },
     upgradedTIME(){
@@ -383,7 +387,7 @@ cc.Class({
     upgradeCombo(){  
         if(this.coins <  this.upgradePrice(this.passiveComboLvl , 'combo') )   this.showerrorPrompt('Insufficient Funds') 
         else if(!(this.passiveComboLvl <10) )   this.showerrorPrompt('Maxed Out')  
-        else if(!this.confirmPrompt("upgradeCombo" , this.upgradePrice(this.passiveComboLvl , 'combo')))return
+        else if(!this.confirmPrompt("combo bonus" , this.upgradePrice(this.passiveComboLvl , 'combo')))return
 
     },
     upgradedCOMBO(){
