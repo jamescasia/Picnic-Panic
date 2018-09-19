@@ -1,5 +1,5 @@
  
-
+var global = require('global')  
 cc.Class({
     extends: cc.Component,
 
@@ -24,6 +24,7 @@ cc.Class({
  
     }, 
     onLoad () {      
+       
         cc.EventListener.create({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed: function (keyCode, event) {
@@ -36,6 +37,7 @@ cc.Class({
         });
         this.setLabels()
         this.preloadScenes()
+        
         
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
         if( this.storage==null  ){
@@ -80,8 +82,20 @@ cc.Class({
         cc.director.preloadScene("main"); 
         cc.director.preloadScene("shop"); 
     },
+    goSettings(){
+        cc.director.loadScene("settings")
 
+    }, 
+    goLdrbrd(){
+        //cc.director.loadScene("settings")
+    },
+    goAchvmnts(){
 
+    },
+    share(){
+        //fb shit
+
+    },
     showBoosterPrompt(){
         this.boosterPrompt.position = cc.v2(0,0)
     },
@@ -90,6 +104,7 @@ cc.Class({
         this.boosterPrompt.position = cc.v2(-1000,-1000)
     },
     shop(){
+        global.wentShop = 'realhome' 
 
         cc.director.loadScene('shop');
     },

@@ -2,6 +2,7 @@
 var global_userID 
 var global_userData 
 var global_activeContests
+var wentShop = 'main'
  
 var global = {
     

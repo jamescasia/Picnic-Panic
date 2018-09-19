@@ -15,6 +15,7 @@ cc.Class({
         gameover:false,
         timebar:cc.Node, 
         prev:null,
+        bg:cc.Node,
         list:[],
         scoreLabel:cc.Node,
         comboLabel:cc.Node,
@@ -98,13 +99,23 @@ cc.Class({
         pi3s:cc.SpriteFrame,
         storage: null ,
         ampopo:null,
-
+        gb:cc.Node,
+        gb1:cc.Node,
+        bg1:cc.SpriteFrame,
+        bg4:cc.SpriteFrame,
+        bg3:cc.SpriteFrame,
+        bg2:cc.SpriteFrame,
         timeBoostSprt:cc.Prefab,
         spawnBoostSpr:cc.Prefab,
         frenzyBoostSprt:cc.Prefab,
         boostersPanel:cc.Node,
         abText:cc.Node,
-        d:cc.Node
+        d:cc.Node,
+        boosterTime:cc.Node,
+        boosterSpawn:cc.Node,
+        boosterFrenzy:cc.Node,
+        boosterPrompt:cc.Node
+        
  
     }, 
 
@@ -128,6 +139,7 @@ cc.Class({
         this.enemyPic.getChildByName('pic').getComponent(cc.Sprite).spriteFrame = new cc.SpriteFrame(texture);
         this.enemyPic.getChildByName('pic').width = 100 
         this.enemyPic.getChildByName('pic').height = 100 
+        
         //this.enemyPic.getComponent(cc.Mask).type =  cc.Mask.Type.ELLIPSE 
     })
 
@@ -138,6 +150,20 @@ cc.Class({
     
 
     onLoad () {   
+        // if(global.wentShop = 'shop') {
+            
+        //     this.gameover = true
+        //     this.gameOver()}
+        
+        var randbg = parseInt(cc.rand()%4)
+        var bgs = [this.bg1, this.bg2, this.bg3, this.bg4]
+
+        this.bg.getComponent(cc.Sprite).spriteFrame = bgs[randbg]
+        this.gb.getComponent(cc.Sprite).spriteFrame = bgs[randbg]
+        this.gb1.getComponent(cc.Sprite).spriteFrame = bgs[randbg]
+
+        
+
         cc.EventListener.create({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed: function (keyCode, event) {
@@ -201,19 +227,21 @@ cc.Class({
         
  
         this.usingFreeze = JSON.parse ( this.storage.usingFreeze)
+        this.freezeBoosts = JSON.parse  (parseInt( this.storage.freezeBoosts))
+        this.frenzyBoosts = JSON.parse (parseInt ( this.storage.frenzyBoosts))
+        this.spawnBoosts = JSON.parse (parseInt ( this.storage.spawnBoosts))
         this.usingFrenzy =    JSON.parse(this.storage.usingFrenzy)
-        this.usingSpawn =    JSON.parse(this.storage.usingSpawn)
-        console.log(this.usingSpawn, "TBGIII", this.usingFreeze, this.usingFrenzy)
+        this.usingSpawn =    JSON.parse(this.storage.usingSpawn) 
         this.coins =  JSON.parse(parseInt( this.storage.coins) )
         this.passiveComboBoost = JSON.parse (parseInt(this.storage.passiveComboBoost))
         this.passiveTimeBoost = JSON.parse( parseInt(this.storage.passiveTimeBoost))
         this.passiveFrenzyBoost = (parseInt( this.storage.passiveFrenzyBoost))
         this.highestCombo =JSON.parse  (parseInt(this.storage.highestCombo))
         this.highestScore =JSON.parse (parseInt( this.storage.highestScore))
-        this.hsLabel.getComponent(cc.Label).string =  String(this.highestScore)
-        console.log('HIGHESST', this.highestScore)
+        this.hsLabel.getComponent(cc.Label).string =  String(this.highestScore) 
         this.ss()
         this.boosterShow()
+        this.setLabels()
         
  
 
@@ -280,23 +308,28 @@ cc.Class({
     },
     onHome(){
         cc.director.resume()
-        cc.director.loadScene('realhome');
+        this.pauseBtn.interactable = true
+        cc.director.loadScene('realhome'); 
     },
     onPause(){
+        this.pausemenu.setLocalZOrder(10)
         this.pausemenu.opacity=255
-        this.pausemenu.position = cc.v2(-42, 110)
+        this.pausemenu.position = cc.v2(0, 0)
         if(this.pauseBtn.getComponent(cc.Toggle).isChecked) {
+            this.pauseBtn.interactable = false
             cc.director.pause()  
         }
         else {
             cc.director.resume()
+            this.pauseBtn.interactable = true
             this.pausemenu.opacity=0
-            this.pausemenu.position = cc.v2(400, 110)
+            this.pausemenu.position = cc.v2(-800,-800)
              
         }
     },
     retry(){ 
         cc.director.resume()
+        this.pauseBtn.interactable = true
          cc.director.loadScene('main')
     },
 
@@ -312,39 +345,77 @@ cc.Class({
         var t= this  
         var left = 60
 
+
         var gameTimer = t.schedule(function() { 
             
 
               
-            if (t.usingFreeze  )   t.timelmt = 70  +t.passiveTimeBoost
-            else t.timelmt = 60+t.passiveTimeBoost 
+            if (t.usingFreeze  )   t.timelmt = 55  +t.passiveTimeBoost
+            else t.timelmt = 50+t.passiveTimeBoost 
                  
-            left =  (t.timelmt- timectr  ).toFixed(2)  
-            t.timebar.getComponent(cc.ProgressBar).progress = left/t.timelmt
-            timectr+= 0.1
+            left =  (t.timelmt- timectr  ) 
+        //     t.gb.x -= 40
+        //     t.gb1.x -= 40
+        //  //   t.gb.position= cc.v2(t.bg.x+2208,t.bg.y)
+            // if(t.gb.x <= 775){
+            //       t.bg.x= t.gb.x+2208 
+                
+            //     }
+            if(t.bg.x <= 800){
+                t.gb.x= t.bg.x+2208 
+                t.gb1.x = t.gb.x+2208
+            }
+            else if(t.gb1.x <= 800){
+                t.bg.x= t.gb1.x+2208 
+                t.gb.x = t.bg.x+2208
+            }
+            else if(t.gb.x <= 800){
+                t.gb1.x= t.gb.x+2208 
+                t.bg.x = t.gb1.x+2208
+            }
+            //t.bg.position.x += timectr*3
             
+            t.timebar.getComponent(cc.ProgressBar).progress = left/t.timelmt
+            timectr+= 10
+            //0.05
             t.lapse = timectr
             
 
             if(left <=0 && !this.gameover  ){ 
-               // t.sdkWork() 
+                this.gameOver()
+                
+                
+            } 
+
+            t.timeLabel.getComponent(cc.Label).string = String(left).replace("." , ':')
+
+
+        }, 0.05, 1500,1.5);
+        
+        
+         
+    },  
+    gameOver(){ 
+        this.pauseBtn.interactable = false
+                this.pauseBtn.position =cc.v2(-800,-800)
+               // this.sdkWork() 
                 var prize =  Math.round(Math.random()*200) 
                 if(prize <= 100) prize = 100+ Math.floor(Math.random()*22)
                 
                 if(this.comboctr >= this.highestCombo) this.highestCombo = this.comboctr
                 
-                if(t.score >= t.highestScore){ t.highestScore = t.score
+                if(this.score >= this.highestScore){ this.highestScore = this.score
                     prize+= 80
  
                 }
-                t.coins +=prize
+                this.coins +=prize
                 this.prize = prize 
-                this.storage.coins = t.coins
-                this.storage.highestScore = t.highestScore
-                t.endPanel.getComponent('layoutScript').showPanel(t.score ,t.highestCombo,t.prize ,t.highestScore)
-                t.gameover = true
-                t.numOfGames+=1
-                t.matrix.destroy()  
+                this.storage.coins = this.coins
+                this.storage.highestScore = this.highestScore
+                
+                this.gameover = true
+                this.numOfGames+=1
+                this.matrix.destroy()  
                 this.usingFrenzy = false
                 this.usingFreeze = false
                 this.usingSpawn = false
@@ -352,19 +423,15 @@ cc.Class({
                 this.storage.usingFreeze = false
                 this.storage.usingSpawn = false
 
-                this.storage.numOfGames = t.numOfGames 
+                this.storage.numOfGames = this.numOfGames 
+                this.endPanel.getComponent('layoutScript').showPanel(this.score ,this.highestCombo,this.prize ,this.highestScore)
                 this.ss()
-                
-            } 
+    },
 
-            t.timeLabel.getComponent(cc.Label).string = String(left).replace("." , ':')
-
-
-        }, 0.1, 750,1.5);
-        
-        
-         
-    },  
+    shop(){
+        global.wentShop = 'main'
+        cc.director.pushScene('shop')
+    },
     frenzyEffect(){ 
         console.log('whyy')
         this.cameraShake()
@@ -810,13 +877,180 @@ getIMG(){
     return canvas.toDataURL('image/png');
 
 }, 
-    resume(){cc.director.resume()
-
+    resume(){
+        cc.director.resume()
+        this.pauseBtn.interactable = true
         this.pausemenu.opacity=255
         this.pausemenu.position=cc.v2(-800, -800)
 
 
     },
+    showPrompt(){
+        this.boosterPrompt.setLocalZOrder(10)
+       if(this.frenzyBoosts == 0) this.boosterFrenzy.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
+       if(this.freezeBoosts == 0) this.boosterTime.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
+       if(this.spawnBoosts == 0) this.boosterSpawn.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
+        this.boosterPrompt.position = cc.v2(0,0)
+    },
+    closePrompt(){
+        //insert closing action here
+        this.boosterPrompt.position = cc.v2(-1000,-1000)
+        this.boosterPrompt.setLocalZOrder(-10)
+    },
+     
+    play(){
+
+        cc.director.loadScene('main');
+    },
+
+      //==============================================================================
+useSpawn(){
+        var usingAction = cc.repeatForever(
+            cc.sequence(
+                cc.spawn(
+                    cc.moveBy(1, 0, 15),
+                    cc.scaleTo(1, 0.21,0.21)
+            ),
+                cc.spawn(
+                    cc.moveBy(1, 0, -15),
+                    cc.scaleTo(1, 0.17 ,0.17 )
+                ),
+            
+                 
+            ));
+        if(this.spawnBoosts>=1){
+            this.usingSpawn = !this.usingSpawn
+             
+            
+        if(this.usingSpawn) this.spawnBoosts-=1
+        else this.spawnBoosts+=1
+        this.setLabels()
+        this.storage.spawnBoosts = this.spawnBoosts 
+        this.storage.usingSpawn = this.usingSpawn
+        this.ss()
+        this.boosterSpawn.getChildByName("New Sprite").runAction(usingAction)
+        }
+        else if(this.usingSpawn) {
+            
+        
+   
+        this.boosterSpawn.getChildByName("New Sprite").stopAllActions()
+        this.boosterSpawn.getChildByName("New Sprite").position = cc.v2(0,0)
+        this.boosterSpawn.getChildByName("New Sprite").scale = cc.v2(0.17,0.17)
+
+            this.usingSpawn = !this.usingSpawn 
+            if(this.usingSpawn) this.spawnBoosts-=1
+            else this.spawnBoosts+=1
+            this.setLabels()
+            this.storage.spawnBoosts = this.spawnBoosts 
+            this.storage.usingSpawn = this.usingSpawn
+            this.ss() 
+        }
+    },
+
+    useFreeze(){ 
+        var usingAction = cc.repeatForever(
+            cc.sequence(
+                cc.spawn(
+                    cc.moveBy(1, 0, 15),
+                    cc.scaleTo(1, 0.21,0.21)
+            ),
+                cc.spawn(
+                    cc.moveBy(1, 0, -15),
+                    cc.scaleTo(1, 0.17 ,0.17 )
+                ),
+            
+                 
+            ));
+        if(this.freezeBoosts>=1){
+            this.usingFreeze = !this.usingFreeze 
+        if(this.usingFreeze) this.freezeBoosts-=1
+        else this.freezeBoosts+=1
+        this.setLabels()
+        this.storage.freezeBoosts = this.freezeBoosts
+        this.storage.usingFreeze = this.usingFreeze
+        this.ss()
+        this.boosterTime.getChildByName("New Sprite").runAction(usingAction)
+        }
+        else if(this.usingFreeze) {
+            
+        
+   
+        this.boosterTime.getChildByName("New Sprite").stopAllActions()
+        this.boosterTime.getChildByName("New Sprite").position = cc.v2(0,0)
+        this.boosterTime.getChildByName("New Sprite").scale = cc.v2(0.17,0.17)
+
+            this.usingFreeze = !this.usingFreeze 
+            if(this.usingFreeze) this.freezeBoosts-=1
+            else this.freezeBoosts+=1
+            this.setLabels()
+            this.storage.freezeBoosts = this.freezeBoosts
+            this.storage.usingFreeze = this.usingFreeze
+            this.ss() 
+        }
+    },
+    useFrenzy(){
+        var usingAction = cc.repeatForever(
+            cc.sequence(
+                cc.spawn(
+                    cc.moveBy(1, 0, 15),
+                    cc.scaleTo(1, 0.21,0.21)
+            ),
+                cc.spawn(
+                    cc.moveBy(1, 0, -15),
+                    cc.scaleTo(1, 0.17 ,0.17 )
+                ),
+            
+                 
+            ));
+            
+        
+        
+        console.log('frboosts ' ,this.frenzyBoosts)
+        if(this.frenzyBoosts>=1){
+            //his.frenzy.getChildByName("New Sprite").runAction(usingAction)
+            
+            this.usingFrenzy = !this.usingFrenzy
+          
+        console.log(this.usingFrenzy , "using Frenzy")
+        if(this.usingFrenzy) this.frenzyBoosts-=1
+        else this.frenzyBoosts+=1
+        this.setLabels()
+        this.storage.frenzyBoosts = this.frenzyBoosts
+        
+        this.storage.usingFrenzy = this.usingFrenzy
+        this.ss()
+
+
+        this.boosterFrenzy.getChildByName("New Sprite").runAction(usingAction)
+        }
+        else if(this.usingFrenzy) {
+            this.boosterFrenzy.getChildByName("New Sprite").stopAllActions()
+            this.boosterFrenzy.getChildByName("New Sprite").position = cc.v2(0,0)
+            this.boosterFrenzy.getChildByName("New Sprite").scale = cc.v2(0.17,0.17)
+            this.usingFrenzy = !this.usingFrenzy 
+          
+        console.log(this.usingFrenzy , "using Frenzy")
+        if(this.usingFrenzy) this.frenzyBoosts-=1
+        else this.frenzyBoosts+=1
+        this.setLabels()
+        this.storage.frenzyBoosts = this.frenzyBoosts
+        
+        this.storage.usingFrenzy = this.usingFrenzy
+        this.ss()
+
+
+        }
+    },
+
+    setLabels(){
+
+        this.boosterTime.getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts
+        this.boosterSpawn.getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts
+        this.boosterFrenzy.getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts
+
+    },
+    //==============================================================================
    toggling(x){ 
        if(x.isEmpty ) return
     switch(x){

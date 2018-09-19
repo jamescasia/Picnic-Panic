@@ -1,4 +1,4 @@
- 
+var global = require('global')  
 cc.Class({
     extends: cc.Component, 
 
@@ -103,11 +103,13 @@ cc.Class({
         
     },
  
-    play(){
-        cc.director.loadScene('realhome');
+    play(){ 
+
+        cc.director.loadScene(global.wentShop);
+        global.wentShop = 'shop'
     
         
-    },
+    },  
     setLabels(){
         this.coinsLabel.getComponent(cc.Label).string = this.coins
         this.boostLabels.getChildByName('spawn').getComponent(cc.Label).string  = this.spawnBoosts
@@ -118,18 +120,29 @@ cc.Class({
         this.useFreezeBtn.getChildByName('Label').getComponent(cc.Label).string ='freeze'+  this.usingFreeze
         this.useSpawnBtn.getChildByName('Label').getComponent(cc.Label).string ='spawn' + this.usingSpawn
         
-        this.upgradeFrenzyNode.getChildByName('level').getComponent(cc.Label).string = this.passiveFrenzyLvl
-        this.upgradeTimeNode.getChildByName('level').getComponent(cc.Label).string = this.passiveTimeLvl
-        this.upgradeComboNode.getChildByName('level').getComponent(cc.Label).string = this.passiveComboLvl
+        // this.upgradeFrenzyNode.getChildByName('level').getComponent(cc.Label).string = this.passiveFrenzyLvl
+        // this.upgradeTimeNode.getChildByName('level').getComponent(cc.Label).string = this.passiveTimeLvl
+        // this.upgradeComboNode.getChildByName('level').getComponent(cc.Label).string = this.passiveComboLvl
 
-        this.upgradeFrenzyNode.getChildByName('price').getComponent(cc.Label).string =  this.upgradePrice(this.passiveFrenzyLvl,'frenzy')
-        this.upgradeTimeNode.getChildByName('price').getComponent(cc.Label).string =this.upgradePrice( this.passiveTimeLvl , 'time')
-        this.upgradeComboNode.getChildByName('price').getComponent(cc.Label).string = this.upgradePrice(this.passiveComboLvl,'combo')
+        if((this.passiveComboLvl <10) )  this.upgradeComboNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string =  this.upgradePrice(this.passiveComboLvl,'combo')
+        else {this.upgradeComboNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = "Maxed Out" 
+        this.upgradeComboNode.getChildByName('btn').getComponent(cc.Button).interactable = false}
 
-        this.upgradeFrenzyNode.getChildByName('defn').getComponent(cc.Label).string =  this.upgradeChange(this.passiveFrenzyBoost, "frenzy")
-        this.upgradeTimeNode.getChildByName('defn').getComponent(cc.Label).string =this.upgradeChange( this.passiveTimeBoost,"time")
-        this.upgradeComboNode.getChildByName('defn').getComponent(cc.Label).string = this.upgradeChange(this.passiveComboBoost, 'combo')
+        if((this.passiveTimeLvl <10) )   this.upgradeTimeNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = this.upgradePrice( this.passiveTimeLvl , 'time')
+        else{ this.upgradeTimeNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = "Maxed Out"
+        this.upgradeTimeNode.getChildByName('btn').getComponent(cc.Button).interactable = false}
 
+        if((this.passiveFrenzyLvl <3) )   this.upgradeFrenzyNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = this.upgradePrice(this.passiveFrenzyLvl,'frenzy')
+        else{ this.upgradeFrenzyNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = "Maxed Out"
+        this.upgradeFrenzyNode.getChildByName('btn').getComponent(cc.Button).interactable = false}
+
+        if((this.passiveFrenzyLvl <3) ) this.upgradeFrenzyNode.getChildByName('defn').getComponent(cc.Label).string =  "Upgrading this would increase frenzy bonus score by "+ String(this.upgradeChange(this.passiveFrenzyBoost, "frenzy")*(1+this.passiveFrenzyLvl))
+        else this.upgradeFrenzyNode.getChildByName('defn').getComponent(cc.Label).string =  "Your Frenzy bonus is already in maximum power! Awesome!"
+        if((this.passiveTimeLvl <10) )  this.upgradeTimeNode.getChildByName('defn').getComponent(cc.Label).string ="Upgrading this would increase time bonus by "+ String(this.upgradeChange( this.passiveTimeBoost,"time")*(1+this.passiveTimeLvl))
+        else this.upgradeTimeNode.getChildByName('defn').getComponent(cc.Label).string =  "Your Time bonus is already in maximum power! Awesome!"
+        if((this.passiveComboLvl <10) )  this.upgradeComboNode.getChildByName('defn').getComponent(cc.Label).string = "Upgrading this would increase combo bonus score by "+String(this.upgradeChange(this.passiveComboBoost, "combo")* (1+this.passiveComboLvl ))
+        else this.upgradeComboNode.getChildByName('defn').getComponent(cc.Label).string =  "Your Combo bonus is already in maximum power! Awesome!"
+        this.ss()
 
 
 
@@ -256,6 +269,7 @@ cc.Class({
         }
     },
     confirmPrompt(name, price){
+        this.promptLayout.setLocalZOrder(10)
         
         this.promptLayout.opacity = 255
         if(  name.includes("bonus" )){
@@ -271,6 +285,7 @@ cc.Class({
     },
     closePrompt(){
         this.promptLayout.opacity = 0
+        this.promptLayout.setLocalZOrder(-10)
         this.promptLayout.position = cc.v2(-900 , -900)
     },
     reject(){   
@@ -288,15 +303,15 @@ cc.Class({
             case "Spawn Booster":
                 this.addedSpawn()
                 break
-            case "upgradeTime":
+            case "time bonus":
                 this.upgradedTIME()
                 break
-            case "upgradeFrenzy":
+            case "frenzy bonus":
                 this.upgradedFRENZY()
                 break
-            case "upgradeCombo":
+            case "combo bonus":
                 this.upgradedCOMBO()
-                break
+                break 
 
         }
 
@@ -306,6 +321,7 @@ cc.Class({
     showerrorPrompt(text){
         this.errorPrompt.position = cc.v2( 7, 30)
         this.errorPrompt.opacity = 255
+        this.errorPrompt.setLocalZOrder(10)
         this.errorPrompt.getChildByName('text').getComponent(cc.Label).string = text
     },
     oked(){
@@ -330,32 +346,32 @@ cc.Class({
 
         switch(name){
             case 'frenzy':
-                return '+1'
+                return 1
                 break
             case 'time':
-                return '+0.5'
+                return 0.5
                 break
             case 'combo':
-                return '+2'
+                return 2
                 break
         } 
 
     },
 
     upgradeFrenzy(){ 
-        if(this.coins < this.upgradePrice(this.passiveFrenzyLvl , 'frenzy'))   this.showerrorPrompt('Insufficient Funds') 
-        else if(!(this.passiveFrenzyLvl <3) )   this.showerrorPrompt('Maxed Out') 
+        if(!(this.passiveFrenzyLvl <3) )   this.showerrorPrompt('Maxed Out') 
+        else if(this.coins < this.upgradePrice(this.passiveFrenzyLvl , 'frenzy'))   this.showerrorPrompt('Insufficient Funds')  
          
-        else if(!this.confirmPrompt("frenzy bonus score" , this.upgradePrice(this.passiveFrenzyLvl , 'frenzy')))return
+        else if(!this.confirmPrompt("frenzy bonus" , this.upgradePrice(this.passiveFrenzyLvl , 'frenzy')))return
 
     },
     upgradedFRENZY(){
         this.passiveFrenzyBoost+=1
         this.storage.passiveFrenzyBoost = this.passiveFrenzyBoost
-        
+        this.passiveFrenzyLvl+=1  
         this.storage.passiveFrenzyLvl = this.passiveFrenzyLvl
         this.coins-= this.upgradePrice( this.passiveFrenzyLvl , 'frenzy')
-        this.passiveFrenzyLvl+=1  
+        
         this.storage.coins = this.coins
         this.setLabels()
         this.ss()
@@ -364,8 +380,9 @@ cc.Class({
     },
 
     upgradeTime(){ 
-        if(this.coins <  this.upgradePrice(this.passiveTimeLvl , 'time') )   this.showerrorPrompt('Insufficient Funds') 
-        else if(!(this.passiveTimeLvl <10) )   this.showerrorPrompt('Maxed Out') 
+         if(!(this.passiveTimeLvl <10) )   this.showerrorPrompt('Maxed Out') 
+         else if(this.coins <  this.upgradePrice(this.passiveTimeLvl , 'time') )   this.showerrorPrompt('Insufficient Funds') 
+        
         
         else if(!this.confirmPrompt("time bonus" , this.upgradePrice(this.passiveTimeLvl , 'time')))return
 
@@ -373,10 +390,10 @@ cc.Class({
     upgradedTIME(){
         this.passiveTimeBoost+=0.5
         this.storage.passiveTimeBoost = this.passiveTimeBoost
-        
+        this.passiveTimeLvl+=1  
         this.storage.passiveTimeLvl = this.passiveTimeLvl
         this.coins-= this.upgradePrice( this.passiveTimeLvl , 'time')
-        this.passiveTimeLvl+=1  
+        
         this.storage.coins = this.coins
         this.setLabels()
         this.ss()
@@ -385,18 +402,19 @@ cc.Class({
     },
 
     upgradeCombo(){  
-        if(this.coins <  this.upgradePrice(this.passiveComboLvl , 'combo') )   this.showerrorPrompt('Insufficient Funds') 
-        else if(!(this.passiveComboLvl <10) )   this.showerrorPrompt('Maxed Out')  
+        if(!(this.passiveComboLvl <10) )   this.showerrorPrompt('Maxed Out')  
+        else if(this.coins <  this.upgradePrice(this.passiveComboLvl , 'combo') )   this.showerrorPrompt('Insufficient Funds') 
+        
         else if(!this.confirmPrompt("combo bonus" , this.upgradePrice(this.passiveComboLvl , 'combo')))return
 
     },
     upgradedCOMBO(){
         this.passiveComboBoost+=2
         this.storage.passiveComboBoost = this.passiveComboBoost
-        
+        this.passiveComboLvl+=1 
         this.storage.passiveComboLvl = this.passiveComboLvl
         this.coins-= this.upgradePrice( this.passiveComboLvl , 'combo')
-        this.passiveComboLvl+=1  
+         
         this.storage.coins = this.coins
         this.setLabels()
         this.ss()

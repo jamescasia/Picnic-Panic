@@ -259,7 +259,7 @@ cc.Class({
         if(this.game.getComponent('Game').burgEffect >=2) this.spawnFactor = 0.2
         else this.spawnFactor = 1  
         
-        if(this.game.getComponent('Game').lapse >=   this.game.getComponent('Game').timelmt-3 &&  this.game.getComponent('Game').lapse!=60 ){ 
+        if(this.game.getComponent('Game').lapse >=   this.game.getComponent('Game').timelmt-6 &&  this.game.getComponent('Game').lapse!=60 ){ 
             var shake = cc.sequence(cc.skewTo(0.1 , cc.randomMinus1To1()*16 , cc.randomMinus1To1()*16 )  , cc.skewTo(0.1 , 0,0 ) ) 
             this.frame.node.runAction(shake)
 

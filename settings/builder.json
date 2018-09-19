@@ -19,13 +19,13 @@
     "portrait": true,
     "upsideDown": false
   },
-  "packageName": "aether.picnic.panic",
+  "packageName": "aetherapps.picnic.panic",
   "privateKey": "",
   "qqplay": {
     "REMOTE_SERVER_ROOT": "",
     "orientation": "portrait"
   },
-  "renderMode": "2",
+  "renderMode": "0",
   "startScene": "588adfd1-c406-4463-8f37-6e3ae5ecc43f",
   "title": "PizzaBugePan",
   "webOrientation": "portrait",

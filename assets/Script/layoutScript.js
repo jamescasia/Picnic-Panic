@@ -7,16 +7,12 @@ cc.Class({
         scoreLabel:cc.Node,
         highScoreLabel:cc.Node,
         highComboLabel:cc.Node,
-        prizeLable:cc.Node,
-        resetBtn:cc.Node,
-        homeBtn:cc.Node
+        prizeLable:cc.Node, 
  
     },
  
 
-    onLoad () {
-        this.resetBtn.on('click', this.onReset, this);
-        this.homeBtn.on('click', this.onHome, this);
+    onLoad () { 
     },
 
     start () {
@@ -24,18 +20,18 @@ cc.Class({
     },
     showPanel(score, highCombo  ,prize ,highest ){
         var show = cc.spawn(
-            cc.moveTo(0.4, 0,-92 ),
+            cc.moveTo(0.4, 0,0 ),
             cc.fadeIn(0.2)
 
         )
 
        this.node.runAction(show)
-       this.prizeLable.getComponent(cc.Label).string = "PRIZE: "  + String(prize) 
+       this.prizeLable.getComponent(cc.Label).string =  String(prize) 
 
-        this.scoreLabel.getComponent(cc.Label).string = "SCORE: "  + String(score) 
+        this.scoreLabel.getComponent(cc.Label).string =  String(score) 
         var highestScore =highest
-          this.highScoreLabel.getComponent(cc.Label).string = "HIGHSCORE: " + String(highestScore  ) 
-        this.highComboLabel.getComponent(cc.Label).string = "HIGH COMBO: " + String(highCombo) 
+          this.highScoreLabel.getComponent(cc.Label).string =   String(highestScore  ) 
+        this.highComboLabel.getComponent(cc.Label).string =  String(highCombo) 
     },
     onHome(){
         cc.director.loadScene('shop');
