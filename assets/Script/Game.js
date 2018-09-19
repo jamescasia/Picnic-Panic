@@ -187,7 +187,7 @@ cc.Class({
         //console.log('gonoing',global.global_activeContests.val()[FBInstant.context.getID()].ongoing )
         
 
-       // cc.director.setDisplayStats ( false )  
+       //   
         
         this.storage = JSON.parse (cc.sys.localStorage.getItem('ampopo'))  
         console.log('fiiirst ' , this.storage)
@@ -341,12 +341,14 @@ cc.Class({
 
         this.highestCombo = 0
         this.comboctr  = 0
-        var timectr = 0
+        var timectr = 56
         var t= this  
         var left = 60
-
+        
 
         var gameTimer = t.schedule(function() { 
+
+           
             
 
               
@@ -359,7 +361,8 @@ cc.Class({
         //  //   t.gb.position= cc.v2(t.bg.x+2208,t.bg.y)
             // if(t.gb.x <= 775){
             //       t.bg.x= t.gb.x+2208 
-                
+                this.scoreLabel.getComponent(cc.Label).string = this.score
+        this.comboLabel.getComponent(cc.Label).string = this.comboctr 
             //     }
             if(t.bg.x <= 800){
                 t.gb.x= t.bg.x+2208 
@@ -376,7 +379,7 @@ cc.Class({
             //t.bg.position.x += timectr*3
             
             t.timebar.getComponent(cc.ProgressBar).progress = left/t.timelmt
-            timectr+= 10
+            timectr+= 0.05
             //0.05
             t.lapse = timectr
             
@@ -386,6 +389,12 @@ cc.Class({
                 
                 
             } 
+
+            if(this.lapse >=   this.timelmt-6 &&  this.lapse!=60 && !this.gameover ) {
+                 
+            
+                var shake = cc.sequence(cc.moveTo(0.1 , cc.randomMinus1To1()*2 ,-55+  cc.randomMinus1To1()*4 )  , cc.moveTo(0.1 , 0,-55 ) ) 
+                this.matrix .runAction(shake)}
 
             t.timeLabel.getComponent(cc.Label).string = String(left).replace("." , ':')
 
@@ -415,7 +424,7 @@ cc.Class({
                 
                 this.gameover = true
                 this.numOfGames+=1
-                this.matrix.destroy()  
+                 
                 this.usingFrenzy = false
                 this.usingFreeze = false
                 this.usingSpawn = false
@@ -424,8 +433,40 @@ cc.Class({
                 this.storage.usingSpawn = false
 
                 this.storage.numOfGames = this.numOfGames 
+                this.gameOverAnim()
                 this.endPanel.getComponent('layoutScript').showPanel(this.score ,this.highestCombo,this.prize ,this.highestScore)
                 this.ss()
+    },
+    gameOverAnim(){
+        //this.endPanel.position =cc.v2(0,0)
+        
+        //animation 
+        var funcs = function(){
+            console.log('hoyotoy')
+            this.matrix.destroy() 
+            //animation for showing panel make this better later include score movement animations and coins
+            var panel = cc.sequence(cc.delayTime(0.1),cc.moveTo(0.4, 0,0))
+            this.endPanel.runAction(panel)
+        }
+        var end = cc.sequence(
+            //animatiom explosion here  for the table
+            cc.spawn(
+                cc.delayTime(0.01),
+                cc.scaleTo(0.3, 1.4,1.4).easing(cc.easeExponentialIn() ), 
+            ),
+            cc.delayTime(0.3),
+            cc.spawn(
+                cc.scaleTo(0.6, 0.4,0.4), 
+                cc.moveBy(0.6, 0 , -1000),
+                cc.rotateBy(0.6, 200)
+
+            ),
+            
+            cc.callFunc(funcs, this)
+        )
+        this.matrix.getChildByName('table').runAction(end)
+
+        
     },
 
     shop(){
@@ -700,8 +741,7 @@ cc.Class({
         
 
  
-       this.scoreLabel.getComponent(cc.Label).string = this.score
-       this.comboLabel.getComponent(cc.Label).string = this.comboctr 
+       
 
         
 

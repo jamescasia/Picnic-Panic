@@ -19,13 +19,8 @@ cc.Class({
 
     },
     showPanel(score, highCombo  ,prize ,highest ){
-        var show = cc.spawn(
-            cc.moveTo(0.4, 0,0 ),
-            cc.fadeIn(0.2)
-
-        )
-
-       this.node.runAction(show)
+        
+ 
        this.prizeLable.getComponent(cc.Label).string =  String(prize) 
 
         this.scoreLabel.getComponent(cc.Label).string =  String(score) 

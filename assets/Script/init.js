@@ -3,6 +3,7 @@
 cc.Class({
     extends: cc.Component,
     onLoad(){
+        cc.director.setDisplayStats ( false )
         this.screenResize()
     },
     screenResize(){

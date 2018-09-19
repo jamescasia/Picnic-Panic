@@ -25,6 +25,7 @@ cc.Class({
         boostonce:false,
         healOnce:false,
         healactn:null,
+        runonce:false
         
 
     },
@@ -249,6 +250,30 @@ cc.Class({
 
 
     },
+
+    gmvrFx(){//animation for gameover right after gameover
+        this.runonce = true
+
+        //this.frame.node.stopAllActions()
+        var as = [1,-1]
+        var gmvr = cc.sequence(
+            cc.delayTime(0.2),
+
+            cc.spawn(
+                cc.scaleTo(2, 2,2),
+                cc.moveBy(2,   as[ parseInt(cc.rand())%2]* (0+cc.rand()%400) ,  as[parseInt(cc.rand())%2]*(0+cc.rand()%400)).easing(cc.easeCircleActionOut())
+            ),
+            cc.spawn(
+                cc.moveBy(0.4,0,-1000 ).easing(cc.easeExponentialIn()),
+                cc.scaleTo(2, 2,2),
+            )
+            
+        )
+
+        this.frame.node.runAction(gmvr)
+
+
+    },
     
     
      
@@ -259,7 +284,7 @@ cc.Class({
         if(this.game.getComponent('Game').burgEffect >=2) this.spawnFactor = 0.2
         else this.spawnFactor = 1  
         
-        if(this.game.getComponent('Game').lapse >=   this.game.getComponent('Game').timelmt-6 &&  this.game.getComponent('Game').lapse!=60 ){ 
+        if(this.game.getComponent('Game').lapse >=   this.game.getComponent('Game').timelmt-6 &&  this.game.getComponent('Game').lapse!=60 && !this.gameover ){ 
             var shake = cc.sequence(cc.skewTo(0.1 , cc.randomMinus1To1()*16 , cc.randomMinus1To1()*16 )  , cc.skewTo(0.1 , 0,0 ) ) 
             this.frame.node.runAction(shake)
 
@@ -267,6 +292,7 @@ cc.Class({
  
 
         this.gameover = this.game.getComponent('Game').gameover 
+        if(this.gameover && !this.runonce) this.gmvrFx()
         //effect on level three burst
          
       
