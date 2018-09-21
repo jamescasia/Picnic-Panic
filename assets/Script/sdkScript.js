@@ -12,12 +12,14 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        gameServices:null,
+        signIn:false
         
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () { 
+    onLoad () {  
 
  
     },
@@ -29,12 +31,12 @@ cc.Class({
     },
 
     
-    admobInit: function() {
-        if(cc.sys.isMobile) {
+    admobInit: function() { 
             //=======
-            const config = new gpg.PlatformConfiguration();
-        config.SetClientID('777734739048-cdkbeieil19d6pfkavddrri5o19gk4ni.apps.googleusercontent.com');
+        const config = new gpg.PlatformConfiguration();
+        config.SetClientID('553134658181-2ulkpfaq4n91k23ibn66fkru7ap878kj.apps.googleusercontent.com');
 
+        
         const l = 1;
         this.gameServices = null;
         this.signIn = false;
@@ -43,20 +45,36 @@ cc.Class({
             .SetOnAuthActionStarted (
                 function(result) {
                     self.log('GPG on auth action start');
-                }).SetOnAuthActionFinished (
+                }
+            ).SetOnAuthActionFinished (
                 function(result) {
                     self.log('GPG on auth action finished: ' + result.AuthOperation + ' ' + result.AuthStatus);
                     self.signIn = gpg.IsSuccess(result.AuthStatus);
                     self.log('GPG signed in:' + self.signIn);
-                })
+                }
+            ).SetOnMultiplayerInvitationEvent(
+                function(result) {
+                    self.log('GPG on multiplayer invitation');
+                }
+            ).SetLogging(gpg.LogLevel.INFO)
+            .EnableSnapshots()
+            .Create(
+                function(gs) {
+                    if (gs) {
+                        self.gameServices = gs;
+                        self.log('GPG game services connect');
+                    } else {
+                        self.log('GPG game services not connect')
+                    }
+                }, config);
 
 
 
-            //======
-        }
+            //====== 
     },
 
     cacheInterstitial: function() {
+        this.gameServices.StartAuthorizationUI();
         if(cc.sys.isMobile) {
             
         
@@ -66,6 +84,7 @@ cc.Class({
     },
 
     showInterstitial: function() {
+        this.gameServices.StartAuthorizationUI();
         if(cc.sys.isMobile) {       
         }
     },

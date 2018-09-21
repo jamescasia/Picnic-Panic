@@ -5,6 +5,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        hud:cc.Node,
         matrix:cc.Node, 
         pausemenu:cc.Node,
         score:0, 
@@ -114,7 +115,8 @@ cc.Class({
         boosterTime:cc.Node,
         boosterSpawn:cc.Node,
         boosterFrenzy:cc.Node,
-        boosterPrompt:cc.Node
+        boosterPrompt:cc.Node,
+        startVal:0
         
  
     }, 
@@ -334,6 +336,9 @@ cc.Class({
     },
 
     start () {   
+
+        this.endPanel.setLocalZOrder(-10)
+        
         
         
 
@@ -341,7 +346,7 @@ cc.Class({
 
         this.highestCombo = 0
         this.comboctr  = 0
-        var timectr = 56
+        var timectr =0
         var t= this  
         var left = 60
         
@@ -363,6 +368,7 @@ cc.Class({
             //       t.bg.x= t.gb.x+2208 
                 this.scoreLabel.getComponent(cc.Label).string = this.score
         this.comboLabel.getComponent(cc.Label).string = this.comboctr 
+        if(this.comboctr >= this.highestCombo) this.highestCombo = this.comboctr
             //     }
             if(t.bg.x <= 800){
                 t.gb.x= t.bg.x+2208 
@@ -405,13 +411,20 @@ cc.Class({
          
     },  
     gameOver(){ 
+        var hideHud = cc.sequence(
+            cc.delayTime(0.5),
+            cc.moveBy(0.16, 0, -6).easing(cc.easeCubicActionOut()) ,
+            cc.moveBy(0.28, 0, 400).easing(cc.easeExponentialIn()) 
+
+            )
+        this.hud.runAction(hideHud)
         this.pauseBtn.interactable = false
                 this.pauseBtn.position =cc.v2(-800,-800)
                // this.sdkWork() 
                 var prize =  Math.round(Math.random()*200) 
                 if(prize <= 100) prize = 100+ Math.floor(Math.random()*22)
                 
-                if(this.comboctr >= this.highestCombo) this.highestCombo = this.comboctr
+                
                 
                 if(this.score >= this.highestScore){ this.highestScore = this.score
                     prize+= 80
@@ -434,8 +447,70 @@ cc.Class({
 
                 this.storage.numOfGames = this.numOfGames 
                 this.gameOverAnim()
-                this.endPanel.getComponent('layoutScript').showPanel(this.score ,this.highestCombo,this.prize ,this.highestScore)
+                //this.endPanel.getComponent('layoutScript').showPanel(this.score ,this.highestCombo,this.prize ,this.highestScore)
+                
                 this.ss()
+                
+    },
+    numAnim(score){
+        // this.endPanel.getChildByName('combo').string = 
+        // this.endPanel.getChildByName('score').string = 
+        // this.endPanel.getChildByName('coins').string =
+        var proceed = function(){
+            if(this.startVal <=  score) this.numAnim(score)
+            else {
+                //this.numAnim(this.highestCombo)
+                this.startVal = 0
+                this.endPanel.getChildByName('score').getComponent(cc.Label).string =  this.highestScore  
+                this.comboAnim(this.highestCombo)
+                }
+        }
+        var add =  Math.floor( score/30)
+         if(add <=1) add =1
+        var anim = cc.sequence(cc.delayTime(0.025) , cc.callFunc(proceed, this)) 
+        this.endPanel.runAction(anim)
+        this.startVal+=add
+        this.endPanel.getChildByName('score').getComponent(cc.Label).string = this.startVal 
+    },
+    comboAnim(score){
+        // this.endPanel.getChildByName('combo').string = 
+        // this.endPanel.getChildByName('score').string = 
+        // this.endPanel.getChildByName('coins').string =
+        var proceed = function(){
+            if(this.startVal <=  score) this.comboAnim(score)
+            else {
+                this.coinAnim(this.prize)
+                this.startVal = 0
+                this.endPanel.getChildByName('combo').getComponent(cc.Label).string =  this.highestCombo  
+                
+                }
+        }
+        var add =  Math.floor( score/15)
+         if(add <=1) add =1
+        var anim = cc.sequence(cc.delayTime(0.025) , cc.callFunc(proceed, this)) 
+        this.endPanel.runAction(anim)
+        this.startVal+=add
+        this.endPanel.getChildByName('combo').getComponent(cc.Label).string = this.startVal 
+    },
+    coinAnim(score){
+        // this.endPanel.getChildByName('combo').string = 
+        // this.endPanel.getChildByName('score').string = 
+        // this.endPanel.getChildByName('coins').string =
+        var proceed = function(){
+            if(this.startVal <=  score) this.coinAnim(score)
+            else {
+                //this.numAnim(this.highestCombo)
+                this.startVal = 0
+                this.endPanel.getChildByName('coins').getComponent(cc.Label).string =  this.prize  
+                
+                }
+        }
+        var add =  Math.floor( score/15)
+         if(add <=1) add =1
+        var anim = cc.sequence(cc.delayTime(0.025) , cc.callFunc(proceed, this)) 
+        this.endPanel.runAction(anim)
+        this.startVal+=add
+        this.endPanel.getChildByName('coins').getComponent(cc.Label).string = this.startVal 
     },
     gameOverAnim(){
         //this.endPanel.position =cc.v2(0,0)
@@ -445,7 +520,14 @@ cc.Class({
             console.log('hoyotoy')
             this.matrix.destroy() 
             //animation for showing panel make this better later include score movement animations and coins
-            var panel = cc.sequence(cc.delayTime(0.1),cc.moveTo(0.4, 0,0))
+            var panel = cc.sequence(cc.delayTime(0.1),
+                cc.spawn(
+                    cc.scaleTo(0.4,1,1),
+                    cc.rotateBy(0.4,720),
+                    cc.fadeIn(0.4)
+                ),
+                cc.delayTime(500),
+                cc.callFunc(this.numAnim(this.score),this))
             this.endPanel.runAction(panel)
         }
         var end = cc.sequence(

@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "d5323b36-1e7a-4d64-a481-97da6c04db10",
+  "uuid": "0a875da2-d310-43b4-8cc9-e704ce529481",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "btn1": {
+    "hudAsset 4": {
       "ver": "1.0.3",
-      "uuid": "5b43c260-0563-4ccd-92f1-e752aa348f0b",
-      "rawTextureUuid": "d5323b36-1e7a-4d64-a481-97da6c04db10",
+      "uuid": "2e05bab0-aff7-4515-b612-ab9a87752824",
+      "rawTextureUuid": "0a875da2-d310-43b4-8cc9-e704ce529481",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 213,
-      "height": 214,
-      "rawWidth": 213,
-      "rawHeight": 214,
+      "width": 818,
+      "height": 34,
+      "rawWidth": 818,
+      "rawHeight": 34,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,
