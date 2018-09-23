@@ -4,7 +4,9 @@ var global = require('global')
 cc.Class({
     extends: cc.Component,
 
-    properties: {
+    properties: { 
+        pauseHome:cc.Button,
+        pausePlay:cc.Button,
         hud:cc.Node,
         matrix:cc.Node, 
         pausemenu:cc.Node,
@@ -104,8 +106,7 @@ cc.Class({
         gb1:cc.Node,
         bg1:cc.SpriteFrame,
         bg4:cc.SpriteFrame,
-        bg3:cc.SpriteFrame,
-        bg2:cc.SpriteFrame,
+        bg3:cc.SpriteFrame, 
         timeBoostSprt:cc.Prefab,
         spawnBoostSpr:cc.Prefab,
         frenzyBoostSprt:cc.Prefab,
@@ -116,7 +117,10 @@ cc.Class({
         boosterSpawn:cc.Node,
         boosterFrenzy:cc.Node,
         boosterPrompt:cc.Node,
-        startVal:0
+        startVal:0,
+        starParts:cc.Node,
+        starFab:cc.Prefab
+
         
  
     }, 
@@ -157,12 +161,10 @@ cc.Class({
         //     this.gameover = true
         //     this.gameOver()}
         
-        var randbg = parseInt(cc.rand()%4)
-        var bgs = [this.bg1, this.bg2, this.bg3, this.bg4]
+        var randbg = parseInt(cc.rand()%3)
+        var bgs = [this.bg1 , this.bg3, this.bg4]
 
-        this.bg.getComponent(cc.Sprite).spriteFrame = bgs[randbg]
-        this.gb.getComponent(cc.Sprite).spriteFrame = bgs[randbg]
-        this.gb1.getComponent(cc.Sprite).spriteFrame = bgs[randbg]
+        this.bg.getComponent(cc.Sprite).spriteFrame = bgs[randbg] 
 
         
 
@@ -208,7 +210,7 @@ cc.Class({
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
                 usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
-                passiveTimeLvl:0
+                passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true 
                         }
                     
         cc.sys.localStorage.setItem('ampopo',JSON.stringify( this.storage)) 
@@ -329,7 +331,8 @@ cc.Class({
              
         }
     },
-    retry(){ 
+    retry(){  
+        
         cc.director.resume()
         this.pauseBtn.interactable = true
          cc.director.loadScene('main')
@@ -346,7 +349,7 @@ cc.Class({
 
         this.highestCombo = 0
         this.comboctr  = 0
-        var timectr =45
+        var timectr =0
         var t= this  
         var left = 60
         
@@ -462,7 +465,21 @@ cc.Class({
                 //this.numAnim(this.highestCombo)
                 this.startVal = 0
                 this.endPanel.getChildByName('score').getComponent(cc.Label).string =  this.score  
-                this.comboAnim(this.highestCombo)
+                var call = function(){this.comboAnim(this.highestCombo)}
+                var action =cc.sequence(  
+                    cc.spawn(
+                        cc.fadeOut(0.100),
+                        cc.scaleTo(0.1,1.4,1.4)
+                    )
+                    ,
+                    cc.spawn(
+                        cc.fadeIn(0.100),
+                        cc.scaleTo(0.1,1,1)
+                    )
+                    ,cc.callFunc(call,this)
+                
+                )
+                this.endPanel.getChildByName('score').runAction(action)
                 }
         }
         var add =  Math.floor( score/30)
@@ -479,9 +496,24 @@ cc.Class({
         var proceed = function(){
             if(this.startVal <=  score) this.comboAnim(score)
             else {
-                this.coinAnim(this.prize)
+                
                 this.startVal = 0
                 this.endPanel.getChildByName('combo').getComponent(cc.Label).string =  this.highestCombo  
+                var call = function(){this.coinAnim(this.prize)}
+                var action =cc.sequence(  
+                    cc.spawn(
+                        cc.fadeOut(0.100),
+                        cc.scaleTo(0.1,1.4,1.4)
+                    )
+                    ,
+                    cc.spawn(
+                        cc.fadeIn(0.100),
+                        cc.scaleTo(0.1,1,1)
+                    ),
+                    cc.callFunc(call,this)
+                
+                )
+                this.endPanel.getChildByName('combo').runAction(action)
                 
                 }
         }
@@ -500,8 +532,10 @@ cc.Class({
             if(this.startVal <=  score) this.coinAnim(score)
             else {
                 //this.numAnim(this.highestCombo)
+                this.afterInc()
                 this.startVal = 0
                 this.endPanel.getChildByName('coins').getComponent(cc.Label).string =  this.prize  
+                
                 
                 }
         }
@@ -511,6 +545,47 @@ cc.Class({
         this.endPanel.runAction(anim)
         this.startVal+=add
         this.endPanel.getChildByName('coins').getComponent(cc.Label).string = this.startVal 
+    },
+    afterInc(){
+        var star =  cc.instantiate (this.starFab); 
+        
+        
+        star.position = cc.v2(-110,46)
+        var star2 =  cc.instantiate (this.starFab); 
+        star2.position = cc.v2(110,46)
+          
+        var emit = function(){
+            this.starParts.addChild(star2); 
+            this.starParts.addChild(star);  
+            this.starParts.getChildByName('a').opacity =255
+            this.starParts.getChildByName('b').opacity =255
+        }
+        var action =cc.sequence(  
+            // cc.moveBy(0.05, 8,6),
+            // cc.moveBy(0.05, -4,6),
+            // cc.moveBy(0.05, 0,3),
+            // cc.moveTo(0.1, 0,0),
+            // cc.moveBy(0.05, 3,-6),
+            cc.callFunc(emit , this),
+            // cc.moveBy(0.05, 3,0),
+            // cc.moveBy(0.05, -1,5),
+            // cc.moveTo(0.1, 0,0),
+            cc.spawn(
+                cc.fadeOut(0.100),
+                cc.scaleTo(0.1,1.7,1.7)
+            )
+            ,
+            cc.spawn(
+                cc.fadeIn(0.100),
+                cc.scaleTo(0.1,1,1)
+            )
+        
+        )
+        this.endPanel.getChildByName('coins').runAction(action)
+        
+        
+
+
     },
     gameOverAnim(){
         //this.endPanel.position =cc.v2(0,0)
@@ -1021,15 +1096,15 @@ getIMG(){
         this.boosterPrompt.setLocalZOrder(-10)
     },
      
-    play(){
+    Goplay(){
 
         cc.director.loadScene('main');
     },
 
       //==============================================================================
 useSpawn(){
-    this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
-    this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable = false
+    
+     
         var usingAction = cc.repeatForever(
             cc.sequence(
                 cc.spawn(
@@ -1044,6 +1119,7 @@ useSpawn(){
                  
             ));
         if(this.spawnBoosts>=1){
+            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
             this.usingSpawn = !this.usingSpawn
              
             
@@ -1055,13 +1131,12 @@ useSpawn(){
         this.ss()
        // this.boosterSpawn.getChildByName("New Sprite").runAction(usingAction)
         }
-        else if(this.usingSpawn) {
+        else if(this.usingSpawn) {spawnBoosts
+            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts +" left"
             
         
    
-        this.boosterSpawn.getChildByName("New Sprite").stopAllActions()
-        this.boosterSpawn.getChildByName("New Sprite").position = cc.v2(0,0)
-        this.boosterSpawn.getChildByName("New Sprite").scale = cc.v2(0.17,0.17)
+         
 
             this.usingSpawn = !this.usingSpawn 
             if(this.usingSpawn) this.spawnBoosts-=1
@@ -1074,8 +1149,8 @@ useSpawn(){
     },
 
     useFreeze(){ 
-        this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
-        this.boosterTime.getChildByName("New Button").getComponent(cc.Button).interactable = false
+        
+        
         var usingAction = cc.repeatForever(
             cc.sequence(
                 cc.spawn(
@@ -1090,6 +1165,7 @@ useSpawn(){
                  
             ));
         if(this.freezeBoosts>=1){
+            this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
             this.usingFreeze = !this.usingFreeze 
         if(this.usingFreeze) this.freezeBoosts-=1
         else this.freezeBoosts+=1
@@ -1100,12 +1176,9 @@ useSpawn(){
        // this.boosterTime.getChildByName("New Sprite").runAction(usingAction)
         }
         else if(this.usingFreeze) {
+            this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.boosterTime +" left"
             
-        
-   
-        this.boosterTime.getChildByName("New Sprite").stopAllActions()
-        this.boosterTime.getChildByName("New Sprite").position = cc.v2(0,0)
-        this.boosterTime.getChildByName("New Sprite").scale = cc.v2(0.17,0.17)
+          
 
             this.usingFreeze = !this.usingFreeze 
             if(this.usingFreeze) this.freezeBoosts-=1
@@ -1118,8 +1191,7 @@ useSpawn(){
     },
     useFrenzy(){
 
-        this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
-        this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = false
+        
         var usingAction = cc.repeatForever(
             cc.sequence(
                 cc.spawn(
@@ -1138,6 +1210,7 @@ useSpawn(){
         
         console.log('frboosts ' ,this.frenzyBoosts)
         if(this.frenzyBoosts>=1){
+            this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using" 
             //his.frenzy.getChildByName("New Sprite").runAction(usingAction)
             
             this.usingFrenzy = !this.usingFrenzy
@@ -1155,9 +1228,7 @@ useSpawn(){
         //this.boosterFrenzy.getChildByName("New Sprite").runAction(usingAction)
         }
         else if(this.usingFrenzy) {
-            this.boosterFrenzy.getChildByName("New Sprite").stopAllActions()
-            this.boosterFrenzy.getChildByName("New Sprite").position = cc.v2(0,0)
-            this.boosterFrenzy.getChildByName("New Sprite").scale = cc.v2(0.17,0.17)
+            this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.boosterFrenzy +" left" 
             this.usingFrenzy = !this.usingFrenzy 
           
         console.log(this.usingFrenzy , "using Frenzy")

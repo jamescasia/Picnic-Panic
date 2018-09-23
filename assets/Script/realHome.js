@@ -19,11 +19,16 @@ cc.Class({
         coins:0,
         highestScore:0,
         highestCombo:0,
+        bgMusic:cc.AudioClip,
 
 
  
     }, 
+     
     onLoad () {      
+        console.log(global.wentShop+'jahahaha')  
+
+        
        
         cc.EventListener.create({
             event: cc.EventListener.KEYBOARD,
@@ -40,11 +45,12 @@ cc.Class({
         
         
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
-        if( this.storage==null  ){
+        //this.storage = null
+        if(  this.storage == null  ){
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
                 usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
-                passiveTimeLvl:0
+                passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true 
                         }
                     
         cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )
@@ -72,6 +78,9 @@ cc.Class({
  
         
          
+    },
+    goToSDK(){
+        cc.director.loadScene('sdk')
     },
 
     start () {

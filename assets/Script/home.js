@@ -368,9 +368,10 @@ cc.Class({
     upgradedFRENZY(){
         this.passiveFrenzyBoost+=1
         this.storage.passiveFrenzyBoost = this.passiveFrenzyBoost
+        this.coins-= this.upgradePrice( this.passiveFrenzyLvl , 'frenzy')
         this.passiveFrenzyLvl+=1  
         this.storage.passiveFrenzyLvl = this.passiveFrenzyLvl
-        this.coins-= this.upgradePrice( this.passiveFrenzyLvl , 'frenzy')
+        
         
         this.storage.coins = this.coins
         this.setLabels()
@@ -390,9 +391,10 @@ cc.Class({
     upgradedTIME(){
         this.passiveTimeBoost+=0.5
         this.storage.passiveTimeBoost = this.passiveTimeBoost
+        this.coins-= this.upgradePrice( this.passiveTimeLvl , 'time')
         this.passiveTimeLvl+=1  
         this.storage.passiveTimeLvl = this.passiveTimeLvl
-        this.coins-= this.upgradePrice( this.passiveTimeLvl , 'time')
+       
         
         this.storage.coins = this.coins
         this.setLabels()
@@ -411,9 +413,10 @@ cc.Class({
     upgradedCOMBO(){
         this.passiveComboBoost+=2
         this.storage.passiveComboBoost = this.passiveComboBoost
+        this.coins-= this.upgradePrice( this.passiveComboLvl , 'combo')
         this.passiveComboLvl+=1 
         this.storage.passiveComboLvl = this.passiveComboLvl
-        this.coins-= this.upgradePrice( this.passiveComboLvl , 'combo')
+        
          
         this.storage.coins = this.coins
         this.setLabels()

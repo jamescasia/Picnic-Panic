@@ -18,6 +18,10 @@ cc.Class({
     },
 
     // LIFE-CYCLE CALLBACKS:
+    goHome(){
+        cc.director.loadScene('realhome')
+
+    },
 
     onLoad () {  
 

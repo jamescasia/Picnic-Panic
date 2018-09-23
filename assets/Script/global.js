@@ -1,10 +1,16 @@
-
-var global_userID 
-var global_userData 
-var global_activeContests
-var wentShop = 'main'
  
 var global = {
+    bgOn:true,
+    wentShop:"main",
+    musicStarted : false,
+    bgMusic : null,
+    sfxMusic:null,
+    bgVolume:0.5,
+    sfxVolume:0.5,
+    numOfGames:0,
+    
+    link : 'http://www.freesfx.co.uk',
+
     
     getMoney:function()
     {
@@ -21,5 +27,9 @@ var global = {
 
         return key
     }
-    }
+}
+// cc.loader.loadRes("./music/dream_shiner.mp3", cc.AudioClip, function (err, clip) {
+//     var audioID = cc.audioEngine.play(clip, false, 0.5);
+// });
+    
 module.exports = global;
