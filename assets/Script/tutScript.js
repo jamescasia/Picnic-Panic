@@ -21,7 +21,9 @@ cc.Class({
         page3:cc.Node,
         page4:cc.Node,
         pos:[],
-        currentBob:cc.Node
+        currentBob:cc.Node,
+        open:true,
+        Game:cc.Node
 
        
 
@@ -33,7 +35,7 @@ cc.Class({
     // onLoad () {},
 
     start () {
-        this.showPage()
+        this.showPage() 
         this.pos = [-142, -48, 46, 139]
         this.currentBob.position  =cc.v2( this.pos[this.pageCtr], 3)
         
@@ -80,8 +82,10 @@ cc.Class({
         this.showPage()
     },
     close(){
+        this.open = false
         this.node.opacity = 0
         this.node.position = cc.v2(-800,-800) 
+        if(cc.director.getScene()._name == 'main')this.Game.getComponent("Game").closePanel()
     },
 
 

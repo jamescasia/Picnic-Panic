@@ -49,7 +49,7 @@ cc.Class({
         )  
     },
 
-    start () {
+    startNow () {
         this.frame.node.opacity = 0
         this.initialize() 
         

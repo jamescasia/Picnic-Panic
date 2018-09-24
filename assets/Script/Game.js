@@ -120,7 +120,8 @@ cc.Class({
         startVal:0,
         starParts:cc.Node,
         starFab:cc.Prefab,
-        tutsFab:cc.Prefab
+        tuts:cc.Node,
+        pausing:false,
 
         
  
@@ -151,18 +152,24 @@ cc.Class({
     })
 
     }, 
-    showTuts(){ 
-        this.node.pauseAllActions()
+    closePanel(){ 
+        this.startNow()
+        // this.initUnit()
 
-        var tuts = cc.instantiate(this.tutsFab)
-        tuts.position = cc.v2(24, 0 )
-        this.node.addChild(tuts)
+    },
+    showTuts(){ 
+        console.log('SJWOFAODOA')
+
+        this.tuts.position = cc.v2(6,0)
+        this.tuts.opacity =255
+
+        
 
     },
     
 
     onLoad () {   
-        if(this.numOfGames <=0)this.showTuts() 
+         
         
         var randbg = parseInt(cc.rand()%3)
         var bgs = [this.bg1 , this.bg3, this.bg4]
@@ -201,12 +208,13 @@ cc.Class({
         cc.sys.localStorage.setItem('ampopo',JSON.stringify( this.storage)) 
         } 
       
-        this.usingFreeze = JSON.parse ( this.storage.usingFreeze)
+        // this.usingFreeze = JSON.parse ( this.storage.usingFreeze)
         this.freezeBoosts = JSON.parse  (parseInt( this.storage.freezeBoosts))
         this.frenzyBoosts = JSON.parse (parseInt ( this.storage.frenzyBoosts))
         this.spawnBoosts = JSON.parse (parseInt ( this.storage.spawnBoosts))
-        this.usingFrenzy =    JSON.parse(this.storage.usingFrenzy)
-        this.usingSpawn =    JSON.parse(this.storage.usingSpawn) 
+        this.numOfGames = JSON.parse (parseInt ( this.storage.numOfGames))
+        // this.usingFrenzy =    JSON.parse(this.storage.usingFrenzy)
+        // this.usingSpawn =    JSON.parse(this.storage.usingSpawn) 
         this.coins =  JSON.parse(parseInt( this.storage.coins) )
         this.passiveComboBoost = JSON.parse (parseInt(this.storage.passiveComboBoost))
         this.passiveTimeBoost = JSON.parse( parseInt(this.storage.passiveTimeBoost))
@@ -215,8 +223,20 @@ cc.Class({
         this.highestScore =JSON.parse (parseInt( this.storage.highestScore))
         this.hsLabel.getComponent(cc.Label).string =  String(this.highestScore) 
         this.ss()
-        this.boosterShow()
-        this.setLabels()
+        this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts +" left" 
+            this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts +" left"
+            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts +" left" 
+         
+        this.initUnit()
+        var show = function(){
+            if(this.numOfGames== 0) this.showTuts() 
+            else this.showPrompt()
+
+        }
+        var delay = cc.sequence(cc.delayTime(1.2),cc.callFunc(show, this))
+        this.node.runAction(delay)
+
+        
         
   
     },
@@ -296,12 +316,17 @@ cc.Class({
          cc.director.loadScene('main')
     },
 
-    start () {   
+    startNow () {   
 
         this.endPanel.setLocalZOrder(-10)
+        this.boosterShow()
+        this.storage.freezeBoosts = this.freezeBoosts
+        this.storage.frenzyBoosts = this.frenzyBoosts
+        this.storage.spawnBoosts = this.spawnBoosts
+        this.ss()
         
         
-        
+         
 
         console.log("GAME" , this.storage  )
 
@@ -309,64 +334,26 @@ cc.Class({
         this.comboctr  = 0
         var timectr =0
         var t= this  
-        var left = 60
-        
+        var left = 60 
+      
 
         var gameTimer = t.schedule(function() { 
-
-           
             
-
-              
             if (t.usingFreeze  )   t.timelmt = 55  +t.passiveTimeBoost
             else t.timelmt = 50+t.passiveTimeBoost 
                  
-            left =  (t.timelmt- timectr  ) 
-        //     t.gb.x -= 40
-        //     t.gb1.x -= 40
-        //  //   t.gb.position= cc.v2(t.bg.x+2208,t.bg.y)
-            // if(t.gb.x <= 775){
-            //       t.bg.x= t.gb.x+2208 
+            left =  (t.timelmt- timectr  )  
                 this.scoreLabel.getComponent(cc.Label).string = this.score
         this.comboLabel.getComponent(cc.Label).string = this.comboctr 
-        if(this.comboctr >= this.highestCombo) this.highestCombo = this.comboctr
-            //     }
-            if(t.bg.x <= 800){
-                t.gb.x= t.bg.x+2208 
-                t.gb1.x = t.gb.x+2208
-            }
-            else if(t.gb1.x <= 800){
-                t.bg.x= t.gb1.x+2208 
-                t.gb.x = t.bg.x+2208
-            }
-            else if(t.gb.x <= 800){
-                t.gb1.x= t.gb.x+2208 
-                t.bg.x = t.gb1.x+2208
-            }
-            //t.bg.position.x += timectr*3
-            
+        if(this.comboctr >= this.highestCombo) this.highestCombo = this.comboctr 
+              
             t.timebar.getComponent(cc.ProgressBar).progress = left/t.timelmt
             timectr+= 0.05
             //0.05
-            t.lapse = timectr
-            
-
-            if(left <=0 && !this.gameover  ){ 
-                this.gameOver()
-                
-                
-            } 
-
-            // if(this.lapse >=   this.timelmt-6 &&  this.lapse!=60 && !this.gameover ) {
-                 
-            
-            //     var shake = cc.sequence(cc.moveTo(0.1 , cc.randomMinus1To1()*2 ,-55+  cc.randomMinus1To1()*4 )  , cc.moveTo(0.1 , 0,-55 ) ) 
-            //     this.matrix .runAction(shake)}
-
-            t.timeLabel.getComponent(cc.Label).string = String(left).replace("." , ':')
-
-
-        }, 0.05, 1500,1.5);
+            t.lapse = timectr 
+            if(left <=0 && !this.gameover  ) this.gameOver()  
+            t.timeLabel.getComponent(cc.Label).string = String(left).replace("." , ':') 
+        }, 0.05, 1500,1.5); 
         
         
          
@@ -391,6 +378,10 @@ cc.Class({
                     prize+= 80
  
                 }
+                this.storage.freezeBoosts = this.freezeBoosts
+                this.storage.frenzyBoosts = this.frenzyBoosts
+                this.storage.spawnBoosts = this.spawnBoosts
+            
                 this.coins +=prize
                 this.prize = prize 
                 this.storage.coins = this.coins
@@ -1057,15 +1048,30 @@ getIMG(){
     },
     showPrompt(){
         this.boosterPrompt.setLocalZOrder(10)
-       if(this.frenzyBoosts == 0) this.boosterFrenzy.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
-       if(this.freezeBoosts == 0) this.boosterTime.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
-       if(this.spawnBoosts == 0) this.boosterSpawn.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
+       if(this.frenzyBoosts <= 0) {
+           this.boosterFrenzy.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
+           this.boosterFrenzy.getChildByName("New Button").disabled = true 
+           this.boosterFrenzy.getChildByName("New Button").interactable = false
+        }
+       if(this.freezeBoosts <= 0) {
+        this.boosterTime.getChildByName("New Button").disabled = true
+        this.boosterTime.getChildByName("New Button").interactable = true
+           this.boosterTime.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
+        }
+       if(this.spawnBoosts <= 0) {
+           this.boosterSpawn.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
+           this.boosterSpawn.getChildByName("New Button").disabled = true
+           this.boosterSpawn.getChildByName("New Button").interactable =false
+        }
         this.boosterPrompt.position = cc.v2(0,0)
     },
     closePrompt(){
+        console.log("closeeeeeeeeeee")
         //insert closing action here
         this.boosterPrompt.position = cc.v2(-1000,-1000)
         this.boosterPrompt.setLocalZOrder(-10)
+        // this.initUnit()
+        this.startNow()
     },
      
     Goplay(){
@@ -1076,156 +1082,74 @@ getIMG(){
       //==============================================================================
 useSpawn(){
     
-     
-        var usingAction = cc.repeatForever(
-            cc.sequence(
-                cc.spawn(
-                    cc.moveBy(1, 0, 15),
-                    cc.scaleTo(1, 0.21,0.21)
-            ),
-                cc.spawn(
-                    cc.moveBy(1, 0, -15),
-                    cc.scaleTo(1, 0.17 ,0.17 )
-                ),
-            
-                 
-            ));
-        if(this.spawnBoosts>=1){
+      
+        if(this.spawnBoosts>=1 ){
             this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
-            this.usingSpawn = !this.usingSpawn
-             
-            
-        if(this.usingSpawn) this.spawnBoosts-=1
-        else this.spawnBoosts+=1
-        //this.setLabels()
-        this.storage.spawnBoosts = this.spawnBoosts 
-        this.storage.usingSpawn = this.usingSpawn
-        this.ss()
-       // this.boosterSpawn.getChildByName("New Sprite").runAction(usingAction)
-        }
-        else if(this.usingSpawn) {spawnBoosts
-            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts +" left"
-            
-        
-   
-         
-
             this.usingSpawn = !this.usingSpawn 
             if(this.usingSpawn) this.spawnBoosts-=1
-            else this.spawnBoosts+=1
-            this.setLabels()
-            this.storage.spawnBoosts = this.spawnBoosts 
-            this.storage.usingSpawn = this.usingSpawn
-            this.ss() 
+            else this.spawnBoosts+=1   
+        }
+        else if(this.usingSpawn) { 
+            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts +" left" 
+            this.usingSpawn = !this.usingSpawn 
+            if(this.usingSpawn) this.spawnBoosts-=1
+            else this.spawnBoosts+=1 
         }
     },
 
     useFreeze(){ 
-        
-        
-        var usingAction = cc.repeatForever(
-            cc.sequence(
-                cc.spawn(
-                    cc.moveBy(1, 0, 15),
-                    cc.scaleTo(1, 0.21,0.21)
-            ),
-                cc.spawn(
-                    cc.moveBy(1, 0, -15),
-                    cc.scaleTo(1, 0.17 ,0.17 )
-                ),
-            
-                 
-            ));
-        if(this.freezeBoosts>=1){
+         
+        if(this.freezeBoosts>=1 ){
             this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
             this.usingFreeze = !this.usingFreeze 
-        if(this.usingFreeze) this.freezeBoosts-=1
-        else this.freezeBoosts+=1
-        //this.setLabels()
-        this.storage.freezeBoosts = this.freezeBoosts
-        this.storage.usingFreeze = this.usingFreeze
-        this.ss()
-       // this.boosterTime.getChildByName("New Sprite").runAction(usingAction)
+            if(this.usingFreeze) this.freezeBoosts-=1
+            else this.freezeBoosts+=1 
         }
         else if(this.usingFreeze) {
-            this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.boosterTime +" left"
-            
-          
-
+            this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts +" left"  
             this.usingFreeze = !this.usingFreeze 
             if(this.usingFreeze) this.freezeBoosts-=1
-            else this.freezeBoosts+=1
-            this.setLabels()
+            else this.freezeBoosts+=1 
             this.storage.freezeBoosts = this.freezeBoosts
             this.storage.usingFreeze = this.usingFreeze
             this.ss() 
         }
     },
-    useFrenzy(){
-
-        
-        var usingAction = cc.repeatForever(
-            cc.sequence(
-                cc.spawn(
-                    cc.moveBy(1, 0, 15),
-                    cc.scaleTo(1, 0.21,0.21)
-            ),
-                cc.spawn(
-                    cc.moveBy(1, 0, -15),
-                    cc.scaleTo(1, 0.17 ,0.17 )
-                ),
-            
-                 
-            ));
-            
-        
-        
-        console.log('frboosts ' ,this.frenzyBoosts)
-        if(this.frenzyBoosts>=1){
-            this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using" 
-            //his.frenzy.getChildByName("New Sprite").runAction(usingAction)
-            
-            this.usingFrenzy = !this.usingFrenzy
-          
-        console.log(this.usingFrenzy , "using Frenzy")
-        if(this.usingFrenzy) this.frenzyBoosts-=1
-        else this.frenzyBoosts+=1
-        //this.setLabels()
-        this.storage.frenzyBoosts = this.frenzyBoosts
-        
-        this.storage.usingFrenzy = this.usingFrenzy
-        this.ss()
-
-
-        //this.boosterFrenzy.getChildByName("New Sprite").runAction(usingAction)
+    useFrenzy(){  
+        if(this.frenzyBoosts>=1 ){
+            this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"  
+            this.usingFrenzy = !this.usingFrenzy 
+            if(this.usingFrenzy) this.frenzyBoosts-=1
+            else this.frenzyBoosts+=1  
         }
         else if(this.usingFrenzy) {
-            this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.boosterFrenzy +" left" 
-            this.usingFrenzy = !this.usingFrenzy 
-          
-        console.log(this.usingFrenzy , "using Frenzy")
-        if(this.usingFrenzy) this.frenzyBoosts-=1
-        else this.frenzyBoosts+=1
-        this.setLabels()
-        this.storage.frenzyBoosts = this.frenzyBoosts
-        
-        this.storage.usingFrenzy = this.usingFrenzy
-        this.ss()
-
-
+            this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts +" left" 
+            this.usingFrenzy = !this.usingFrenzy  
+            if(this.usingFrenzy) this.frenzyBoosts-=1
+            else this.frenzyBoosts+=1  
         }
     },
-
-    setLabels(){
-        if(this.freezeBoosts ==0 ) this.boosterTime.getChildByName("New Button").getComponent(cc.Button).interactable = false
-        if(this.spawnBoosts ==0 ) this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable = false
-        if(this.frenzyBoosts ==0 ) this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = false
-        this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts +" left"
-        this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts +" left"
-        this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts +" left"
-
-    },
+ 
     //==============================================================================
+
+    initUnit(){
+            this.oneone.getComponent('unit').startNow()
+            this.onetwo.getComponent('unit').startNow()
+            this.onethree.getComponent('unit').startNow()
+            this.onefour.getComponent('unit').startNow()
+            this.twoone.getComponent('unit').startNow()
+            this.twotwo.getComponent('unit').startNow()
+            this.twothree.getComponent('unit').startNow()
+            this.twofour.getComponent('unit').startNow()
+            this.threeone.getComponent('unit').startNow()
+            this.threetwo.getComponent('unit').startNow()
+            this.threethree.getComponent('unit').startNow()
+            this.threefour.getComponent('unit').startNow()
+            this.fourone.getComponent('unit').startNow()
+            this.fourtwo.getComponent('unit').startNow()
+            this.fourthree.getComponent('unit').startNow()
+            this.fourfour.getComponent('unit').startNow()
+    },
    toggling(x){ 
        if(x.isEmpty ) return
     switch(x){
