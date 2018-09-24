@@ -547,6 +547,7 @@ cc.Class({
         this.endPanel.getChildByName('coins').getComponent(cc.Label).string = this.startVal 
     },
     afterInc(){
+        
         var star =  cc.instantiate (this.starFab); 
         
         
@@ -559,6 +560,7 @@ cc.Class({
             this.starParts.addChild(star);  
             this.starParts.getChildByName('a').opacity =255
             this.starParts.getChildByName('b').opacity =255
+            
         }
         var action =cc.sequence(  
             // cc.moveBy(0.05, 8,6),
@@ -605,6 +607,15 @@ cc.Class({
                 cc.delayTime(500),
                 cc.callFunc(this.numAnim(this.score),this))
             this.endPanel.runAction(panel)
+
+            var breathing = cc.repeatForever(
+                cc.sequence(
+                    cc.moveTo(2, 0, -12).easing(cc.easeCubicActionOut()),
+                    cc.moveTo(2, 0, -6).easing(cc.easeQuarticActionIn()),
+                    cc.moveTo(2, 0, 0).easing(cc.easeCubicActionOut())
+                ) 
+            )
+            this.endPanel.runAction(breathing)
         }
         var end = cc.sequence(
             //animatiom explosion here  for the table
@@ -828,6 +839,8 @@ cc.Class({
         t.matrix.runAction(t1 )
     },
     cameraShake(){
+        let blink = cc.blink(0.1)
+        this.matrix.getChildByName('table').runAction(blink)
         //let cameraShakeA = cc.sequence(cc.moveTo( 0.1, 0, cc.randomMinus1To1()*24) ,cc.moveTo(0.1, 0, -cc.random0To1()*24)).repeat(10)
         //this.everything.runAction(cameraShakeA)
     }, 
