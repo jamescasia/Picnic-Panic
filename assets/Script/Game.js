@@ -119,7 +119,8 @@ cc.Class({
         boosterPrompt:cc.Node,
         startVal:0,
         starParts:cc.Node,
-        starFab:cc.Prefab
+        starFab:cc.Prefab,
+        tutsFab:cc.Prefab
 
         
  
@@ -150,16 +151,18 @@ cc.Class({
     })
 
     }, 
-    log(){
-        
+    showTuts(){ 
+        this.node.pauseAllActions()
+
+        var tuts = cc.instantiate(this.tutsFab)
+        tuts.position = cc.v2(24, 0 )
+        this.node.addChild(tuts)
+
     },
     
 
     onLoad () {   
-        // if(global.wentShop = 'shop') {
-            
-        //     this.gameover = true
-        //     this.gameOver()}
+        if(this.numOfGames <=0)this.showTuts() 
         
         var randbg = parseInt(cc.rand()%3)
         var bgs = [this.bg1 , this.bg3, this.bg4]
@@ -182,29 +185,11 @@ cc.Class({
          
 
 
-        
-        //firebase.database().ref('/users/'+global.global_userID+'/activeContests/'+key).set(FBInstant.context.getID()) 
-        
-        //this.saveToDB()
-        //this.setEnemy() 
-        //console.log('globo here' , global.global_userID , global.global_userData.val().activeContests)
-        //console.log('gonoing',global.global_activeContests.val()[FBInstant.context.getID()].ongoing )
-        
-
-       //   
+         
         
         this.storage = JSON.parse (cc.sys.localStorage.getItem('ampopo'))  
-        console.log('fiiirst ' , this.storage)
-      /*   this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
-                usingSpawn:false , coins:22222 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
-                passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
-                passiveTimeLvl:0
-                        }
-                        cc.sys.localStorage.setItem('ampopo',JSON.stringify( this.storage)) */
-                        
-                        
-                        
-                
+        console.log('fiiirst ' , this.storage) 
+                         
        
         if(  this.storage == null  ){
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
@@ -215,21 +200,7 @@ cc.Class({
                     
         cc.sys.localStorage.setItem('ampopo',JSON.stringify( this.storage)) 
         } 
-     console.log(this.storage)
-     /*
-      this.ampopo = ( JSON.parse (cc.sys.localStorage.getItem('ampopo')) )
-      console.log(this.ampopo)
-      this.ampopo.tangina = 'd1231'
-      cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.ampopo) )
-      this.ampopo = ( JSON.parse (cc.sys.localStorage.getItem('ampopo')) )
-      console.log('babababbaboyka' , this.ampopo)
-      //console.log  (JSON.parse(this.ampopo.tangina))
-       console.log( JSON.parse (cc.sys.localStorage.getItem('ampopo')) ) */
-
- 
       
-        
- 
         this.usingFreeze = JSON.parse ( this.storage.usingFreeze)
         this.freezeBoosts = JSON.parse  (parseInt( this.storage.freezeBoosts))
         this.frenzyBoosts = JSON.parse (parseInt ( this.storage.frenzyBoosts))
@@ -247,20 +218,7 @@ cc.Class({
         this.boosterShow()
         this.setLabels()
         
- 
-
-        
-        
-
-       // this.storage.numOfGames = 23;
-        
- 
-        
-
-    
- 
-
-        
+  
     },
     boosterShow(){
             var aa = cc.sequence(cc.delayTime(0.15) ,cc.spawn (cc.fadeIn(1),  cc.moveBy(1, 0, 155)).easing(cc.easeCubicActionOut()) ,
@@ -399,11 +357,11 @@ cc.Class({
                 
             } 
 
-            if(this.lapse >=   this.timelmt-6 &&  this.lapse!=60 && !this.gameover ) {
+            // if(this.lapse >=   this.timelmt-6 &&  this.lapse!=60 && !this.gameover ) {
                  
             
-                var shake = cc.sequence(cc.moveTo(0.1 , cc.randomMinus1To1()*2 ,-55+  cc.randomMinus1To1()*4 )  , cc.moveTo(0.1 , 0,-55 ) ) 
-                this.matrix .runAction(shake)}
+            //     var shake = cc.sequence(cc.moveTo(0.1 , cc.randomMinus1To1()*2 ,-55+  cc.randomMinus1To1()*4 )  , cc.moveTo(0.1 , 0,-55 ) ) 
+            //     this.matrix .runAction(shake)}
 
             t.timeLabel.getComponent(cc.Label).string = String(left).replace("." , ':')
 
@@ -547,6 +505,14 @@ cc.Class({
         this.endPanel.getChildByName('coins').getComponent(cc.Label).string = this.startVal 
     },
     afterInc(){
+        var breathing = cc.repeatForever(
+            cc.sequence(
+                cc.moveTo(2, 0, -12).easing(cc.easeCubicActionOut()),
+                cc.moveTo(2, 0, -6).easing(cc.easeQuarticActionIn()),
+                cc.moveTo(2, 0, 0).easing(cc.easeCubicActionOut())
+            ) 
+        )
+        this.endPanel.runAction(breathing)
         
         var star =  cc.instantiate (this.starFab); 
         
@@ -608,14 +574,7 @@ cc.Class({
                 cc.callFunc(this.numAnim(this.score),this))
             this.endPanel.runAction(panel)
 
-            var breathing = cc.repeatForever(
-                cc.sequence(
-                    cc.moveTo(2, 0, -12).easing(cc.easeCubicActionOut()),
-                    cc.moveTo(2, 0, -6).easing(cc.easeQuarticActionIn()),
-                    cc.moveTo(2, 0, 0).easing(cc.easeCubicActionOut())
-                ) 
-            )
-            this.endPanel.runAction(breathing)
+            
         }
         var end = cc.sequence(
             //animatiom explosion here  for the table

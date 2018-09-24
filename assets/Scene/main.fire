@@ -12197,7 +12197,6 @@
       "__id__": 2
     },
     "_enabled": true,
-    "pauseRetry": null,
     "pauseHome": null,
     "pausePlay": null,
     "hud": {
@@ -12443,6 +12442,9 @@
     },
     "starFab": {
       "__uuid__": "7844a655-4c17-45a3-9770-fe17ac65ad7a"
+    },
+    "tutsFab": {
+      "__uuid__": "ee841b56-23f7-41cf-9afa-ac068e44ed84"
     }
   },
   {
@@ -12529,7 +12531,6 @@
     "_enabled": true,
     "musicProp": {
       "__uuid__": "acb038f3-4247-4694-b84f-aa204cde968e"
-    },
-    "storage": null
+    }
   }
 ]

@@ -15,9 +15,9 @@ cc.Class({
         bgSlider:cc.Node,
         sfxSlider:cc.Node,
         bgToggle:cc.Node,
-        sfxToggle:cc.Node,
-        tutPanel:cc.Node,
+        sfxToggle:cc.Node, 
         storage:null,
+        tutsFab:cc.Prefab,
 
        
     },
@@ -31,6 +31,12 @@ cc.Class({
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo')) 
         //this.tutPanel.
 
+
+    },
+    showTuts(){
+        var tuts = cc.instantiate(this.tutsFab)
+        tuts.position = cc.v2(24, 0 )
+        this.node.addChild(tuts)
 
     },
 
