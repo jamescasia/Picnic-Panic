@@ -50,7 +50,7 @@ cc.Class({
     panLeft(){
         var hide = cc.sequence(
             cc.spawn(
-                cc.moveBy(0.2, 1000,0),
+                cc.moveBy(0.2, 1000,0).easing(cc.easeQuinticActionOut()) ,
                 cc.delayTime(0)
                 //
             ), 
@@ -68,7 +68,7 @@ cc.Class({
     panRight(){
         var hide = cc.sequence(
             cc.spawn(
-                cc.moveBy(0.2, -1000,0),
+                cc.moveBy(0.2, -1000,0).easing(cc.easeQuinticActionOut()) ,
                 cc.delayTime(0)
                 // 
             ),

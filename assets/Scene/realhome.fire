@@ -78,13 +78,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 26
-      },
-      {
         "__id__": 27
       },
       {
         "__id__": 28
+      },
+      {
+        "__id__": 29
       }
     ],
     "_prefab": null,
@@ -971,7 +971,9 @@
         "__id__": 25
       }
     ],
-    "_prefab": null,
+    "_prefab": {
+      "__id__": 26
+    },
     "_id": "83nvIvXRZLjJV7Qmb9pUJy",
     "_opacity": 255,
     "_color": {
@@ -1097,6 +1099,17 @@
     "_N$target": {
       "__id__": 23
     }
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 23
+    },
+    "asset": {
+      "__uuid__": "92b960d9-9a73-4faf-ab84-4e1bfd45d1c8"
+    },
+    "fileId": "83nvIvXRZLjJV7Qmb9pUJy",
+    "sync": false
   },
   {
     "__type__": "cc.Canvas",

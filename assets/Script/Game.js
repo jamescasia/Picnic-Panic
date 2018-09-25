@@ -590,7 +590,7 @@ cc.Class({
 
     shop(){
         global.wentShop = 'main'
-        cc.director.pushScene('shop')
+        cc.director.loadScene('shop')
     },
     frenzyEffect(){ 
         console.log('whyy')
@@ -1047,7 +1047,45 @@ getIMG(){
 
     },
     showPrompt(){
+        this.boosterPrompt.getChildByName("all").scale = cc.v2(0,0)
+        this.boosterPrompt.getChildByName("all").opacity = 0
+        var shopshake= function(){
+            cc.log('faf')
+            var shake = cc.repeatForever(  
+                cc.sequence(
+                    
+                    cc.spawn(
+                        cc.scaleTo(0.2,1.05,1.05),
+                        cc.moveBy(0.2, 0,13)
+                    ),
+                    cc.rotateTo(0.2, 4),
+                    cc.rotateTo(0.15, 12),
+                    cc.rotateTo(0.23, 4),
+                    cc.rotateTo(0.14, 1),
+                    cc.rotateTo(0.2, -4),
+                    cc.rotateTo(0.14, -4),
+                    cc.rotateTo(0.2, -11),
+                    cc.spawn(
+                        cc.scaleTo(0.2,1,1),
+                        cc.moveBy(0.2, 0,-13)
+                    ),
+                    
+            )
+            ).speed(3)
+            this.boosterPrompt.getChildByName("all").getChildByName('shop').runAction(shake)
+
+        }
+        var action =cc.sequence(
+            cc.spawn(
+                cc.scaleTo(0.2,1,1).easing(cc.easeExponentialIn()),
+                cc.fadeIn(0.2).easing(cc.easeExponentialIn())
+            ),
+            cc.callFunc(shopshake , this)
+        )
+        this.boosterPrompt.getChildByName("all").runAction(action)
         this.boosterPrompt.setLocalZOrder(10)
+
+        
        if(this.frenzyBoosts <= 0) {
            this.boosterFrenzy.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
            this.boosterFrenzy.getChildByName("New Button").disabled = true 
@@ -1063,7 +1101,7 @@ getIMG(){
            this.boosterSpawn.getChildByName("New Button").disabled = true
            this.boosterSpawn.getChildByName("New Button").interactable =false
         }
-        this.boosterPrompt.position = cc.v2(0,0)
+        this.boosterPrompt.position = cc.v2(4,0)
     },
     closePrompt(){
         console.log("closeeeeeeeeeee")
@@ -1081,53 +1119,59 @@ getIMG(){
 
       //==============================================================================
 useSpawn(){
+    if(this.spawnBoosts>=1 || (this.usingSpawn && this.spawnBoosts == 0)){
+        this.usingSpawn = !this.usingSpawn
+        if(this.usingSpawn){
+            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "spawnusing"
+            this.spawnBoosts-=1
+        }
+        if(!this.usingSpawn) {
+            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts +" left" 
+            this.spawnBoosts+=1
+            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts +" left"
+        } 
+        this.storage.spawnBoosts = this.spawnBoosts 
+        this.ss()  
+    }
     
       
-        if(this.spawnBoosts>=1 ){
-            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
-            this.usingSpawn = !this.usingSpawn 
-            if(this.usingSpawn) this.spawnBoosts-=1
-            else this.spawnBoosts+=1   
-        }
-        else if(this.usingSpawn) { 
-            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts +" left" 
-            this.usingSpawn = !this.usingSpawn 
-            if(this.usingSpawn) this.spawnBoosts-=1
-            else this.spawnBoosts+=1 
-        }
+     
     },
 
     useFreeze(){ 
+
+        if(this.freezeBoosts>=1 || (this.usingFreeze && this.freezeBoosts == 0)){
+            this.usingFreeze = !this.usingFreeze
+            if(this.usingFreeze){
+                this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "frezeusing"
+                this.freezeBoosts-=1
+            }
+            if(!this.usingFreeze) { 
+                this.freezeBoosts+=1
+                this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts +" left"
+            } 
+            this.storage.freezeBoosts = this.freezeBoosts 
+            this.ss()  
+        }
          
-        if(this.freezeBoosts>=1 ){
-            this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
-            this.usingFreeze = !this.usingFreeze 
-            if(this.usingFreeze) this.freezeBoosts-=1
-            else this.freezeBoosts+=1 
-        }
-        else if(this.usingFreeze) {
-            this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts +" left"  
-            this.usingFreeze = !this.usingFreeze 
-            if(this.usingFreeze) this.freezeBoosts-=1
-            else this.freezeBoosts+=1 
-            this.storage.freezeBoosts = this.freezeBoosts
-            this.storage.usingFreeze = this.usingFreeze
-            this.ss() 
-        }
+      
     },
     useFrenzy(){  
-        if(this.frenzyBoosts>=1 ){
-            this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"  
-            this.usingFrenzy = !this.usingFrenzy 
-            if(this.usingFrenzy) this.frenzyBoosts-=1
-            else this.frenzyBoosts+=1  
+
+        if(this.frenzyBoosts>=1 || (this.usingFrenzy && this.frenzyBoosts == 0)){
+            this.usingFrenzy = !this.usingFrenzy
+            if(this.usingFrenzy){
+                this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "frenzyusing"
+                this.frenzyBoosts-=1
+            }
+            if(!this.usingFrenzy) {  
+                this.frenzyBoosts+=1
+                this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts +" left"
+            } 
+            this.storage.frenzyBoosts = this.frenzyBoosts 
+            this.ss()  
         }
-        else if(this.usingFrenzy) {
-            this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts +" left" 
-            this.usingFrenzy = !this.usingFrenzy  
-            if(this.usingFrenzy) this.frenzyBoosts-=1
-            else this.frenzyBoosts+=1  
-        }
+        
     },
  
     //==============================================================================
