@@ -1,9 +1,10 @@
 {
-  "ver": "1.0.0",
+  "ver": "2.2.0",
   "uuid": "0cc8fcd2-1c57-4793-9be0-de88fe0dcf9d",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
+  "premultiplyAlpha": false,
   "subMetas": {
     "pauseAsset 3": {
       "ver": "1.0.3",

@@ -44,8 +44,25 @@ cc.Class({
 
     },
 
-    onLoad () {     
-        this.scrnLabel.getComponent(cc.Label).string = String(cc.director.getVisibleSize() ) 
+    onLoad () {      
+
+        cc.eventManager.addListener({
+            event: cc.EventListener.KEYBOARD,
+            onKeyPressed: function(keyCode, event) {
+                if (keyCode === cc.KEY.back) {
+
+                        cc.director.loadScene('realhome')
+                    // the back button of Android Device is pressed
+                    // maybe it's not work in Web environment
+                }
+                else if (keyCode === cc.KEY.backspace) {
+                    // the backspace of PC/Mac is pressed
+                }
+                else if (keyCode === cc.KEY.escape) {
+                    // the escape of PC/Mac is pressed
+                }
+            }
+        }, this.node);
         cc.director.preloadScene("main"); 
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
         if( this.storage==null  ){
@@ -115,14 +132,7 @@ cc.Class({
         this.boostLabels.getChildByName('spawn').getComponent(cc.Label).string  = this.spawnBoosts
         this.boostLabels.getChildByName('frenzy').getComponent(cc.Label).string   = this.frenzyBoosts
         this.boostLabels.getChildByName('freeze').getComponent(cc.Label).string  = this.freezeBoosts
-        
-        this.useFrenzyBtn.getChildByName('Label').getComponent(cc.Label).string = 'frenzy' + this.usingFrenzy
-        this.useFreezeBtn.getChildByName('Label').getComponent(cc.Label).string ='freeze'+  this.usingFreeze
-        this.useSpawnBtn.getChildByName('Label').getComponent(cc.Label).string ='spawn' + this.usingSpawn
-        
-        // this.upgradeFrenzyNode.getChildByName('level').getComponent(cc.Label).string = this.passiveFrenzyLvl
-        // this.upgradeTimeNode.getChildByName('level').getComponent(cc.Label).string = this.passiveTimeLvl
-        // this.upgradeComboNode.getChildByName('level').getComponent(cc.Label).string = this.passiveComboLvl
+          
 
         if((this.passiveComboLvl <10) )  this.upgradeComboNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string =  this.upgradePrice(this.passiveComboLvl,'combo')
         else {this.upgradeComboNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = "Maxed Out" 
@@ -273,10 +283,10 @@ cc.Class({
         
         this.promptLayout.opacity = 255
         if(  name.includes("bonus" )){
-            this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Are you sure you want to upgrade "+ name+" for " + price
+            this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Really want to upgrade "+ name+" for " + price  +" ?"
         
         }
-        else this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Are you sure you want to buy "+ name+" for " + price
+        else this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Really want to buy "+ name+" for " + price +" ?"
         this.promptLayout.position = cc.v2( 7, 30)
         this.buying = name
 

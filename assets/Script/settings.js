@@ -30,6 +30,23 @@ cc.Class({
         
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo')) 
         //this.tutPanel.
+         cc.eventManager.addListener({
+            event: cc.EventListener.KEYBOARD,
+            onKeyPressed: function(keyCode, event) {
+                if (keyCode === cc.KEY.back) {
+
+                        cc.director.loadScene('realhome')
+                    // the back button of Android Device is pressed
+                    // maybe it's not work in Web environment
+                }
+                else if (keyCode === cc.KEY.backspace) {
+                    // the backspace of PC/Mac is pressed
+                }
+                else if (keyCode === cc.KEY.escape) {
+                    // the escape of PC/Mac is pressed
+                }
+            }
+        }, this.node);
 
 
     },

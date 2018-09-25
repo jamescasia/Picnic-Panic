@@ -170,24 +170,33 @@ cc.Class({
 
     onLoad () {   
          
-        
-        var randbg = parseInt(cc.rand()%3)
+        var randbg = 2
+        //var randbg = parseInt(cc.rand()%3)
         var bgs = [this.bg1 , this.bg3, this.bg4]
-
+        
+        this.bg.position = cc.v2( Math.random() * (1550) -775 , -28)
+        if(randbg ==1) this.bg.position =cc.v2( Math.random() * (  905) -775, -28)
         this.bg.getComponent(cc.Sprite).spriteFrame = bgs[randbg] 
 
         
 
-        cc.EventListener.create({
+        cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
-            onKeyPressed: function (keyCode, event) {
-                console.log('pressed key: ' + keyCode);
-            },
-            onKeyReleased: function (keyCode, event) {
-                if(keyCode ===cc.KEY.back) this.closePrompt()
-                console.log('released key: ' + keyCode);
+            onKeyPressed: function(keyCode, event) {
+                if (keyCode === cc.KEY.back) {
+
+                        cc.director.loadScene('realhome')
+                    // the back button of Android Device is pressed
+                    // maybe it's not work in Web environment
+                }
+                else if (keyCode === cc.KEY.backspace) {
+                    // the backspace of PC/Mac is pressed
+                }
+                else if (keyCode === cc.KEY.escape) {
+                    // the escape of PC/Mac is pressed
+                }
             }
-        });
+        }, this.node);
         
          
 
@@ -1053,22 +1062,30 @@ getIMG(){
             cc.log('faf')
             var shake = cc.repeatForever(  
                 cc.sequence(
-                    
                     cc.spawn(
-                        cc.scaleTo(0.2,1.05,1.05),
-                        cc.moveBy(0.2, 0,13)
-                    ),
+                    cc.moveBy(1.26, 0,13).easing(cc.easeCubicActionOut()) ,
+                    
+                    cc.sequence(
                     cc.rotateTo(0.2, 4),
                     cc.rotateTo(0.15, 12),
                     cc.rotateTo(0.23, 4),
                     cc.rotateTo(0.14, 1),
-                    cc.rotateTo(0.2, -4),
-                    cc.rotateTo(0.14, -4),
-                    cc.rotateTo(0.2, -11),
+                    cc.rotateTo(0.2, -8),
+                    cc.rotateTo(0.14, -11),
+                    cc.rotateTo(0.2, -16))),
+
+
                     cc.spawn(
-                        cc.scaleTo(0.2,1,1),
-                        cc.moveBy(0.2, 0,-13)
-                    ),
+                    cc.sequence(
+                    cc.rotateTo(0.1, -12),
+                    cc.rotateTo(0.2, -8),
+                    cc.rotateTo(0.2, -3), 
+                    cc.rotateTo(0.2, 0),
+                    cc.rotateTo(0.2, 3),
+                    cc.rotateTo(0.1, 0)) , 
+
+                    cc.moveBy(1, 0,-13) ),
+                    cc.delayTime(1.9)
                     
             )
             ).speed(3)
@@ -1105,6 +1122,8 @@ getIMG(){
     },
     closePrompt(){
         console.log("closeeeeeeeeeee")
+        
+        this.ss()  
         //insert closing action here
         this.boosterPrompt.position = cc.v2(-1000,-1000)
         this.boosterPrompt.setLocalZOrder(-10)
@@ -1122,7 +1141,7 @@ useSpawn(){
     if(this.spawnBoosts>=1 || (this.usingSpawn && this.spawnBoosts == 0)){
         this.usingSpawn = !this.usingSpawn
         if(this.usingSpawn){
-            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "spawnusing"
+            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
             this.spawnBoosts-=1
         }
         if(!this.usingSpawn) {
@@ -1131,7 +1150,6 @@ useSpawn(){
             this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts +" left"
         } 
         this.storage.spawnBoosts = this.spawnBoosts 
-        this.ss()  
     }
     
       
@@ -1143,15 +1161,14 @@ useSpawn(){
         if(this.freezeBoosts>=1 || (this.usingFreeze && this.freezeBoosts == 0)){
             this.usingFreeze = !this.usingFreeze
             if(this.usingFreeze){
-                this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "frezeusing"
+                this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
                 this.freezeBoosts-=1
             }
             if(!this.usingFreeze) { 
                 this.freezeBoosts+=1
                 this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts +" left"
             } 
-            this.storage.freezeBoosts = this.freezeBoosts 
-            this.ss()  
+            this.storage.freezeBoosts = this.freezeBoosts  
         }
          
       
@@ -1161,15 +1178,14 @@ useSpawn(){
         if(this.frenzyBoosts>=1 || (this.usingFrenzy && this.frenzyBoosts == 0)){
             this.usingFrenzy = !this.usingFrenzy
             if(this.usingFrenzy){
-                this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "frenzyusing"
+                this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
                 this.frenzyBoosts-=1
             }
             if(!this.usingFrenzy) {  
                 this.frenzyBoosts+=1
                 this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts +" left"
             } 
-            this.storage.frenzyBoosts = this.frenzyBoosts 
-            this.ss()  
+            this.storage.frenzyBoosts = this.frenzyBoosts  
         }
         
     },

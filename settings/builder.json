@@ -5,7 +5,7 @@
   "excludeScenes": [],
   "fb-instant-games": {},
   "includeAnySDK": false,
-  "includeSDKBox": true,
+  "includeSDKBox": false,
   "inlineSpriteFrames": true,
   "inlineSpriteFrames_native": true,
   "jailbreakPlatform": false,
@@ -26,7 +26,7 @@
     "orientation": "portrait"
   },
   "renderMode": "0",
-  "startScene": "588adfd1-c406-4463-8f37-6e3ae5ecc43f",
+  "startScene": "c5b41934-df85-473f-a532-cfbf10e785ca",
   "title": "PizzaBugePan",
   "webOrientation": "portrait",
   "wechatgame": {

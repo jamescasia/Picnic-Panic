@@ -1,9 +1,10 @@
 {
-  "ver": "1.0.0",
+  "ver": "2.2.0",
   "uuid": "e32ef062-d00b-4b39-ae3b-cb761fe0c7cf",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
+  "premultiplyAlpha": false,
   "subMetas": {
     "tuts1Asset 8": {
       "ver": "1.0.3",

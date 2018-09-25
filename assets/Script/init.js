@@ -20,7 +20,7 @@ cc.Class({
         global.sfxVolume = JSON.parse( (this.storage.sfxVolume))
     },
     screenResize(){
-        if( cc.director.getWinSize().height/cc.director.getWinSize().width <= 1.34   ) {
+        if( cc.director.getWinSize().height/cc.director.getWinSize().width <= 1.34     ) {
             console.log('bogo resized')
             this.node.getComponent(cc.Canvas).fitHeight = true
             this.node.getComponent(cc.Canvas).fitWidth = true
@@ -32,9 +32,7 @@ cc.Class({
 
         if(cc.director.getScene()._name == "realhome" && global.bgOn && !global.musicStarted) {
             cc.audioEngine.preload(this.musicProp );
-            global.musicStarted = true
-            // global.bgMusic=cc.audioEngine.playMusic(this.musicProp, true); 
-            // cc.audioEngine.setMusicVolume(global.bgVolume)
+            global.musicStarted = true 
             var bgMusic = cc.audioEngine
             global.bgMusic = bgMusic
             global.bgMusic.playMusic(this.musicProp, true); 
