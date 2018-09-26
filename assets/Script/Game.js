@@ -207,13 +207,24 @@ cc.Class({
         
         this.storage = JSON.parse (cc.sys.localStorage.getItem('ampopo'))  
         console.log('fiiirst ' , this.storage) 
-                         
-       
+                          
         if(  this.storage == null  ){
+            var a0={collected:false,prize:100,achieved:false,desc:"score 100" }
+            var a1={collected:false,prize:100,achieved:false ,desc:"combo 20" }
+            var a2={collected:false,prize:200,achieved:false ,desc:"score 200" }
+            var a3={collected:false,prize:200,achieved:false ,desc:"combo 30" }
+            var a4={collected:false,prize:500,achieved:false ,desc:"score 500" }
+            var a5={collected:false,prize:500,achieved:false ,desc:"combo 40" }
+            var a6={collected:false,prize:1000,achieved:false ,desc:"score 1000" }
+            var a7={collected:false,prize:1000,achieved:false, desc:"combo 60" }
+            var a8={collected:false,prize:2000,achieved:false ,desc:"score 2000" } 
+            var a9={collected:false,prize:3000,achieved:false,desc:"play 50"  }
+
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
                 usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
-                passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true 
+                passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
+                achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9],usedParticle:"none",leaf:false,pinkLeaf:false, sakura:false
                         }
                     
         cc.sys.localStorage.setItem('ampopo',JSON.stringify( this.storage)) 
@@ -1105,17 +1116,17 @@ getIMG(){
        if(this.frenzyBoosts <= 0) {
            this.boosterFrenzy.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
            this.boosterFrenzy.getChildByName("New Button").disabled = true 
-           this.boosterFrenzy.getChildByName("New Button").interactable = false
+           this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = false
         }
        if(this.freezeBoosts <= 0) {
         this.boosterTime.getChildByName("New Button").disabled = true
-        this.boosterTime.getChildByName("New Button").interactable = true
+        this.boosterTime.getChildByName("New Button").getComponent(cc.Button).interactable = false
            this.boosterTime.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
         }
        if(this.spawnBoosts <= 0) {
            this.boosterSpawn.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
            this.boosterSpawn.getChildByName("New Button").disabled = true
-           this.boosterSpawn.getChildByName("New Button").interactable =false
+           this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable =false
         }
         this.boosterPrompt.position = cc.v2(4,0)
     },

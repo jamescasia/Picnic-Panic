@@ -2,9 +2,7 @@
 var global = {
     bgOn:true,
     wentShop:"main",
-    musicStarted : false,
-    bgMusic : null,
-    sfxMusic:null,
+    musicStarted : false, 
     bgVolume:0.5,
     sfxVolume:0.5,
     numOfGames:0,

@@ -7,44 +7,14 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
-
+var global  = require('global')
 cc.Class({
-    extends: cc.Component,
-
+    extends: cc.Component, 
     properties: {
-        musicProp: cc.AudioClip
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
-    },
-
-    // LIFE-CYCLE CALLBACKS:
-
+        musicProp: cc.AudioClip 
+    }, 
     onLoad () {
-        cc.audioEngine.playEffect(this.musicProp,false,0.5)
-        // global.bgMusic.playEffect(this.musicProp)
-            // var a = cc.AudioSource
-            // cc.AudioSource.clip =this.musicProp 
-            // console.log("this",a)
-            // cc.AudioSource.play() 
-        //    a.setMusicVolume(1) 
+        cc.audioEngine.playEffect(this.musicProp,false,global.sfxVolume) 
     },
-
-    start () {
-
-    },
-
-    // update (dt) {},
+  
 });

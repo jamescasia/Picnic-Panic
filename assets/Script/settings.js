@@ -66,7 +66,7 @@ cc.Class({
     changeBgVolume(){
         global.bgVolume = this.bgSlider.getComponent(cc.Slider).progress 
         
-        global.bgMusic.setMusicVolume(global.bgVolume) 
+        cc.audioEngine.setMusicVolume(global.bgVolume) 
         
         this.storage.bgVolume =  this.bgSlider.getComponent(cc.Slider).progress
         global.bgVolume = this.storage.bgVolume 
@@ -76,6 +76,15 @@ cc.Class({
 
     },
     changeSfxVolume(){
+        global.sfxVolume = this.sfxSlider.getComponent(cc.Slider).progress 
+        
+        cc.audioEngine.setEffectsVolume(global.sfxVolume) 
+        
+        this.storage.sfxVolume =  this.sfxSlider.getComponent(cc.Slider).progress
+        global.sfxVolume = this.storage.sfxVolume 
+
+        this.ss()
+
 
     },
     ss(){

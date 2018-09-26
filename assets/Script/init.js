@@ -33,10 +33,9 @@ cc.Class({
         if(cc.director.getScene()._name == "realhome" && global.bgOn && !global.musicStarted) {
             cc.audioEngine.preload(this.musicProp );
             global.musicStarted = true 
-            var bgMusic = cc.audioEngine
-            global.bgMusic = bgMusic
-            global.bgMusic.playMusic(this.musicProp, true); 
-            global.bgMusic.setMusicVolume(global.bgVolume) 
+            var bgMusic = cc.audioEngine 
+            bgMusic.playMusic(this.musicProp, true); 
+            bgMusic.setMusicVolume(global.bgVolume) 
  
              
 

@@ -19,13 +19,18 @@ cc.Class({
         highestScore:0,
         highestCombo:0,
         bgMusic:cc.AudioClip,
+        achvContent:cc.Node,
+        achvPanel:cc.Node,
+        itemFab:cc.Prefab,
+        numOfAchv:0
+
 
 
  
     }, 
      
-    onLoad () {        
-        console.log(global.wentShop+'jahahaha')  
+    onLoad () {           
+        this.numOfAchv = 13
 
         
        
@@ -46,16 +51,47 @@ cc.Class({
             }
         }, this.node);
         this.preloadScenes()
+        this.dataLoad()
+        this.setAchievements()
         
         
+        
+
+         
+ 
+        
+         
+    },
+    goToSDK(){
+        cc.game.end()
+        // cc.director.loadScene('sdk')
+    },
+    dataLoad(){
+
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
-        //this.storage = null
+        
+        // this.storage = null
         if(  this.storage == null  ){
+            var a0={collected:false,prize:100,achieved:false,desc:"Score 100 points!", type:"score", req:100 }
+            var a1={collected:false,prize:100,achieved:false ,desc:"Achieve a 20-long combo" , type:"combo", req:20 }
+            var a2={collected:false,prize:200,achieved:false ,desc:"Score 500 points!", type:"score", req:500 }
+            var a3={collected:false,prize:200,achieved:false ,desc:"Achieve a 30-long combo" , type:"combo", req:30 }
+            var a4={collected:false,prize:500,achieved:false ,desc:"Score 1000 points!" , type:"score", req:1000 }
+            var a5={collected:false,prize:500,achieved:false ,desc:"Achieve a 40-long combo" , type:"combo", req:40 }
+            var a6={collected:false,prize:1000,achieved:false ,desc:"Score 2000 points!" , type:"score", req:2000 }
+            var a7={collected:false,prize:1000,achieved:false, desc:"Achieve a 60-long combo" , type:"combo", req:60 }
+            var a8={collected:false,prize:2000,achieved:false ,desc:"Score 5000 points!" , type:"score", req:5000 }
+            var a9={collected:false,prize:3000,achieved:false,desc:"Play 100 games" , type:"games", req:100 }
+            var a10={collected:false,prize:5000,achieved:false,desc:"Play 200 games" , type:"games", req:200 }
+            var a11={collected:false,prize:7000,achieved:false,desc:"Play 500 games" , type:"games", req:500 }
+            var a12={collected:false,prize:10000,achieved:false,desc:"Play 1000 games" , type:"games", req:1000 }
+            
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
                 usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
-                passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true 
-                        }
+                passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
+                achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12],usedParticle:"none",leaf:false,pinkLeaf:false, sakura:false
+                        } 
                     
         cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )
         } 
@@ -74,19 +110,30 @@ cc.Class({
         this.storage.usingFreeze = false
         this.storage.usingSpawn = false
         this.ss() 
+        this.achvPanel.opacity = 0
+        this.achvPanel.setLocalZOrder(-10)
 
-         
- 
-        
-         
-    },
-    goToSDK(){
-        cc.game.end()
-        // cc.director.loadScene('sdk')
+
     },
 
     start () {
 
+    },
+    setAchievements(){
+
+        for (var ach in this.storage.achievements) {
+            if(! this.storage.achievements[ach].achieved){
+
+            console.log("ach", this.storage.achievements[ach])
+
+            if(   this.storage.achievements[ach].type == "combo" && parseInt( this.storage.achievements[ach].req )<= parseInt(this.storage.highestCombo)  )  this.storage.achievements[ach].achieved = true
+            if(   this.storage.achievements[ach].type == "score" && parseInt( this.storage.achievements[ach].req )<= parseInt(this.storage.highestScore)  )   this.storage.achievements[ach].achieved = true
+            if(   this.storage.achievements[ach].type == "games" && parseInt( this.storage.achievements[ach].req )<= parseInt(this.storage.numOfGames)  )  this.storage.achievements[ach].achieved = true
+            }
+
+
+        }
+        this.ss()
     },
     preloadScenes(){
 
@@ -123,6 +170,31 @@ cc.Class({
         console.log(this.storage)
         
     },
+    collect(event,customEventData){ 
+
+
+    },
+    showAchievements(){
+        this.achvPanel.opacity = 255
+        this.achvPanel.setLocalZOrder(10)
+        
+        var pos = -40
+        for(var a in Array.from(Array(this.numOfAchv).keys())){
+            var item = cc.instantiate(this.itemFab)
+            item.getComponent('itemachv')._name = ""+ a
+            item.position = cc.v2(-300 , pos)
+            this.achvContent.addChild(item)
+            pos-=140
+
+        }
+        
+
+
+    },
+    closeAchvmnts(){
+        this.achvPanel.opacity = 0
+        this.achvPanel.setLocalZOrder(-10)
+    }
 
    
 
