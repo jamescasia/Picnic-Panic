@@ -399,7 +399,7 @@ cc.Class({
                 if(this.score >= this.highestScore){ this.highestScore = this.score
                     prize+= 80
  
-                }
+                }  
                 this.storage.freezeBoosts = this.freezeBoosts
                 this.storage.frenzyBoosts = this.frenzyBoosts
                 this.storage.spawnBoosts = this.spawnBoosts
@@ -407,6 +407,7 @@ cc.Class({
                 this.coins +=prize
                 this.prize = prize 
                 this.storage.coins = this.coins
+                this.storage.highestCombo = this.highestCombo
                 this.storage.highestScore = this.highestScore
                 
                 this.gameover = true

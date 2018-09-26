@@ -78,19 +78,22 @@
       },
       {
         "__id__": 98
+      },
+      {
+        "__id__": 112
       }
     ],
     "_tag": -1,
     "_active": true,
     "_components": [
       {
-        "__id__": 112
-      },
-      {
-        "__id__": 113
-      },
-      {
         "__id__": 114
+      },
+      {
+        "__id__": 115
+      },
+      {
+        "__id__": 116
       }
     ],
     "_prefab": null,
@@ -257,8 +260,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -292,
-      "y": 453
+      "x": -291.9999999999999,
+      "y": 452.9999999999999
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -1735,7 +1738,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": -22,
-      "y": -256
+      "y": -255.99999999999997
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -4664,6 +4667,99 @@
     "customEventData": ""
   },
   {
+    "__type__": "cc.Node",
+    "_name": "shop",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 2
+    },
+    "_children": [],
+    "_tag": -1,
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 113
+      }
+    ],
+    "_prefab": null,
+    "_id": "71Li5LkzVLdakH4UvedjYq",
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_cascadeOpacityEnabled": true,
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 0,
+      "height": 0
+    },
+    "_rotationX": 0,
+    "_rotationY": 0,
+    "_scaleX": 1,
+    "_scaleY": 1,
+    "_position": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_localZOrder": 0,
+    "_globalZOrder": 0,
+    "_opacityModifyRGB": false,
+    "groupIndex": 0
+  },
+  {
+    "__type__": "de1f1+y7TFNSI7tL/tK7epK",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 112
+    },
+    "_enabled": true,
+    "playBtn": null,
+    "addBoostBtn": null,
+    "boosterNum": null,
+    "frenzyBoosts": 0,
+    "freezeBoosts": 0,
+    "spawnBoosts": 0,
+    "coins": 100,
+    "coinsLabel": null,
+    "realcoins": 5,
+    "buyBoosters": null,
+    "currencies": null,
+    "usingFreeze": false,
+    "usingFrenzy": false,
+    "usingSpawn": false,
+    "useFreezeBtn": null,
+    "useFrenzyBtn": null,
+    "useSpawnBtn": null,
+    "passiveComboBoost": 0,
+    "passiveTimeBoost": 0,
+    "passiveFrenzyBoost": 0,
+    "boostLabels": null,
+    "promptLayout": null,
+    "errorPrompt": null,
+    "buying": null,
+    "storage": null,
+    "upgradeTimeNode": null,
+    "upgradeComboNode": null,
+    "upgradeFrenzyNode": null,
+    "passiveTimeLvl": 0,
+    "passiveFrenzyLvl": 0,
+    "passiveComboLvl": 0,
+    "scrnLabel": null
+  },
+  {
     "__type__": "cc.Canvas",
     "_name": "",
     "_objFlags": 0,
@@ -4678,6 +4774,15 @@
     },
     "_fitWidth": true,
     "_fitHeight": false
+  },
+  {
+    "__type__": "c1c90Ola3pHOIRZxVGbsafk",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true
   },
   {
     "__type__": "de1f1+y7TFNSI7tL/tK7epK",
@@ -4737,14 +4842,5 @@
     "passiveFrenzyLvl": 0,
     "passiveComboLvl": 0,
     "scrnLabel": null
-  },
-  {
-    "__type__": "c1c90Ola3pHOIRZxVGbsafk",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 2
-    },
-    "_enabled": true
   }
 ]
