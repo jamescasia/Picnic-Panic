@@ -1,10 +1,9 @@
 {
-  "ver": "2.2.0",
+  "ver": "1.0.0",
   "uuid": "df2f4be3-70d6-40f5-9e68-2ee4c2bdef16",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
-  "premultiplyAlpha": false,
   "subMetas": {
     "platformer_background_3": {
       "ver": "1.0.3",

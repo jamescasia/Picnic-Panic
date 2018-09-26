@@ -99,14 +99,14 @@ cc.Class({
     fuse(){
         this.selected = false
         
-        var a = Math. abs(cc.randomMinus1To1() )
+        var a = Math. abs( Math.random () )
 
         
         var pumpUp = cc.sequence(
             cc.spawn(
                 cc.moveTo(0.1  , 0 ,a* 8.5) ,
                 cc.scaleTo(0.1, 1.4, 1.4) ,
-                cc.skewTo(0.1  , 0,cc.randomMinus1To1()*6) ,
+                cc.skewTo(0.1  , 0,  cc.randomMinus1To1 ()*6) ,
                 //cc.tintTo(0.2 ,300,300  ,300)
             )   ,
             cc.moveBy(0.04,0,0),
@@ -285,7 +285,7 @@ cc.Class({
         else this.spawnFactor = 1  
         
         if(this.game.getComponent('Game').lapse >=   this.game.getComponent('Game').timelmt-6 &&  this.game.getComponent('Game').lapse!=60 && !this.gameover ){ 
-            var shake = cc.sequence(cc.skewTo(0.1 , cc.randomMinus1To1()*16 , cc.randomMinus1To1()*16 )  , cc.skewTo(0.1 , 0,0 ) ) 
+            var shake = cc.sequence(cc.skewTo(0.1 ,  cc.randomMinus1To1    ()*16 , cc.randomMinus1To1 ()*16 )  , cc.skewTo(0.1 , 0,0 ) ) 
             this.frame.node.runAction(shake)
 
         }
@@ -402,7 +402,7 @@ cc.Class({
             var r= parseInt( cc.rand() )%11
             if(r===3) this.level =2
         }
-        //this. frame.spriteFrame = this.choices[Math.floor(cc.rand()) % (this.choices.length)]
+        //this. frame.spriteFrame = this.choices[Math.floor(Math.random()) % (this.choices.length)]
         switch(rand){
             case 0:
                 this.mode = 'bu'
@@ -424,8 +424,8 @@ cc.Class({
             cc.fadeIn(0.17  ).easing(cc.easeBackIn()),
              
         ) 
-        var a =    Math.abs(   cc.randomMinus1To1())
-        var b =   Math.abs(cc.randomMinus1To1())
+        var a =    Math.abs(    Math.random ())
+        var b =   Math.abs( Math.random ())
          
 
         var firstborn =cc.sequence(
@@ -441,12 +441,12 @@ cc.Class({
             
             cc.spawn(
                 
-                cc.skewTo(0.1 , 0,cc.randomMinus1To1()*7 ).easing(cc.easeCircleActionOut()),
+                cc.skewTo(0.1 , 0, Math.random ()*7 ).easing(cc.easeCircleActionOut()),
                 cc.moveBy(a *0.1 , 0 , a *80).easing(cc.easeCircleActionOut()),
             ),
             cc.moveTo(0.083 *a , 0 , 0).easing(cc.easeSineIn())  , 
             cc.spawn( 
-                cc.skewTo(  0.2 , 0,cc.randomMinus1To1()*3.5  ).easing(cc.easeCircleActionOut()),
+                cc.skewTo(  0.2 , 0, Math.random ()*3.5  ).easing(cc.easeCircleActionOut()),
                 cc.moveBy(b *0.06 , 0 , b *55).easing(cc.easeCircleActionOut()), 
             ),
             cc.moveBy(0,0,0),

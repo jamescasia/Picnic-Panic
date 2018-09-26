@@ -1,10 +1,9 @@
 {
-  "ver": "2.2.0",
+  "ver": "1.0.0",
   "uuid": "91b41291-3a69-4096-8a2e-738148df9aff",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
-  "premultiplyAlpha": false,
   "subMetas": {
     "btnAsset 20": {
       "ver": "1.0.3",

@@ -153,7 +153,9 @@ cc.Class({
 
     }, 
     closePanel(){ 
+        this.tuts.setLocalZOrder(-10)
         this.startNow()
+
         // this.initUnit()
 
     },
@@ -161,6 +163,7 @@ cc.Class({
         console.log('SJWOFAODOA')
 
         this.tuts.position = cc.v2(6,0)
+        this.tuts.setLocalZOrder(10)
         this.tuts.opacity =255
 
         
@@ -169,9 +172,8 @@ cc.Class({
     
 
     onLoad () {   
-         
-        var randbg = 2
-        //var randbg = parseInt(cc.rand()%3)
+          
+        var randbg = parseInt(cc.rand()%3)
         var bgs = [this.bg1 , this.bg3, this.bg4]
         
         this.bg.position = cc.v2( Math.random() * (1550) -775 , -28)
@@ -348,7 +350,7 @@ cc.Class({
 
         var gameTimer = t.schedule(function() { 
             
-            if (t.usingFreeze  )   t.timelmt = 55  +t.passiveTimeBoost
+            if (t.usingFreeze  )   t.timelmt =60  +t.passiveTimeBoost
             else t.timelmt = 50+t.passiveTimeBoost 
                  
             left =  (t.timelmt- timectr  )  
@@ -362,7 +364,7 @@ cc.Class({
             t.lapse = timectr 
             if(left <=0 && !this.gameover  ) this.gameOver()  
             t.timeLabel.getComponent(cc.Label).string = String(left).replace("." , ':') 
-        }, 0.05, 1500,1.5); 
+        }, 0.05, 1500,0.5); 
         
         
          
@@ -414,6 +416,7 @@ cc.Class({
                 
     },
     numAnim(score){
+   
         // this.endPanel.getChildByName('combo').string = 
         // this.endPanel.getChildByName('score').string = 
         // this.endPanel.getChildByName('coins').string =
@@ -556,7 +559,8 @@ cc.Class({
 
     },
     gameOverAnim(){
-        //this.endPanel.position =cc.v2(0,0)
+        this.endPanel.setLocalZOrder(10)
+        this.endPanel.position =cc.v2(0,0)
         
         //animation 
         var funcs = function(){
@@ -566,7 +570,7 @@ cc.Class({
             //animation for showing panel make this better later include score movement animations and coins
             var panel = cc.sequence(cc.delayTime(0.1),
                 cc.spawn(
-                    cc.scaleTo(0.4,1,1),
+                    cc.scaleTo(0.4,0.9,0.9),
                     cc.rotateBy(0.4,720),
                     cc.fadeIn(0.4)
                 ),
@@ -602,8 +606,7 @@ cc.Class({
         cc.director.loadScene('shop')
     },
     frenzyEffect(){ 
-        console.log('whyy')
-        this.cameraShake()
+        console.log('whyy') 
         var frenzyburn = cc.instantiate( this.frenzyburn); 
         this.node.addChild(frenzyburn);  
         
@@ -796,12 +799,6 @@ cc.Class({
         var t = this
         var t1 = cc.sequence( cc.delayTime(5),cc.callFunc( burgEnd, t)  )
         t.matrix.runAction(t1 )
-    },
-    cameraShake(){
-        let blink = cc.blink(0.1)
-        this.matrix.getChildByName('table').runAction(blink)
-        //let cameraShakeA = cc.sequence(cc.moveTo( 0.1, 0, cc.randomMinus1To1()*24) ,cc.moveTo(0.1, 0, -cc.random0To1()*24)).repeat(10)
-        //this.everything.runAction(cameraShakeA)
     }, 
     healPan(){ 
             this.oneone.getComponent('unit').turnOffHeal('pa')
@@ -1099,8 +1096,10 @@ getIMG(){
             ),
             cc.callFunc(shopshake , this)
         )
+        
         this.boosterPrompt.getChildByName("all").runAction(action)
         this.boosterPrompt.setLocalZOrder(10)
+        this.boosterPrompt.opacity = 255
 
         
        if(this.frenzyBoosts <= 0) {
@@ -1124,9 +1123,9 @@ getIMG(){
         console.log("closeeeeeeeeeee")
         
         this.ss()  
-        //insert closing action here
-        this.boosterPrompt.position = cc.v2(-1000,-1000)
+        //insert closing action here 
         this.boosterPrompt.setLocalZOrder(-10)
+        this.boosterPrompt.opacity = 0
         // this.initUnit()
         this.startNow()
     },

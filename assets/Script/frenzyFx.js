@@ -33,6 +33,8 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        cc.audioEngine.playEffect(this.musicProp,false,0.5)
+        // global.bgMusic.playEffect(this.musicProp)
             // var a = cc.AudioSource
             // cc.AudioSource.clip =this.musicProp 
             // console.log("this",a)
