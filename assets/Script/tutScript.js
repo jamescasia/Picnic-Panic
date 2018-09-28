@@ -19,7 +19,8 @@ cc.Class({
         page1:cc.Node,
         page2:cc.Node,
         page3:cc.Node,
-        page4:cc.Node,
+        page4:{ default:null,
+                type:cc.Node},
         pos:[],
         currentBob:cc.Node,
         open:true,
@@ -35,15 +36,21 @@ cc.Class({
     // onLoad () {},
 
     start () {
+        console.log("next pageee", this.page4)
         this.showPage() 
         this.pos = [-142, -48, 46, 139]
+        if(this.page4 == null ) this.pos = [-97,-2.6, 92.6]
         this.currentBob.position  =cc.v2( this.pos[this.pageCtr], 3)
         
 
     },
     showPage(){
-        this.pages = [this.page1, this.page2, this.page3, this.page4]
-        var show = cc.sequence(cc.fadeIn(0.5) , cc.delayTime(0.1)) 
+        
+        
+        if(this.page4 == null )this.pages = [this.page1, this.page2, this.page3 ] 
+        else this.pages = [this.page1, this.page2, this.page3, this.page4] 
+        
+        var show = cc.sequence(cc.moveTo(0,0,-29),cc.fadeIn(0.5) , cc.delayTime(0.1)) 
         
         this.pages[this.pageCtr].runAction(show) 
     },
@@ -54,13 +61,14 @@ cc.Class({
                 cc.delayTime(0)
                 //
             ), 
-            cc.fadeOut(0.3),
-            cc.moveTo(0,0,0)
+            cc.fadeOut(0.3), 
         )
         this.pages[this.pageCtr].runAction(hide)
 
         this.pageCtr-=1
-        if(this.pageCtr <0) this.pageCtr = 3
+        if(this.pageCtr <0 && this.page4!= null) this.pageCtr = 3
+        else if(this.pageCtr <0 && this.page4== null) this.pageCtr = 2
+        
         this.currentBob.position  =cc.v2( this.pos[this.pageCtr], 3)
         
         this.showPage()
@@ -72,12 +80,12 @@ cc.Class({
                 cc.delayTime(0)
                 // 
             ),
-            cc.fadeOut(0.3),
-            cc.moveTo(0,0,0)
+            cc.fadeOut(0.3), 
         )
         this.pages[this.pageCtr].runAction(hide)
         this.pageCtr+=1
-        if(this.pageCtr >3) this.pageCtr = 0
+        if(this.pageCtr >3 && this.page4!= null) this.pageCtr = 0
+        else if (this.pageCtr >2 && this.page4== null) this.pageCtr =0
         this.currentBob.position  =cc.v2( this.pos[this.pageCtr], 3)
         this.showPage()
     },

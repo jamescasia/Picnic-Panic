@@ -9567,6 +9567,11 @@
     "frame": {
       "__id__": 254
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -9827,6 +9832,11 @@
     "frame": {
       "__id__": 259
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -10087,6 +10097,11 @@
     "frame": {
       "__id__": 265
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -10347,6 +10362,11 @@
     "frame": {
       "__id__": 271
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -10607,6 +10627,11 @@
     "frame": {
       "__id__": 277
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -10867,6 +10892,11 @@
     "frame": {
       "__id__": 283
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -11127,6 +11157,11 @@
     "frame": {
       "__id__": 289
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -11387,6 +11422,11 @@
     "frame": {
       "__id__": 295
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -11647,6 +11687,11 @@
     "frame": {
       "__id__": 301
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -11907,6 +11952,11 @@
     "frame": {
       "__id__": 307
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -12167,6 +12217,11 @@
     "frame": {
       "__id__": 313
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -12427,6 +12482,11 @@
     "frame": {
       "__id__": 319
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -12687,6 +12747,11 @@
     "frame": {
       "__id__": 325
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -12947,6 +13012,11 @@
     "frame": {
       "__id__": 331
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -13207,6 +13277,11 @@
     "frame": {
       "__id__": 337
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -13467,6 +13542,11 @@
     "frame": {
       "__id__": 343
     },
+    "usedParticle": "",
+    "bongTex": null,
+    "sakuraTex": null,
+    "blossomTex": null,
+    "leafTex": null,
     "level": 0,
     "isEmpty": true,
     "mode": "a",
@@ -13805,6 +13885,21 @@
       "__id__": 2
     },
     "_enabled": true,
+    "bongTex": {
+      "__uuid__": "aa21a934-0307-47a0-af03-a1094868e394"
+    },
+    "sakuraTex": {
+      "__uuid__": "7e31829e-0b19-49e5-a2d4-ba54d96e7030"
+    },
+    "blossomTex": {
+      "__uuid__": "6d7c52aa-5ef0-4f74-979f-f895c267241d"
+    },
+    "leafTex": {
+      "__uuid__": "a54a1519-b01d-404c-9dde-6155a5fd32fb"
+    },
+    "shopFab": {
+      "__uuid__": "373928cb-5ad4-45ce-b860-de23ee2fd83d"
+    },
     "pauseHome": null,
     "pausePlay": null,
     "hud": {
@@ -13935,6 +14030,7 @@
     "frenzyburn": {
       "__uuid__": "7361e365-a6b4-41b2-9669-3f67f3c56942"
     },
+    "usedParticle": "none",
     "passiveComboBoost": 0,
     "passiveTimeBoost": 0,
     "passiveFrenzyBoost": 0,
@@ -14050,7 +14146,8 @@
     "tuts": {
       "__id__": 130
     },
-    "pausing": false
+    "pausing": false,
+    "shap": null
   },
   {
     "__type__": "cc.Node",

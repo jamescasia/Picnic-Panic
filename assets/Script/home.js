@@ -3,6 +3,14 @@ cc.Class({
     extends: cc.Component, 
 
     properties: {
+        Ngrass:cc.Node,
+        Nblossom:cc.Node,
+        Nsakura:cc.Node,
+        Nbong:cc.Node,
+        useS:cc.SpriteFrame,
+        usingS:cc.SpriteFrame, 
+        
+        upgrades:cc.Node,
         playBtn:cc.Node,
         addBoostBtn:cc.Node,
         boosterNum:cc.Node,
@@ -65,6 +73,7 @@ cc.Class({
         }, this.node);
         cc.director.preloadScene("main"); 
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
+        
         if( this.storage==null  ){
             var a0={collected:false,prize:100,achieved:false,desc:"score 100" }
             var a1={collected:false,prize:100,achieved:false ,desc:"combo 20" }
@@ -81,7 +90,7 @@ cc.Class({
                 usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
                 passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
-                achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9],usedParticle:"none",leaf:false,pinkLeaf:false, sakura:false
+                achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9],usedParticle:"none",leaf:false,pinkLeaf:false, sakura:false,bong:false
                         }
                     
         cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )
@@ -103,6 +112,12 @@ cc.Class({
         this.passiveFrenzyLvl =JSON.parse( parseInt(this.storage.passiveFrenzyLvl))
         this.passiveTimeLvl =JSON.parse( parseInt(this.storage.passiveTimeLvl))
         this.passiveComboLvl =JSON.parse(parseInt( this.storage.passiveComboLvl))
+        // usedParticle:"none",leaf:false,pinkLeaf:false, sakura:false,bong:false 
+        this.usedParticle =  (  (this.storage.usedParticle))
+        this.leaf =  (  (this.storage.usedParticle))
+        this.pinkLeaf =  (  (this.storage.pinkLeaf))
+        this.sakura =  (  (this.storage.sakura))
+        this.bong =  (  (this.storage.bong))
         this.usingFrenzy = false
                 this.usingFreeze = false
                 this.usingSpawn = false
@@ -114,6 +129,9 @@ cc.Class({
        
 
         this.playBtn.on('click', this.play, this);
+
+        this.upgrades.getComponent("levels").onLoads()
+        this.setButtons()
          
     },
 
@@ -133,9 +151,10 @@ cc.Class({
     },
  
     play(){ 
-
-        cc.director.loadScene(global.wentShop);
-        global.wentShop = 'shop'
+        this.node.opacity = 0
+        this.node.setLocalZOrder(-10)
+        this.node.scale = cc.v2(0,0)
+ 
     
         
     },  
@@ -146,24 +165,24 @@ cc.Class({
         this.boostLabels.getChildByName('freeze').getComponent(cc.Label).string  = this.freezeBoosts
           
 
-        if((this.passiveComboLvl <10) )  this.upgradeComboNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string =  this.upgradePrice(this.passiveComboLvl,'combo')
+        if((this.passiveComboLvl <10) )  this.upgradeComboNode. getChildByName('Label').getComponent(cc.Label).string =  this.upgradePrice(this.passiveComboLvl,'combo')
         else {this.upgradeComboNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = "Maxed Out" 
         this.upgradeComboNode.getChildByName('btn').getComponent(cc.Button).interactable = false}
 
-        if((this.passiveTimeLvl <10) )   this.upgradeTimeNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = this.upgradePrice( this.passiveTimeLvl , 'time')
+        if((this.passiveTimeLvl <10) )   this.upgradeTimeNode.getChildByName('Label').getComponent(cc.Label).string = this.upgradePrice( this.passiveTimeLvl , 'time')
         else{ this.upgradeTimeNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = "Maxed Out"
         this.upgradeTimeNode.getChildByName('btn').getComponent(cc.Button).interactable = false}
 
-        if((this.passiveFrenzyLvl <3) )   this.upgradeFrenzyNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = this.upgradePrice(this.passiveFrenzyLvl,'frenzy')
+        if((this.passiveFrenzyLvl <3) )   this.upgradeFrenzyNode.getChildByName('Label').getComponent(cc.Label).string = this.upgradePrice(this.passiveFrenzyLvl,'frenzy')
         else{ this.upgradeFrenzyNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = "Maxed Out"
         this.upgradeFrenzyNode.getChildByName('btn').getComponent(cc.Button).interactable = false}
 
-        if((this.passiveFrenzyLvl <3) ) this.upgradeFrenzyNode.getChildByName('defn').getComponent(cc.Label).string =  "Upgrading this would increase frenzy bonus score by "+ String(this.upgradeChange(this.passiveFrenzyBoost, "frenzy")*(1+this.passiveFrenzyLvl))
-        else this.upgradeFrenzyNode.getChildByName('defn').getComponent(cc.Label).string =  "Your Frenzy bonus is already in maximum power! Awesome!"
-        if((this.passiveTimeLvl <10) )  this.upgradeTimeNode.getChildByName('defn').getComponent(cc.Label).string ="Upgrading this would increase time bonus by "+ String(this.upgradeChange( this.passiveTimeBoost,"time")*(1+this.passiveTimeLvl))
-        else this.upgradeTimeNode.getChildByName('defn').getComponent(cc.Label).string =  "Your Time bonus is already in maximum power! Awesome!"
-        if((this.passiveComboLvl <10) )  this.upgradeComboNode.getChildByName('defn').getComponent(cc.Label).string = "Upgrading this would increase combo bonus score by "+String(this.upgradeChange(this.passiveComboBoost, "combo")* (1+this.passiveComboLvl ))
-        else this.upgradeComboNode.getChildByName('defn').getComponent(cc.Label).string =  "Your Combo bonus is already in maximum power! Awesome!"
+        // if((this.passiveFrenzyLvl <3) ) this.upgradeFrenzyNode.getChildByName('defn').getComponent(cc.Label).string =  "Upgrading this would increase frenzy bonus score by "+ String(this.upgradeChange(this.passiveFrenzyBoost, "frenzy")*(1+this.passiveFrenzyLvl))
+        // else this.upgradeFrenzyNode.getChildByName('defn').getComponent(cc.Label).string =  "Your Frenzy bonus is already in maximum power! Awesome!"
+        // if((this.passiveTimeLvl <10) )  this.upgradeTimeNode.getChildByName('defn').getComponent(cc.Label).string ="Upgrading this would increase time bonus by "+ String(this.upgradeChange( this.passiveTimeBoost,"time")*(1+this.passiveTimeLvl))
+        // else this.upgradeTimeNode.getChildByName('defn').getComponent(cc.Label).string =  "Your Time bonus is already in maximum power! Awesome!"
+        // if((this.passiveComboLvl <10) )  this.upgradeComboNode.getChildByName('defn').getComponent(cc.Label).string = "Upgrading this would increase combo bonus score by "+String(this.upgradeChange(this.passiveComboBoost, "combo")* (1+this.passiveComboLvl ))
+        // else this.upgradeComboNode.getChildByName('defn').getComponent(cc.Label).string =  "Your Combo bonus is already in maximum power! Awesome!"
         this.ss()
 
 
@@ -295,26 +314,29 @@ cc.Class({
         
         this.promptLayout.opacity = 255
         if(  name.includes("bonus" )){
-            this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Really want to upgrade "+ name+" for " + price  +" ?"
-        
+            if( name.includes("frenzy" ))  this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Increases frenzy bonus score by "+ String(this.upgradeChange(this.passiveFrenzyBoost, "frenzy")*(1+this.passiveFrenzyLvl))+ " points for " + price  +" stars. Proceed?"
+            if( name.includes("time" ))  this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Increases time bonus by "+ String(this.upgradeChange(this.passiveTimeBoost, "time")*(1+this.passiveTimeLvl))+ " s for " + price  +" stars. Proceed?"
+            if( name.includes("combo" ))  this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Increases combo bonus score by "+ String(this.upgradeChange(this.passiveComboBoost, "combo")*(1+this.passiveComboLvl))+ " points for " + price  +" stars. Proceed?"
+       
         }
         else this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Really want to buy "+ name+" for " + price +" ?"
         this.promptLayout.position = cc.v2( 7, 30)
         this.buying = name
-
+        
 
 
     },
     closePrompt(){
         this.promptLayout.opacity = 0
         this.promptLayout.setLocalZOrder(-10)
-        this.promptLayout.position = cc.v2(-900 , -900)
+        this.promptLayout.position = cc.v2(-1800 , -1800)
     },
     reject(){   
         this.closePrompt()
 
     },
     accept(){ 
+        
         switch (this.buying){
             case "Freeze Booster":
                 this.addedFreeze()
@@ -334,8 +356,12 @@ cc.Class({
             case "combo bonus":
                 this.upgradedCOMBO()
                 break 
+            
 
         }
+        if(this.buying.includes("effect")) this.earnEffect(this.buying)
+        console.log('HUY INATAYY')
+        this.upgrades.getComponent("levels").onLoads()
 
         this.closePrompt()
         
@@ -382,7 +408,7 @@ cc.Class({
 
     upgradeFrenzy(){ 
         if(!(this.passiveFrenzyLvl <3) )   this.showerrorPrompt('Maxed Out') 
-        else if(this.coins < this.upgradePrice(this.passiveFrenzyLvl , 'frenzy'))   this.showerrorPrompt('Insufficient Funds')  
+        else if(this.coins < this.upgradePrice(this.passiveFrenzyLvl , 'frenzy'))   this.showerrorPrompt('Insufficient Stars')  
          
         else if(!this.confirmPrompt("frenzy bonus" , this.upgradePrice(this.passiveFrenzyLvl , 'frenzy')))return
 
@@ -446,6 +472,146 @@ cc.Class({
 
 
     },
+    buyEffect(e, name){
+        
+        name = name + " effect"
+        console.log("BUY", name)
+        switch(name){
+            case "leaf effect":
+                if(this.leaf) {
+                this.storage.usedParticle = "leaf"
+                this.Ngrass.getChildByName('grass').getComponent(cc.Sprite).spriteFrame = this.usingS
+                this.Ngrass.getChildByName('grass').getComponent(cc.Button).interactable =false
+
+                this.Nblossom.getChildByName('blossom').getComponent(cc.Button).interactable =true
+                this.Nsakura.getChildByName('sakura').getComponent(cc.Button).interactable =true
+                this.Nbong.getChildByName('bong').getComponent(cc.Button).interactable =true 
+                if(this.blossom) this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
+                 if(this.sakura)this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.useS
+                 if(this.bong)this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.useS
+                 }
+
+                //  if(this.leaf && "leaf" != this.usedParticle) this.Ngrass.getChildByName('grass').getComponent(cc.Sprite).spriteFrame = this.useS
+                //  if(this.pinkLeaf && "pinkLeaf" != this.usedParticle) this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
+                //  if(this.sakura && "sakura" != this.usedParticle)this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.useS
+                //  if(this.bong && "bong" != this.usedParticle)this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.useS
+
+                else this.confirmPrompt(name, 4000)
+                this.ss()
+                break
+            case "blossom effect":
+            if(this.pinkLeaf) {this.storage.usedParticle = "pinkLeaf"
+            this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.usingS
+            this.Nblossom.getChildByName('blossom').getComponent(cc.Button).interactable =false
+
+            this.Ngrass.getChildByName('grass').getComponent(cc.Button).interactable =true
+                this.Nsakura.getChildByName('sakura').getComponent(cc.Button).interactable =true
+                this.Nbong.getChildByName('bong').getComponent(cc.Button).interactable =true
+               if(this.leaf) this.Ngrass.getChildByName('grass').getComponent(cc.Sprite).spriteFrame = this.useS
+                 if(this.sakura)this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.useS
+                 if(this.bong)this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.useS
+                 }
+                else this.confirmPrompt(name, 6000)
+                this.ss()
+                break
+            case "sakura effect":
+            console.log("SAKURA", this.sakura)
+            
+            if(this.sakura) {
+                this.storage.usedParticle = "sakura"
+            this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.usingS
+            this.Nsakura.getChildByName('sakura').getComponent(cc.Button).interactable =false
+
+            this.Ngrass.getChildByName('grass').getComponent(cc.Button).interactable =true
+                this.Nblossom.getChildByName('blossom').getComponent(cc.Button).interactable =true
+                this.Nbong.getChildByName('bong').getComponent(cc.Button).interactable =true
+                if(this.leaf)this.Ngrass.getChildByName('grass').getComponent(cc.Sprite).spriteFrame = this.useS
+                 if(this.blossom)this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
+                 if(this.bong)this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.useS
+                 }
+                else this.confirmPrompt(name, 10000)
+                this.ss()
+                break
+            case "bong effect":
+            if(this.bong) {this.storage.usedParticle = "bong"
+            this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.usingS
+            this.Nbong.getChildByName('bong').getComponent(cc.Button).interactable =false
+
+            this.Ngrass.getChildByName('grass').getComponent(cc.Button).interactable =true
+                this.Nblossom.getChildByName('blossom').getComponent(cc.Button).interactable =true
+                this.Nsakura.getChildByName('sakura').getComponent(cc.Button).interactable =true
+                if(this.leaf)this.Ngrass.getChildByName('grass').getComponent(cc.Sprite).spriteFrame = this.useS
+                 if(this.blossom)this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
+                 if(this.sakura)this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.useS
+                 }
+                else this.confirmPrompt(name, 20000)
+                this.ss()
+                break
+        }
+        global.usingPart = this.storage.usedParticle
+
+        
+
+    },
+    earnEffect(name){  
+        // usedParticle:"none",leaf:false,pinkLeaf:false, sakura:false,bong:false 
+        switch(name){ 
+            case "leaf effect":
+                this.coins-= 4000 
+                this.storage.leaf = true
+                break
+            case "blossom effect":
+                this.coins-= 6000 
+                this.storage.pinkLeaf = true
+                break
+            case "sakura effect":
+                this.coins-= 10000 
+                this.storage.sakura = true
+                break
+            case "bong effect":
+                this.coins-= 20000 
+                this.storage.bong = true
+                break
+        }
+
+        this.storage.coins = this.coins 
+        this.ss()
+        this.setLabels()
+    },
+  setButtons(){
+      //set buttons to parts used
+      //set use for unused if bought(this.sakura etc)
+      switch(this.usedParticle){
+
+        case "leaf": 
+            this.Ngrass.getChildByName('grass').getComponent(cc.Sprite).spriteFrame = this.usingS
+            this.Ngrass.getChildByName('grass').getComponent(cc.Button).interactable =false
+  
+ 
+            break
+        case "pinkLeaf": 
+            this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.usingS
+            this.Nblossom.getChildByName('blossom').getComponent(cc.Button).interactable =false
+    
+            break
+        case "sakura": 
+         
+        this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.usingS
+        this.Nsakura.getChildByName('sakura').getComponent(cc.Button).interactable =false
+ 
+            break
+        case "bong": 
+
+            this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.usingS
+            this.Nbong.getChildByName('bong').getComponent(cc.Button).interactable =false
+ 
+            break
+    }
+    if(this.leaf && "leaf" != this.usedParticle) this.Ngrass.getChildByName('grass').getComponent(cc.Sprite).spriteFrame = this.useS
+    if(this.pinkLeaf && "pinkLeaf" != this.usedParticle) this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
+    if(this.sakura && "sakura" != this.usedParticle)this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.useS
+    if(this.bong && "bong" != this.usedParticle)this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.useS
+  }
 
 
 

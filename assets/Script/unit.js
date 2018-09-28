@@ -7,6 +7,11 @@ cc.Class({
         game:cc.Node,
         choices:[], 
         frame:cc.Sprite,
+        usedParticle:"",
+        bongTex:null,
+        sakuraTex:null,
+        blossomTex:null,
+        leafTex:null,
          
          
 
@@ -31,7 +36,7 @@ cc.Class({
     },
  
 
-    onLoad () {
+    onLoad () { 
         this.healactn = cc.sequence( cc.fadeTo(0.2, 150) , cc.fadeTo(0.2, 255)).repeat(15)
         this.frenzySoloFx =   
             cc.sequence( 
@@ -50,6 +55,11 @@ cc.Class({
     },
 
     startNow () {
+        this.usedParticle = this.game.getComponent('Game').usedParticle
+        this.leafTex =  this.game.getComponent('Game').leafTex
+        this.sakuraTex =  this.game.getComponent('Game').sakuraTex
+        this.blossomTex =  this.game.getComponent('Game').blossomTex
+        this.bongTex =  this.game.getComponent('Game').bongTex
         this.frame.node.opacity = 0
         this.initialize() 
         
@@ -184,7 +194,26 @@ cc.Class({
             
             this.game.getComponent('Game').showIndic(t) 
             
-            var barstu = cc.instantiate( this.game.getComponent('Game').threeBurstEffect); 
+            var barstu = cc.instantiate( this.game.getComponent('Game').burstEffect); 
+            if(this.usedParticle == "none") barstu.getChildByName('part').destroy()  
+            switch(this.usedParticle){
+                case "leaf":
+                    barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.leafTex 
+
+                break
+                case "pinkLeaf":
+                    barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.blossomTex 
+
+                break
+                case "sakura":
+                    barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.sakuraTex 
+
+                break
+                case "bong":
+                    barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.bongTex 
+
+                break
+            } 
             prevNode.node.addChild(barstu);  
             barstu.position = cc.v2( 0.5*( t.node.x -prevNode.node.x) ,0.5*(t.node.y -prevNode.node.y))
             t.death() 
@@ -297,8 +326,7 @@ cc.Class({
          
       
         if(this.selected){ 
-            this.frame.node.scale = cc.v2(1.15,1.15)
-            this.frame.node.z= 100
+            this.frame.node.scale = cc.v2(1.15,1.15) 
             
             if(this.level ===0){
                 switch(this.mode){

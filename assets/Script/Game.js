@@ -5,6 +5,12 @@ cc.Class({
     extends: cc.Component,
 
     properties: { 
+        bongTex:cc.Texture2D,
+        sakuraTex:cc.Texture2D,
+        blossomTex:cc.Texture2D,
+        leafTex:cc.Texture2D,
+        shopFab:cc.Prefab,
+
         pauseHome:cc.Button,
         pausePlay:cc.Button,
         hud:cc.Node,
@@ -69,6 +75,7 @@ cc.Class({
         timelmt:60,
         pauseBtn:cc.Node,
         frenzyburn:cc.Prefab,
+        usedParticle:"none",
 
         passiveComboBoost:0 , 
         passiveTimeBoost:0, 
@@ -122,6 +129,7 @@ cc.Class({
         starFab:cc.Prefab,
         tuts:cc.Node,
         pausing:false,
+        shap:null
 
         
  
@@ -172,6 +180,8 @@ cc.Class({
     
 
     onLoad () {   
+
+        
           
         var randbg = parseInt(cc.rand()%3)
         var bgs = [this.bg1 , this.bg3, this.bg4]
@@ -206,8 +216,9 @@ cc.Class({
          
         
         this.storage = JSON.parse (cc.sys.localStorage.getItem('ampopo'))  
+        // this.storage = null
         console.log('fiiirst ' , this.storage) 
-                          
+        
         if(  this.storage == null  ){
             var a0={collected:false,prize:100,achieved:false,desc:"score 100" }
             var a1={collected:false,prize:100,achieved:false ,desc:"combo 20" }
@@ -221,10 +232,10 @@ cc.Class({
             var a9={collected:false,prize:3000,achieved:false,desc:"play 50"  }
 
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
-                usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
+                usingSpawn:false , coins:10000 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
                 passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
-                achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9],usedParticle:"none",leaf:false,pinkLeaf:false, sakura:false
+                achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9],usedParticle:"none",leaf:false,pinkLeaf:false, sakura:false,bong:false
                         }
                     
         cc.sys.localStorage.setItem('ampopo',JSON.stringify( this.storage)) 
@@ -238,6 +249,7 @@ cc.Class({
         // this.usingFrenzy =    JSON.parse(this.storage.usingFrenzy)
         // this.usingSpawn =    JSON.parse(this.storage.usingSpawn) 
         this.coins =  JSON.parse(parseInt( this.storage.coins) )
+        this.usedParticle = ( this.storage.usedParticle)
         this.passiveComboBoost = JSON.parse (parseInt(this.storage.passiveComboBoost))
         this.passiveTimeBoost = JSON.parse( parseInt(this.storage.passiveTimeBoost))
         this.passiveFrenzyBoost = (parseInt( this.storage.passiveFrenzyBoost))
@@ -259,8 +271,17 @@ cc.Class({
         this.node.runAction(delay)
 
         
+
         
+        this.loadShop()
   
+    },
+    loadShop(){
+        this. shap = cc.instantiate(this.shopFab)
+        this.node.addChild(this.shap)
+        this.shap.opacity = 0
+        this.shap.setLocalZOrder(-10)
+        this.shap.scale = cc.v2(0,0)
     },
     boosterShow(){
             var aa = cc.sequence(cc.delayTime(0.15) ,cc.spawn (cc.fadeIn(1),  cc.moveBy(1, 0, 155)).easing(cc.easeCubicActionOut()) ,
@@ -380,6 +401,11 @@ cc.Class({
         
          
     },  
+    openShop(){ 
+        this.shap.opacity = 255
+        this.shap.scale = cc.v2(1,1)
+        this.shap.setLocalZOrder(10)
+    },
     gameOver(){ 
         var hideHud = cc.sequence(
             cc.delayTime(0.5),
@@ -614,8 +640,9 @@ cc.Class({
     },
 
     shop(){
-        global.wentShop = 'main'
-        cc.director.loadScene('shop')
+        // global.wentShop = 'main'
+        // cc.director.loadScene('shop')
+        this.openShop()
     },
     frenzyEffect(){ 
         console.log('whyy') 
@@ -721,6 +748,7 @@ cc.Class({
     
     },
     ss(){
+        this.storage.usedParticle = global.usingPart
         cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
     },
@@ -912,11 +940,49 @@ cc.Class({
                 if(this.comboctr>=5){
 
                     var barstu = cc.instantiate(this.burstEffect); 
+                    if(this.usedParticle == "none")     barstu.getChildByName('part').destroy()  
+                    switch(this.usedParticle){
+                        case "leaf":
+                            barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.leafTex 
+
+                        break
+                        case "pinkLeaf":
+                            barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.blossomTex 
+
+                        break
+                        case "sakura":
+                            barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.sakuraTex 
+
+                        break
+                        case "bong":
+                            barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.bongTex 
+
+                        break
+                    } 
                    x.node.addChild(barstu);  
                   // this.prev.node.addChild(barstu); 
                   barstu.position = cc.v2(0,0 ) 
                   if(x.level ==2){
                   var ass = cc.instantiate(this.burstEffect); 
+                  if(this.usedParticle == "none")     ass.getChildByName('part').destroy()  
+                    switch(this.usedParticle){
+                        case "leaf":
+                        ass.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.leafTex 
+
+                        break
+                        case "pinkLeaf":
+                        ass.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.blossomTex 
+
+                        break
+                        case "sakura":
+                        ass.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.sakuraTex 
+
+                        break
+                        case "bong":
+                        ass.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.bongTex 
+
+                        break
+                    } 
                   this.prev.node.addChild(ass);  
                   // this.prev.node.addChild(barstu); 
                   ass.position = cc.v2(0,0 ) }

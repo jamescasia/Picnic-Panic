@@ -6,6 +6,7 @@ var global = {
     bgVolume:0.5,
     sfxVolume:0.5,
     numOfGames:0,
+    usingPart:null,
     
     link : 'http://www.freesfx.co.uk',
 
