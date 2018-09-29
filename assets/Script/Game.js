@@ -1203,17 +1203,17 @@ getIMG(){
            this.boosterFrenzy.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
            this.boosterFrenzy.getChildByName("New Button").disabled = true 
            this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = false
-        }
+        }else  this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = true
        if(this.freezeBoosts <= 0) {
         this.boosterTime.getChildByName("New Button").disabled = true
         this.boosterTime.getChildByName("New Button").getComponent(cc.Button).interactable = false
            this.boosterTime.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
-        }
+        }else this.boosterTime.getChildByName("New Button").getComponent(cc.Button).interactable = true
        if(this.spawnBoosts <= 0) {
            this.boosterSpawn.getChildByName("New Sprite").color = new cc.Color(110, 110,110);
            this.boosterSpawn.getChildByName("New Button").disabled = true
            this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable =false
-        }
+        } else this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable =true
         this.boosterPrompt.position = cc.v2(4,0)
     },
     closePrompt(a){
