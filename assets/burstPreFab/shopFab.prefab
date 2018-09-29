@@ -381,8 +381,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 56,
-      "height": 53
+      "width": 100,
+      "height": 100
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -706,8 +706,8 @@
     "_scaleY": 1.5,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -111,
-      "y": 476.4
+      "x": -127,
+      "y": 474
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -10625,6 +10625,9 @@
     },
     "usingS": {
       "__uuid__": "320596d0-409f-4390-b2fa-3e010c240996"
+    },
+    "done": {
+      "__uuid__": "615ae944-7317-4c7f-ab63-fb790b7e1a1a"
     },
     "upgrades": {
       "__id__": 91

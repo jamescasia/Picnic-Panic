@@ -216,8 +216,28 @@ cc.Class({
          
 
 
-         
+        this.loadData()
         
+        
+        
+         
+        this.initUnit()
+        var show = function(){
+            if(this.numOfGames== 0) this.showTuts() 
+            else this.showPrompt()
+
+        }
+        var delay = cc.sequence(cc.delayTime(1.2),cc.callFunc(show, this))
+        this.node.runAction(delay)
+
+        
+
+        this.preloadParts()
+        
+  
+    },
+
+    loadData(){
         this.storage = JSON.parse (cc.sys.localStorage.getItem('ampopo'))  
         // this.storage = null
         console.log('fiiirst ' , this.storage) 
@@ -263,24 +283,6 @@ cc.Class({
         this.highestScore =JSON.parse (parseInt( this.storage.highestScore))
         this.hsLabel.getComponent(cc.Label).string =  String(this.highestScore) 
         this.ss()
-        this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts +" left" 
-            this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts +" left"
-            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts +" left" 
-         
-        this.initUnit()
-        var show = function(){
-            if(this.numOfGames== 0) this.showTuts() 
-            else this.showPrompt()
-
-        }
-        var delay = cc.sequence(cc.delayTime(1.2),cc.callFunc(show, this))
-        this.node.runAction(delay)
-
-        
-
-        this.preloadParts()
-        this.loadShop()
-  
     },
     preloadParts(){
          this.barstu =cc.instantiate(this.burstEffect); 
@@ -434,7 +436,13 @@ cc.Class({
         
          
     },  
-    openShop(){ 
+    closed(){
+        this.showPrompt()
+    },
+    openShop(){   
+        this.loadShop()
+        this.boosterPrompt.getChildByName("all").getChildByName('shop').stopAllActions()
+        this.shap.on('destroyed', this.closed, this);
         this.shap.opacity = 255
         this.shap.scale = cc.v2(1,1)
         this.shap.setLocalZOrder(200)
@@ -675,6 +683,7 @@ cc.Class({
     shop(){
         // global.wentShop = 'main'
         // cc.director.loadScene('shop')
+        this.closePrompt('a')
         this.openShop()
     },
     frenzyEffect(){ 
@@ -1137,6 +1146,10 @@ getIMG(){
 
     },
     showPrompt(){
+        this.loadData()
+        this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts +" left" 
+            this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts +" left"
+            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts +" left" 
         this.boosterPrompt.getChildByName("all").scale = cc.v2(0,0)
         this.boosterPrompt.getChildByName("all").opacity = 0
         var shopshake= function(){
@@ -1203,7 +1216,7 @@ getIMG(){
         }
         this.boosterPrompt.position = cc.v2(4,0)
     },
-    closePrompt(){
+    closePrompt(a){
         console.log("closeeeeeeeeeee")
         
         this.ss()  
@@ -1211,7 +1224,7 @@ getIMG(){
         this.boosterPrompt.setLocalZOrder(-10)
         this.boosterPrompt.opacity = 0
         // this.initUnit()
-        this.startNow()
+        if(a!="a") this.startNow()
     },
      
     Goplay(){

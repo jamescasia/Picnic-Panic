@@ -14,6 +14,7 @@ cc.Class({
     },  
     readData(){
         this.storage = JSON.parse (cc.sys.localStorage.getItem('ampopo'))  
+        // this.storage = null
         if(  this.storage == null  ){
             var a0={collected:false,prize:100,achieved:false,desc:"Score 100 points!", type:"score", req:100 }
             var a1={collected:false,prize:100,achieved:false ,desc:"Achieve a 20-long combo" , type:"combo", req:20 }
@@ -29,8 +30,9 @@ cc.Class({
             var a11={collected:false,prize:7000,achieved:false,desc:"Play 500 games" , type:"games", req:500 }
             var a12={collected:false,prize:10000,achieved:false,desc:"Play 1000 games" , type:"games", req:1000 }
             
+
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
-                usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
+                usingSpawn:false , coins:20000 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
                 passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
                 achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12],usedParticle:null,leaf:false,pinkLeaf:false, sakura:false,bong:false
@@ -38,6 +40,7 @@ cc.Class({
                     
         cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )
         } 
+        global.storage = this.storage
         console.log('read', this.storage)
         global.bgVolume = JSON.parse( (this.storage.bgVolume))
         console.log('saved vol' , global.bgVolume)

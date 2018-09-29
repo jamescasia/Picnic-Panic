@@ -66,9 +66,11 @@ cc.Class({
          
     },
     openShop(){ 
+        this.loadShop()
         this.shap.opacity = 255
         this.shap.scale = cc.v2(1,1)
         this.shap.setLocalZOrder(10)
+        
     },
     loadShop(){
         this. shap = cc.instantiate(this.shopFab)
@@ -82,11 +84,13 @@ cc.Class({
         // cc.director.loadScene('sdk')
     },
     dataLoad(){
+        console.log("ATAY")
 
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
         
         // this.storage = null
         if(  this.storage == null  ){
+            
             var a0={collected:false,prize:100,achieved:false,desc:"Score 100 points!", type:"score", req:100 }
             var a1={collected:false,prize:100,achieved:false ,desc:"Achieve a 20-long combo" , type:"combo", req:20 }
             var a2={collected:false,prize:200,achieved:false ,desc:"Score 500 points!", type:"score", req:500 }
@@ -109,6 +113,7 @@ cc.Class({
                         } 
                     
         cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )
+        global.storage = this.storage
         } 
         this.frenzyBoosts =JSON.parse( parseInt(this.storage.frenzyBoosts))
         this.freezeBoosts =JSON.parse( parseInt(this.storage.freezeBoosts))

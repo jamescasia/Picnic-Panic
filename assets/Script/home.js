@@ -9,7 +9,7 @@ cc.Class({
         Nbong:cc.Node,
         useS:cc.SpriteFrame,
         usingS:cc.SpriteFrame, 
-        
+        done:cc.SpriteFrame,
         upgrades:cc.Node,
         playBtn:cc.Node,
         addBoostBtn:cc.Node,
@@ -157,6 +157,8 @@ cc.Class({
         this.node.opacity = 0
         this.node.setLocalZOrder(-10)
         this.node.scale = cc.v2(0,0) 
+        this.node.emit('destroyed')
+        this.node.destroy()
         
  
     
@@ -170,16 +172,16 @@ cc.Class({
           
 
         if((this.passiveComboLvl <10) )  this.upgradeComboNode. getChildByName('Label').getComponent(cc.Label).string =  this.upgradePrice(this.passiveComboLvl,'combo')
-        else {this.upgradeComboNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = "Maxed Out" 
-        this.upgradeComboNode.getChildByName('btn').getComponent(cc.Button).interactable = false}
+        else  {this.upgradeComboNode.getChildByName('btn').getComponent(cc.Button).interactable = false
+                this.upgradeComboNode.getChildByName('btn').getComponent(cc.Sprite).spriteFrame = this.done }
 
         if((this.passiveTimeLvl <10) )   this.upgradeTimeNode.getChildByName('Label').getComponent(cc.Label).string = this.upgradePrice( this.passiveTimeLvl , 'time')
-        else{ this.upgradeTimeNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = "Maxed Out"
-        this.upgradeTimeNode.getChildByName('btn').getComponent(cc.Button).interactable = false}
+        else  {this.upgradeTimeNode.getChildByName('btn').getComponent(cc.Button).interactable = false 
+            this.upgradeTimeNode.getChildByName('btn').getComponent(cc.Sprite).spriteFrame = this.done }
 
         if((this.passiveFrenzyLvl <3) )   this.upgradeFrenzyNode.getChildByName('Label').getComponent(cc.Label).string = this.upgradePrice(this.passiveFrenzyLvl,'frenzy')
-        else{ this.upgradeFrenzyNode.getChildByName('btn').getChildByName('Label').getComponent(cc.Label).string = "Maxed Out"
-        this.upgradeFrenzyNode.getChildByName('btn').getComponent(cc.Button).interactable = false}
+        else{    this.upgradeFrenzyNode.getChildByName('btn').getComponent(cc.Button).interactable = false
+                this.upgradeFrenzyNode.getChildByName('btn').getComponent(cc.Sprite).spriteFrame = this.done }
 
         // if((this.passiveFrenzyLvl <3) ) this.upgradeFrenzyNode.getChildByName('defn').getComponent(cc.Label).string =  "Upgrading this would increase frenzy bonus score by "+ String(this.upgradeChange(this.passiveFrenzyBoost, "frenzy")*(1+this.passiveFrenzyLvl))
         // else this.upgradeFrenzyNode.getChildByName('defn').getComponent(cc.Label).string =  "Your Frenzy bonus is already in maximum power! Awesome!"
@@ -434,7 +436,7 @@ cc.Class({
 
     upgradeTime(){ 
          if(!(this.passiveTimeLvl <10) )   this.showerrorPrompt('Maxed Out') 
-         else if(this.coins <  this.upgradePrice(this.passiveTimeLvl , 'time') )   this.showerrorPrompt('Insufficient Funds') 
+         else if(this.coins <  this.upgradePrice(this.passiveTimeLvl , 'time') )   this.showerrorPrompt('Insufficient stars') 
         
         
         else if(!this.confirmPrompt("time bonus" , this.upgradePrice(this.passiveTimeLvl , 'time')))return
@@ -457,7 +459,7 @@ cc.Class({
 
     upgradeCombo(){  
         if(!(this.passiveComboLvl <10) )   this.showerrorPrompt('Maxed Out')  
-        else if(this.coins <  this.upgradePrice(this.passiveComboLvl , 'combo') )   this.showerrorPrompt('Insufficient Funds') 
+        else if(this.coins <  this.upgradePrice(this.passiveComboLvl , 'combo') )   this.showerrorPrompt('Insufficient stars') 
         
         else if(!this.confirmPrompt("combo bonus" , this.upgradePrice(this.passiveComboLvl , 'combo')))return
 
@@ -490,7 +492,7 @@ cc.Class({
                 this.Nblossom.getChildByName('blossom').getComponent(cc.Button).interactable =true
                 this.Nsakura.getChildByName('sakura').getComponent(cc.Button).interactable =true
                 this.Nbong.getChildByName('bong').getComponent(cc.Button).interactable =true 
-                if(this.blossom) this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
+                if(this.pinkLeaf) this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
                  if(this.sakura)this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.useS
                  if(this.bong)this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.useS
                  }
@@ -539,7 +541,7 @@ cc.Class({
                 this.Nblossom.getChildByName('blossom').getComponent(cc.Button).interactable =true
                 this.Nbong.getChildByName('bong').getComponent(cc.Button).interactable =true
                 if(this.leaf)this.Ngrass.getChildByName('grass').getComponent(cc.Sprite).spriteFrame = this.useS
-                 if(this.blossom)this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
+                 if(this.pinkLeaf)this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
                  if(this.bong)this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.useS
                  }
                  else {
@@ -561,7 +563,7 @@ cc.Class({
                 this.Nblossom.getChildByName('blossom').getComponent(cc.Button).interactable =true
                 this.Nsakura.getChildByName('sakura').getComponent(cc.Button).interactable =true
                 if(this.leaf)this.Ngrass.getChildByName('grass').getComponent(cc.Sprite).spriteFrame = this.useS
-                 if(this.blossom)this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
+                 if(this.pinkLeaf)this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
                  if(this.sakura)this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.useS
                  }
                 else {
@@ -582,6 +584,7 @@ cc.Class({
             case "leaf effect":
                 this.coins-= 4000 
                 this.storage.leaf = true
+                this.leaf = true
                  this.Ngrass.getChildByName('grass').getComponent(cc.Sprite).spriteFrame = this.useS
                  
                  
@@ -589,16 +592,19 @@ cc.Class({
             case "blossom effect":
                 this.coins-= 6000 
                 this.storage.pinkLeaf = true
+                this.pinkLeaf = true
                  this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
                 break
             case "sakura effect":
                 this.coins-= 10000 
                 this.storage.sakura = true
+                this.sakura = true
                  this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.useS
                 break
             case "bong effect":
                 this.coins-= 20000 
                 this.storage.bong = true
+                this.bong = true
                 this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.useS
                 break
         }

@@ -23,9 +23,9 @@ cc.Class({
         this.timeLevel = this.god.getComponent('home').passiveTimeLvl
         this.comboLevel = this.god.getComponent('home').passiveComboLvl
 
-        this.addBar(this.time.getChildByName('level'), this.timeLevel, 0, -140  )
-        this.addBar(this.combo.getChildByName('level'), this.comboLevel, 0, -140  )
-        this.addBar(this.frenzy.getChildByName('level'), this.frenzyLevel, 0, -30 )
+        if(this.timeLevel != 0)this.addBar(this.time.getChildByName('level'), this.timeLevel, 0, -140  )
+        if(this.comboLevel != 0)this.addBar(this.combo.getChildByName('level'), this.comboLevel, 0, -140  )
+        if(this.frenzyLevel != 0)this.addBar(this.frenzy.getChildByName('level'), this.frenzyLevel, 0, -30 )
 
 
 
