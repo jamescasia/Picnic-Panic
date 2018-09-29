@@ -7,6 +7,7 @@ var global = {
     sfxVolume:0.5,
     numOfGames:0,
     usingPart:null,
+    storage:null,
     
     link : 'http://www.freesfx.co.uk',
 

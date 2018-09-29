@@ -73,25 +73,27 @@ cc.Class({
         }, this.node);
         cc.director.preloadScene("main"); 
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
-        
-        if( this.storage==null  ){
-            var a0={collected:false,prize:100,achieved:false,desc:"score 100" }
-            var a1={collected:false,prize:100,achieved:false ,desc:"combo 20" }
-            var a2={collected:false,prize:200,achieved:false ,desc:"score 200" }
-            var a3={collected:false,prize:200,achieved:false ,desc:"combo 30" }
-            var a4={collected:false,prize:500,achieved:false ,desc:"score 500" }
-            var a5={collected:false,prize:500,achieved:false ,desc:"combo 40" }
-            var a6={collected:false,prize:1000,achieved:false ,desc:"score 1000" }
-            var a7={collected:false,prize:1000,achieved:false, desc:"combo 60" }
-            var a8={collected:false,prize:2000,achieved:false ,desc:"score 2000" } 
-            var a9={collected:false,prize:3000,achieved:false,desc:"play 50"  }
+        if(  this.storage == null  ){
+            var a0={collected:false,prize:100,achieved:false,desc:"Score 100 points!", type:"score", req:100 }
+            var a1={collected:false,prize:100,achieved:false ,desc:"Achieve a 20-long combo" , type:"combo", req:20 }
+            var a2={collected:false,prize:200,achieved:false ,desc:"Score 500 points!", type:"score", req:500 }
+            var a3={collected:false,prize:200,achieved:false ,desc:"Achieve a 30-long combo" , type:"combo", req:30 }
+            var a4={collected:false,prize:500,achieved:false ,desc:"Score 1000 points!" , type:"score", req:1000 }
+            var a5={collected:false,prize:500,achieved:false ,desc:"Achieve a 40-long combo" , type:"combo", req:40 }
+            var a6={collected:false,prize:1000,achieved:false ,desc:"Score 2000 points!" , type:"score", req:2000 }
+            var a7={collected:false,prize:1000,achieved:false, desc:"Achieve a 60-long combo" , type:"combo", req:60 }
+            var a8={collected:false,prize:2000,achieved:false ,desc:"Score 5000 points!" , type:"score", req:5000 }
+            var a9={collected:false,prize:3000,achieved:false,desc:"Play 100 games" , type:"games", req:100 }
+            var a10={collected:false,prize:5000,achieved:false,desc:"Play 200 games" , type:"games", req:200 }
+            var a11={collected:false,prize:7000,achieved:false,desc:"Play 500 games" , type:"games", req:500 }
+            var a12={collected:false,prize:10000,achieved:false,desc:"Play 1000 games" , type:"games", req:1000 }
             
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
                 usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
                 passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
-                achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9],usedParticle:"none",leaf:false,pinkLeaf:false, sakura:false,bong:false
-                        }
+                achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12],usedParticle:null,leaf:false,pinkLeaf:false, sakura:false,bong:false
+                        } 
                     
         cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )
         } 
@@ -114,6 +116,7 @@ cc.Class({
         this.passiveComboLvl =JSON.parse(parseInt( this.storage.passiveComboLvl))
         // usedParticle:"none",leaf:false,pinkLeaf:false, sakura:false,bong:false 
         this.usedParticle =  (  (this.storage.usedParticle))
+        console.log(this.usedParticle , "FROM GENSAN")
         this.leaf =  (  (this.storage.usedParticle))
         this.pinkLeaf =  (  (this.storage.pinkLeaf))
         this.sakura =  (  (this.storage.sakura))
@@ -153,7 +156,8 @@ cc.Class({
     play(){ 
         this.node.opacity = 0
         this.node.setLocalZOrder(-10)
-        this.node.scale = cc.v2(0,0)
+        this.node.scale = cc.v2(0,0) 
+        
  
     
         
@@ -192,15 +196,15 @@ cc.Class({
  
     },
     addFrenzyBoost(){ 
-        if(this.coins <=50) {this.showerrorPrompt('Insufficient Funds') 
+        if(this.coins <100) {this.showerrorPrompt('Insufficient Stars') 
         return}
-        if(!this.confirmPrompt("Frenzy Booster" , 50))return
+        if(!this.confirmPrompt("Frenzy Booster" , 100))return
 
     },
     addedFrenzy(){
         this.frenzyBoosts+=1  
         this.storage.frenzyBoosts = this.frenzyBoosts
-        this.coins-=50 
+        this.coins-=100 
         this.storage.coins = this.coins
         this.setLabels()
         this.ss()
@@ -208,15 +212,15 @@ cc.Class({
 
     },
     addSpawnBoost(){
-        if(this.coins <=50) {this.showerrorPrompt('Insufficient Funds') 
+        if(this.coins <100) {this.showerrorPrompt('Insufficient stars') 
         return}
-        if(!this.confirmPrompt("Spawn Booster" , 50))return
+        if(!this.confirmPrompt("Spawn Booster" , 100))return
         
     },
     addedSpawn(){
         this.spawnBoosts+=1
         this.storage.spawnBoosts = this.spawnBoosts
-        this.coins-=50
+        this.coins-=100
         this.storage.coins = this.coins
         this.setLabels()
         this.ss()
@@ -224,15 +228,15 @@ cc.Class({
     },
 
     addFreezeBoost(){
-        if(this.coins <=50) {this.showerrorPrompt('Insufficient Funds') 
+        if(this.coins <100) {this.showerrorPrompt('Insufficient sTaRs') 
         return}
-        if(!this.confirmPrompt("Freeze Booster" , 50)) return
+        if(!this.confirmPrompt("Freeze Booster" , 100)) return
         
     },
     addedFreeze(){
         this.freezeBoosts+=1
         this.storage.freezeBoosts = this.freezeBoosts
-        this.coins-=50
+        this.coins-=100
         this.storage.coins = this.coins
         this.setLabels()
         this.ss()
@@ -328,7 +332,7 @@ cc.Class({
     },
     closePrompt(){
         this.promptLayout.opacity = 0
-        this.promptLayout.setLocalZOrder(-10)
+        this.promptLayout.setLocalZOrder(-14)
         this.promptLayout.position = cc.v2(-1800 , -1800)
     },
     reject(){   
@@ -373,8 +377,8 @@ cc.Class({
         this.errorPrompt.getChildByName('text').getComponent(cc.Label).string = text
     },
     oked(){
-        this.errorPrompt.position = cc.v2(-900 , -900)
-
+        this.errorPrompt.position = cc.v2(-1800 , -1800)
+        this.errorPrompt.setLocalZOrder(-10)
         this.errorPrompt.opacity = 0
     },
     upgradePrice(lvl,name){
@@ -383,10 +387,10 @@ cc.Class({
                 return 1000 + lvl*1000
                 break
             case 'time':
-                return 200 + lvl*200
+                return 500 + lvl*500
                 break
             case 'combo':
-                return 250 + lvl*250
+                return 700 + lvl*700
                 break
         } 
     },
@@ -477,7 +481,7 @@ cc.Class({
         name = name + " effect"
         console.log("BUY", name)
         switch(name){
-            case "leaf effect":
+            case "leaf effect": 
                 if(this.leaf) {
                 this.storage.usedParticle = "leaf"
                 this.Ngrass.getChildByName('grass').getComponent(cc.Sprite).spriteFrame = this.usingS
@@ -496,10 +500,14 @@ cc.Class({
                 //  if(this.sakura && "sakura" != this.usedParticle)this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.useS
                 //  if(this.bong && "bong" != this.usedParticle)this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.useS
 
-                else this.confirmPrompt(name, 4000)
-                this.ss()
-                break
-            case "blossom effect":
+                else {
+                    if(this.coins <4000) {this.showerrorPrompt('Insufficient STars') }
+                    else this.confirmPrompt(name, 4000) 
+                     return}
+                    break
+
+
+            case "blossom effect": 
             if(this.pinkLeaf) {this.storage.usedParticle = "pinkLeaf"
             this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.usingS
             this.Nblossom.getChildByName('blossom').getComponent(cc.Button).interactable =false
@@ -511,13 +519,18 @@ cc.Class({
                  if(this.sakura)this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.useS
                  if(this.bong)this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.useS
                  }
-                else this.confirmPrompt(name, 6000)
-                this.ss()
-                break
+                 else {
+                    if(this.coins <6000) {this.showerrorPrompt('Insufficient STars') }
+                    else this.confirmPrompt(name, 6000) 
+                     return}
+                    break
+
+
             case "sakura effect":
             console.log("SAKURA", this.sakura)
-            
+             
             if(this.sakura) {
+                
                 this.storage.usedParticle = "sakura"
             this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.usingS
             this.Nsakura.getChildByName('sakura').getComponent(cc.Button).interactable =false
@@ -529,11 +542,18 @@ cc.Class({
                  if(this.blossom)this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
                  if(this.bong)this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.useS
                  }
-                else this.confirmPrompt(name, 10000)
-                this.ss()
-                break
+                 else {
+                    if(this.coins <10000) {this.showerrorPrompt('Insufficient STars') }
+                    else this.confirmPrompt(name, 10000) 
+                     return}
+                    break
+
+
+
             case "bong effect":
-            if(this.bong) {this.storage.usedParticle = "bong"
+            
+            if(this.bong) {
+                this.storage.usedParticle = "bong"
             this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.usingS
             this.Nbong.getChildByName('bong').getComponent(cc.Button).interactable =false
 
@@ -544,11 +564,14 @@ cc.Class({
                  if(this.blossom)this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
                  if(this.sakura)this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.useS
                  }
-                else this.confirmPrompt(name, 20000)
-                this.ss()
+                else {
+                if(this.coins <20000) {this.showerrorPrompt('Insufficient STars') }
+                else this.confirmPrompt(name, 20000) 
+                 return}
                 break
         }
         global.usingPart = this.storage.usedParticle
+        this.ss()
 
         
 
@@ -559,18 +582,24 @@ cc.Class({
             case "leaf effect":
                 this.coins-= 4000 
                 this.storage.leaf = true
+                 this.Ngrass.getChildByName('grass').getComponent(cc.Sprite).spriteFrame = this.useS
+                 
+                 
                 break
             case "blossom effect":
                 this.coins-= 6000 
                 this.storage.pinkLeaf = true
+                 this.Nblossom.getChildByName('blossom').getComponent(cc.Sprite).spriteFrame = this.useS
                 break
             case "sakura effect":
                 this.coins-= 10000 
                 this.storage.sakura = true
+                 this.Nsakura.getChildByName('sakura').getComponent(cc.Sprite).spriteFrame = this.useS
                 break
             case "bong effect":
                 this.coins-= 20000 
                 this.storage.bong = true
+                this.Nbong.getChildByName('bong').getComponent(cc.Sprite).spriteFrame = this.useS
                 break
         }
 
@@ -581,6 +610,7 @@ cc.Class({
   setButtons(){
       //set buttons to parts used
       //set use for unused if bought(this.sakura etc)
+      console.log(this.usedParticle,"galing sa setBUttons")
       switch(this.usedParticle){
 
         case "leaf": 

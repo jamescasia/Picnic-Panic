@@ -13,7 +13,7 @@ cc.Class({
         blossomTex:null,
         leafTex:null,
          
-         
+        customBurst:cc.Prefab,
 
         level:2,
         isEmpty:true,
@@ -30,7 +30,9 @@ cc.Class({
         boostonce:false,
         healOnce:false,
         healactn:null,
-        runonce:false
+        runonce:false,
+        barstu:null, 
+        custo:null
         
 
     },
@@ -53,8 +55,36 @@ cc.Class({
             cc.scaleTo(0.3 , 1 ,1)   
         )  
     },
+    preloadParts(){
+         this.barstu =cc.instantiate( this.game.getComponent('Game').burstEffect); 
+         if(this.game.getComponent('Game').usedParticle != null) {this.custo = cc.instantiate(this.customBurst)
+                    switch(this.usedParticle){
+                        case "leaf":
+                            this.custo .getComponent(cc.ParticleSystem).texture = this.leafTex 
+
+                        break
+                        case "pinkLeaf":
+                        this.custo .getComponent(cc.ParticleSystem).texture = this.blossomTex 
+
+                        break
+                        case "sakura":
+                        this.custo .getComponent(cc.ParticleSystem).texture = this.sakuraTex 
+
+                        break
+                        case "bong":
+                        this.custo .getComponent(cc.ParticleSystem).texture = this.bongTex 
+
+                        break
+
+                    }
+                    this.node.addChild(this.custo);  }
+
+                    this.node.addChild(this.barstu); 
+                    
+    },
 
     startNow () {
+        this.customBurst = this.game.getComponent('Game').customBurst
         this.usedParticle = this.game.getComponent('Game').usedParticle
         this.leafTex =  this.game.getComponent('Game').leafTex
         this.sakuraTex =  this.game.getComponent('Game').sakuraTex
@@ -62,11 +92,13 @@ cc.Class({
         this.bongTex =  this.game.getComponent('Game').bongTex
         this.frame.node.opacity = 0
         this.initialize() 
+
         
         
 
     },
     initialize(){  
+        this.preloadParts()
         
         if(!this.gameover){
         this.level = 0
@@ -193,29 +225,14 @@ cc.Class({
           
             
             this.game.getComponent('Game').showIndic(t) 
+            this.barstu.position =    cc.v2( -0.5*( t.node.x -prevNode.node.x) ,-0.5*(t.node.y -prevNode.node.y))
+            this.barstu.getComponent(cc.ParticleSystem).resetSystem() 
+            //   this.barstu.position = cc.v2(0,0 ) 
+            if(this.game.getComponent('Game').usedParticle != null) {
+            this.custo.position =    cc.v2( -0.5*( t.node.x -prevNode.node.x) ,-0.5*(t.node.y -prevNode.node.y))
+            this.custo.getComponent(cc.ParticleSystem).resetSystem() }
+            //   this.barstu.position = cc.v2(0,0 ) 
             
-            var barstu = cc.instantiate( this.game.getComponent('Game').burstEffect); 
-            if(this.usedParticle == "none") barstu.getChildByName('part').destroy()  
-            switch(this.usedParticle){
-                case "leaf":
-                    barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.leafTex 
-
-                break
-                case "pinkLeaf":
-                    barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.blossomTex 
-
-                break
-                case "sakura":
-                    barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.sakuraTex 
-
-                break
-                case "bong":
-                    barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.bongTex 
-
-                break
-            } 
-            prevNode.node.addChild(barstu);  
-            barstu.position = cc.v2( 0.5*( t.node.x -prevNode.node.x) ,0.5*(t.node.y -prevNode.node.y))
             t.death() 
             prevNode.death() 
             

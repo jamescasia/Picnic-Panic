@@ -492,7 +492,7 @@
       "__id__": 2
     },
     "component": "realHome",
-    "handler": "shop",
+    "handler": "openShop",
     "customEventData": ""
   },
   {
@@ -2094,6 +2094,9 @@
       "__id__": 2
     },
     "_enabled": true,
+    "shopFab": {
+      "__uuid__": "373928cb-5ad4-45ce-b860-de23ee2fd83d"
+    },
     "freeze": null,
     "spawn": null,
     "frenzy": null,
@@ -2119,6 +2122,7 @@
     "itemFab": {
       "__uuid__": "bc023eef-f316-48a4-87f6-ffdebfe5eed2"
     },
-    "numOfAchv": 0
+    "numOfAchv": 0,
+    "shap": null
   }
 ]

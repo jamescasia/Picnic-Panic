@@ -57,6 +57,7 @@ cc.Class({
         pizEffect:1,
         indics:cc.Node,
         burstEffect:cc.Prefab,
+        customBurst:cc.Prefab,
         threeBurstEffect:cc.Prefab, 
         lapse:60,  
         frenzying:false,
@@ -129,7 +130,9 @@ cc.Class({
         starFab:cc.Prefab,
         tuts:cc.Node,
         pausing:false,
-        shap:null
+        shap:null,
+        barstu:null,
+        custo:null
 
         
  
@@ -220,23 +223,26 @@ cc.Class({
         console.log('fiiirst ' , this.storage) 
         
         if(  this.storage == null  ){
-            var a0={collected:false,prize:100,achieved:false,desc:"score 100" }
-            var a1={collected:false,prize:100,achieved:false ,desc:"combo 20" }
-            var a2={collected:false,prize:200,achieved:false ,desc:"score 200" }
-            var a3={collected:false,prize:200,achieved:false ,desc:"combo 30" }
-            var a4={collected:false,prize:500,achieved:false ,desc:"score 500" }
-            var a5={collected:false,prize:500,achieved:false ,desc:"combo 40" }
-            var a6={collected:false,prize:1000,achieved:false ,desc:"score 1000" }
-            var a7={collected:false,prize:1000,achieved:false, desc:"combo 60" }
-            var a8={collected:false,prize:2000,achieved:false ,desc:"score 2000" } 
-            var a9={collected:false,prize:3000,achieved:false,desc:"play 50"  }
-
+            var a0={collected:false,prize:100,achieved:false,desc:"Score 100 points!", type:"score", req:100 }
+            var a1={collected:false,prize:100,achieved:false ,desc:"Achieve a 20-long combo" , type:"combo", req:20 }
+            var a2={collected:false,prize:200,achieved:false ,desc:"Score 500 points!", type:"score", req:500 }
+            var a3={collected:false,prize:200,achieved:false ,desc:"Achieve a 30-long combo" , type:"combo", req:30 }
+            var a4={collected:false,prize:500,achieved:false ,desc:"Score 1000 points!" , type:"score", req:1000 }
+            var a5={collected:false,prize:500,achieved:false ,desc:"Achieve a 40-long combo" , type:"combo", req:40 }
+            var a6={collected:false,prize:1000,achieved:false ,desc:"Score 2000 points!" , type:"score", req:2000 }
+            var a7={collected:false,prize:1000,achieved:false, desc:"Achieve a 60-long combo" , type:"combo", req:60 }
+            var a8={collected:false,prize:2000,achieved:false ,desc:"Score 5000 points!" , type:"score", req:5000 }
+            var a9={collected:false,prize:3000,achieved:false,desc:"Play 100 games" , type:"games", req:100 }
+            var a10={collected:false,prize:5000,achieved:false,desc:"Play 200 games" , type:"games", req:200 }
+            var a11={collected:false,prize:7000,achieved:false,desc:"Play 500 games" , type:"games", req:500 }
+            var a12={collected:false,prize:10000,achieved:false,desc:"Play 1000 games" , type:"games", req:1000 }
+            
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
-                usingSpawn:false , coins:10000 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
+                usingSpawn:false , coins:20000 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
                 passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
-                achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9],usedParticle:"none",leaf:false,pinkLeaf:false, sakura:false,bong:false
-                        }
+                achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12],usedParticle:null,leaf:false,pinkLeaf:false, sakura:false,bong:false
+                        } 
                     
         cc.sys.localStorage.setItem('ampopo',JSON.stringify( this.storage)) 
         } 
@@ -272,9 +278,36 @@ cc.Class({
 
         
 
-        
+        this.preloadParts()
         this.loadShop()
   
+    },
+    preloadParts(){
+         this.barstu =cc.instantiate(this.burstEffect); 
+         if(this.usedParticle != null) {this.custo = cc.instantiate(this.customBurst)
+                    switch(this.usedParticle){
+                        case "leaf":
+                            this.custo .getComponent(cc.ParticleSystem).texture = this.leafTex 
+
+                        break
+                        case "pinkLeaf":
+                        this.custo .getComponent(cc.ParticleSystem).texture = this.blossomTex 
+
+                        break
+                        case "sakura":
+                        this.custo .getComponent(cc.ParticleSystem).texture = this.sakuraTex 
+
+                        break
+                        case "bong":
+                        this.custo .getComponent(cc.ParticleSystem).texture = this.bongTex 
+
+                        break
+                        
+                    } 
+                    this.node.addChild(this.custo); }
+
+                    this.node.addChild(this.barstu); 
+                    
     },
     loadShop(){
         this. shap = cc.instantiate(this.shopFab)
@@ -404,7 +437,7 @@ cc.Class({
     openShop(){ 
         this.shap.opacity = 255
         this.shap.scale = cc.v2(1,1)
-        this.shap.setLocalZOrder(10)
+        this.shap.setLocalZOrder(200)
     },
     gameOver(){ 
         var hideHud = cc.sequence(
@@ -748,7 +781,7 @@ cc.Class({
     
     },
     ss(){
-        this.storage.usedParticle = global.usingPart
+        if(global.usingPart != null)this.storage.usedParticle = global.usingPart
         cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
     },
@@ -938,54 +971,27 @@ cc.Class({
         
             else if(this.prev.level === x.level && this.prev.mode === x.mode && this.prev !=x &&x.selected      ){ 
                 if(this.comboctr>=5){
+ 
+                     
+                this.barstu.getComponent(cc.ParticleSystem).resetSystem()  
+                this.barstu.position =   cc.v2(x.node.position.x ,x.node.position.y  -65 )
+                if(this.usedParticle!= null){
+                    this.custo.getComponent(cc.ParticleSystem).resetSystem()  
+                    this.custo.position =   cc.v2(x.node.position.x ,x.node.position.y  -65 )
 
-                    var barstu = cc.instantiate(this.burstEffect); 
-                    if(this.usedParticle == "none")     barstu.getChildByName('part').destroy()  
-                    switch(this.usedParticle){
-                        case "leaf":
-                            barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.leafTex 
-
-                        break
-                        case "pinkLeaf":
-                            barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.blossomTex 
-
-                        break
-                        case "sakura":
-                            barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.sakuraTex 
-
-                        break
-                        case "bong":
-                            barstu.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.bongTex 
-
-                        break
-                    } 
-                   x.node.addChild(barstu);  
-                  // this.prev.node.addChild(barstu); 
-                  barstu.position = cc.v2(0,0 ) 
+                }
+                
                   if(x.level ==2){
-                  var ass = cc.instantiate(this.burstEffect); 
-                  if(this.usedParticle == "none")     ass.getChildByName('part').destroy()  
-                    switch(this.usedParticle){
-                        case "leaf":
-                        ass.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.leafTex 
-
-                        break
-                        case "pinkLeaf":
-                        ass.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.blossomTex 
-
-                        break
-                        case "sakura":
-                        ass.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.sakuraTex 
-
-                        break
-                        case "bong":
-                        ass.getChildByName('part').getComponent(cc.ParticleSystem).texture = this.bongTex 
-
-                        break
-                    } 
-                  this.prev.node.addChild(ass);  
-                  // this.prev.node.addChild(barstu); 
-                  ass.position = cc.v2(0,0 ) }
+                    
+                    // x.node.addChild(this.barstu);  
+                    this.barstu.getComponent(cc.ParticleSystem).resetSystem()  
+                    this.barstu.position =   cc.v2(x.node.position.x ,x.node.position.y  -65 )
+                    if(this.usedParticle!= null){
+                        this.custo.getComponent(cc.ParticleSystem).resetSystem()  
+                        this.custo.position =   cc.v2(x.node.position.x ,x.node.position.y  -65 )
+    
+                    }
+                }
 
                   this.comboLabel.position =x.node.position
                   var comboFade = cc.sequence( cc.fadeIn(0), cc.spawn( cc.moveBy(0.6, 0, 90) , cc.fadeOut(0.6)))

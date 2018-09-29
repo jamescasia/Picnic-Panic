@@ -1,10 +1,11 @@
 
-
+ 
+var global = require('global')  
 cc.Class({
     extends: cc.Component,
 
     properties: {  
-        _name:"",
+        namae:"",
         collected:false, 
         achieved:false,
         prize:cc.Node,
@@ -15,6 +16,7 @@ cc.Class({
         storage:null,
         achievements:null,
         desc:cc.Node,
+        home:cc.Node
 
 
 
@@ -23,10 +25,9 @@ cc.Class({
 
     dataLoad(){
 
-        this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))  
-        this.achievements = (  this.storage.achievements) 
-         
-        this.ss() 
+        this.storage = global.storage
+        this.achievements =   this.storage.achievements 
+          
 
 
     }, 
@@ -38,7 +39,7 @@ cc.Class({
 
     onLoad () { 
         this.dataLoad()  
-        this.prize.getComponent(cc.Label).string = this.achievements[parseInt(this._name)].prize + ""
+        this.prize.getComponent(cc.Label).string = this.achievements[parseInt(this.namae)].prize + ""
         for (var ach in this.achievements) {
             if(!ach.achieved){
 
@@ -51,28 +52,28 @@ cc.Class({
         }
 
  
-        if( (this.achievements[parseInt(this._name)].collected )  ) { 
+        if( (this.achievements[parseInt(this.namae)].collected )  ) { 
             this.btn.getComponent(cc.Sprite).spriteFrame = this.collected 
             this.btn.getComponent(cc.Button).interactable = false
         }
-        else if((this.achievements[parseInt(this._name)].achieved )  ) { 
+        else if((this.achievements[parseInt(this.namae)].achieved )  ) { 
             this.btn.getComponent(cc.Sprite).spriteFrame = this.normal 
         }
        else {
            this.btn.getComponent(cc.Sprite).spriteFrame = this.locked 
             this.btn.getComponent(cc.Button).interactable = false}
 
-       this.desc.getComponent(cc.Label).string = (this.achievements[parseInt(this._name)].desc )
+       this.desc.getComponent(cc.Label).string = (this.achievements[parseInt(this.namae)].desc )
 
         
 
     },
     collect(e,a){
         //only collectable if achieved and not collected
-        if( ! (this.achievements[parseInt(this._name)].collected ) && (this.achievements[parseInt(this._name)].achieved ) ){
-           this.storage.achievements[parseInt(this._name)].collected = true 
+        if( ! (this.achievements[parseInt(this.namae)].collected ) && (this.achievements[parseInt(this.namae)].achieved ) ){
+           this.storage.achievements[parseInt(this.namae)].collected = true 
            this.btn.getComponent(cc.Sprite).spriteFrame = this.collected
-           this.storage.coins = JSON.parse(parseInt( this.storage.coins))  + parseInt(this.achievements[parseInt(this._name)].prize)
+           this.storage.coins = JSON.parse(parseInt( this.storage.coins))  + parseInt(this.achievements[parseInt(this.namae)].prize)
            this.btn.getComponent(cc.Button).interactable = false
 
            this.ss()

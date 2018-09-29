@@ -4,6 +4,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        shopFab:cc.Prefab,
   
         freeze:cc.Node,
         spawn:cc.Node,
@@ -22,7 +23,8 @@ cc.Class({
         achvContent:cc.Node,
         achvPanel:cc.Node,
         itemFab:cc.Prefab,
-        numOfAchv:0
+        numOfAchv:13,
+        shap:null
 
 
 
@@ -51,6 +53,7 @@ cc.Class({
             }
         }, this.node);
         this.preloadScenes()
+        this.loadShop()
         this.dataLoad()
         this.setAchievements()
         
@@ -61,6 +64,18 @@ cc.Class({
  
         
          
+    },
+    openShop(){ 
+        this.shap.opacity = 255
+        this.shap.scale = cc.v2(1,1)
+        this.shap.setLocalZOrder(10)
+    },
+    loadShop(){
+        this. shap = cc.instantiate(this.shopFab)
+        this.node.addChild(this.shap)
+        this.shap.opacity = 0
+        this.shap.setLocalZOrder(-10)
+        this.shap.scale = cc.v2(0,0)
     },
     goToSDK(){
         cc.game.end()
@@ -90,7 +105,7 @@ cc.Class({
                 usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
                 passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
-                achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12],usedParticle:"none",leaf:false,pinkLeaf:false, sakura:false
+                achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12],usedParticle:null,leaf:false,pinkLeaf:false, sakura:false,bong:false
                         } 
                     
         cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )
@@ -120,13 +135,15 @@ cc.Class({
 
     },
     setAchievements(){
+        
+        console.log("gitaya achieve ba", this.storage)
 
         for (var ach in this.storage.achievements) {
             if(! this.storage.achievements[ach].achieved){
 
             console.log("ach", this.storage.achievements[ach])
 
-            if(   this.storage.achievements[ach].type == "combo" && parseInt( this.storage.achievements[ach].req )<= parseInt(this.storage.highestCombo)  )  this.storage.achievements[ach].achieved = true
+            if(   this.storage.achievements[ach].type == "combo" && parseInt( this.storage.achievements[ach].req )<= parseInt(this.storage.highestCombo)  ) console.log("WOW"), console.log("WOW"), this.storage.achievements[ach].achieved = true
             if(   this.storage.achievements[ach].type == "score" && parseInt( this.storage.achievements[ach].req )<= parseInt(this.storage.highestScore)  )   this.storage.achievements[ach].achieved = true
             if(   this.storage.achievements[ach].type == "games" && parseInt( this.storage.achievements[ach].req )<= parseInt(this.storage.numOfGames)  )  this.storage.achievements[ach].achieved = true
             }
@@ -134,11 +151,11 @@ cc.Class({
 
         }
         this.ss()
+
     },
     preloadScenes(){
 
-        cc.director.preloadScene("main"); 
-        cc.director.preloadScene("shop"); 
+        cc.director.preloadScene("main");  
     },
     goSettings(){
         cc.director.loadScene("settings")
@@ -168,6 +185,7 @@ cc.Class({
         cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
         console.log(this.storage)
+        global.storage = this.storage
         
     },
     collect(event,customEventData){ 
@@ -181,7 +199,7 @@ cc.Class({
         var pos = -40
         for(var a in Array.from(Array(this.numOfAchv).keys())){
             var item = cc.instantiate(this.itemFab)
-            item.getComponent('itemachv')._name = ""+ a
+            item.getComponent('itemachv').namae = ""+ a
             item.position = cc.v2(-300 , pos)
             this.achvContent.addChild(item)
             pos-=140

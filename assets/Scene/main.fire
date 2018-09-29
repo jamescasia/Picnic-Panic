@@ -9572,6 +9572,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -9587,7 +9588,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -9837,6 +9840,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -9852,7 +9856,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -10102,6 +10108,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -10117,7 +10124,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -10367,6 +10376,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -10382,7 +10392,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -10632,6 +10644,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -10647,7 +10660,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -10897,6 +10912,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -10912,7 +10928,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -11162,6 +11180,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -11177,7 +11196,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -11427,6 +11448,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -11442,7 +11464,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -11692,6 +11716,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -11707,7 +11732,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -11957,6 +11984,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -11972,7 +12000,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -12222,6 +12252,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -12237,7 +12268,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -12487,6 +12520,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -12502,7 +12536,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -12752,6 +12788,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -12767,7 +12804,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -13017,6 +13056,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -13032,7 +13072,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -13282,6 +13324,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": false,
@@ -13297,7 +13340,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -13547,6 +13592,7 @@
     "sakuraTex": null,
     "blossomTex": null,
     "leafTex": null,
+    "customBurst": null,
     "level": 0,
     "isEmpty": true,
     "mode": "a",
@@ -13562,7 +13608,9 @@
     "boostonce": false,
     "healOnce": false,
     "healactn": null,
-    "runonce": false
+    "runonce": false,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
@@ -14002,6 +14050,9 @@
     "burstEffect": {
       "__uuid__": "bda70c27-02c8-4dc8-8925-39475caa9bd2"
     },
+    "customBurst": {
+      "__uuid__": "9fa9a07c-f5ae-4b14-b3ca-695d86daa9ce"
+    },
     "threeBurstEffect": {
       "__uuid__": "bda70c27-02c8-4dc8-8925-39475caa9bd2"
     },
@@ -14147,7 +14198,9 @@
       "__id__": 130
     },
     "pausing": false,
-    "shap": null
+    "shap": null,
+    "barstu": null,
+    "custo": null
   },
   {
     "__type__": "cc.Node",
