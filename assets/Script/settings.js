@@ -12,10 +12,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        bgSlider:cc.Node,
-        sfxSlider:cc.Node,
-        bgToggle:cc.Node,
-        sfxToggle:cc.Node, 
+        bgSlider:cc.Node, 
         storage:null,
         tutsFab:cc.Prefab,
 
@@ -50,6 +47,9 @@ cc.Class({
 
 
     },
+    rateGame(){
+        cc.sys.openURL("https://play.google.com/store/apps/details?id=aetherapps.picnic.panic")
+    },
     showTuts(){
         var tuts = cc.instantiate(this.tutsFab)
         tuts.position = cc.v2(24, 0 )
@@ -61,7 +61,8 @@ cc.Class({
 
     },
     goHome(){
-        cc.director.loadScene("realhome")
+        this.node.opacity = 0
+        this.node.setLocalZOrder(-10)
     },
     changeBgVolume(){
         global.bgVolume = this.bgSlider.getComponent(cc.Slider).progress 
@@ -74,19 +75,7 @@ cc.Class({
         this.ss()
 
 
-    },
-    changeSfxVolume(){
-        global.sfxVolume = this.sfxSlider.getComponent(cc.Slider).progress 
-        
-        cc.audioEngine.setEffectsVolume(global.sfxVolume) 
-        
-        this.storage.sfxVolume =  this.sfxSlider.getComponent(cc.Slider).progress
-        global.sfxVolume = this.storage.sfxVolume 
-
-        this.ss()
-
-
-    },
+    }, 
     ss(){
         
         cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )

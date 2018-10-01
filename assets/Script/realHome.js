@@ -24,7 +24,9 @@ cc.Class({
         achvPanel:cc.Node,
         itemFab:cc.Prefab,
         numOfAchv:13,
-        shap:null
+        shap:null,
+        settingsFab:cc.Prefab,
+        creditPanel:cc.Node
 
 
 
@@ -163,7 +165,10 @@ cc.Class({
         cc.director.preloadScene("main");  
     },
     goSettings(){
-        cc.director.loadScene("settings")
+        var set = cc.instantiate(this.settingsFab)
+        this.node.addChild(set)
+        set.setLocalZOrder(10)
+ 
 
     }, 
     goLdrbrd(){
@@ -173,9 +178,15 @@ cc.Class({
 
     },
     share(){
+
+        cc.sys.openURL("https://play.google.com/store/apps/details?id=aetherapps.picnic.panic")
         //fb shit
 
     },  
+    website(){
+
+        c.sys.openURL("https://www.facebook.com/aetherapps/")
+    },
     shop(){
         global.wentShop = 'realhome' 
 
@@ -214,9 +225,16 @@ cc.Class({
 
 
     },
-    closeAchvmnts(){
+    closeAchvmnts(e,a){
+        if(a == "credits") this.creditPanel.opacity = 0, this.creditPanel.setLocalZOrder(-10)
         this.achvPanel.opacity = 0
         this.achvPanel.setLocalZOrder(-10)
+    },
+    credits(){
+        this.creditPanel.position = cc.v2(0,0)
+
+        this.creditPanel.opacity = 255
+        this.creditPanel.setLocalZOrder(10)
     }
 
    
