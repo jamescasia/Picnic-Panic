@@ -19,7 +19,7 @@
     "portrait": true,
     "upsideDown": false
   },
-  "packageName": "aetherapps.picnic.panic",
+  "packageName": "org.aetherapps.picnic.panic",
   "privateKey": "",
   "qqplay": {
     "REMOTE_SERVER_ROOT": "",

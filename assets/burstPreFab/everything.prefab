@@ -128,8 +128,8 @@
     },
     "_rotationX": 0,
     "_rotationY": 0,
-    "_scaleX": 1,
-    "_scaleY": 1,
+    "_scaleX": 1.57,
+    "_scaleY": 1.57,
     "_position": {
       "__type__": "cc.Vec2",
       "x": 24,
@@ -377,8 +377,8 @@
     },
     "_rotationX": 0,
     "_rotationY": 0,
-    "_scaleX": 0.67,
-    "_scaleY": 0.67,
+    "_scaleX": 0.828,
+    "_scaleY": 0.828,
     "_position": {
       "__type__": "cc.Vec2",
       "x": 263,
@@ -1069,7 +1069,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": -135
+      "y": -104.7
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -1377,6 +1377,9 @@
     "storage": null,
     "tutsFab": {
       "__uuid__": "ee841b56-23f7-41cf-9afa-ac068e44ed84"
+    },
+    "uiSound": {
+      "__uuid__": "4e71f4d4-826f-411e-b793-13b02a5514da"
     }
   },
   {

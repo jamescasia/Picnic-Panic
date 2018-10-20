@@ -32,7 +32,7 @@ cc.Class({
             
 
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
-                usingSpawn:false , coins:20000 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
+                usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
                 passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
                 achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12],usedParticle:null,leaf:false,pinkLeaf:false, sakura:false,bong:false
@@ -55,14 +55,14 @@ cc.Class({
 
     },
     playBgMusic(){ 
-        console.log(global.bgMusic, "musika")
+        console.log(global.bgOn,"sdaa" ,  global.musicStarted, "musika")
 
         if(cc.director.getScene()._name == "realhome" && global.bgOn && !global.musicStarted) {
             cc.audioEngine.preload(this.musicProp );
             global.musicStarted = true 
-            var bgMusic = cc.audioEngine 
-            bgMusic.playMusic(this.musicProp, true); 
-            bgMusic.setMusicVolume(global.bgVolume) 
+            cc.audioEngine.playMusic(this.musicProp, true,global.bgVolume);  
+            cc.audioEngine.setMusicVolume(global.bgVolume) 
+            cc.audioEngine.setEffectsVolume(global.bgVolume) 
  
              
 

@@ -42,7 +42,9 @@ cc.Class({
         passiveTimeLvl:0,
         passiveFrenzyLvl:0,
         passiveComboLvl:0,
-        scrnLabel:cc.Node
+        scrnLabel:cc.Node,
+        uiSound:cc.AudioClip, 
+        buysound:cc.AudioClip
 
  
     }, 
@@ -54,23 +56,7 @@ cc.Class({
 
     onLoad () {      
 
-        cc.eventManager.addListener({
-            event: cc.EventListener.KEYBOARD,
-            onKeyPressed: function(keyCode, event) {
-                if (keyCode === cc.KEY.back) {
-
-                        cc.director.loadScene('realhome')
-                    // the back button of Android Device is pressed
-                    // maybe it's not work in Web environment
-                }
-                else if (keyCode === cc.KEY.backspace) {
-                    // the backspace of PC/Mac is pressed
-                }
-                else if (keyCode === cc.KEY.escape) {
-                    // the escape of PC/Mac is pressed
-                }
-            }
-        }, this.node);
+       
         cc.director.preloadScene("main"); 
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
         if(  this.storage == null  ){
@@ -91,7 +77,7 @@ cc.Class({
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
                 usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
-                passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
+                passiveTimeLvl:0, bgVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
                 achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12],usedParticle:null,leaf:false,pinkLeaf:false, sakura:false,bong:false
                         } 
                     
@@ -154,6 +140,7 @@ cc.Class({
     },
  
     play(){ 
+        // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.node.opacity = 0
         this.node.setLocalZOrder(-10)
         this.node.scale = cc.v2(0,0) 
@@ -325,7 +312,7 @@ cc.Class({
             if( name.includes("combo" ))  this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Increases combo bonus score by "+ String(this.upgradeChange(this.passiveComboBoost, "combo")*(1+this.passiveComboLvl))+ " points for " + price  +" stars. Proceed?"
        
         }
-        else this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Really want to buy "+ name+" for " + price +" ?"
+        else this.promptLayout.getChildByName('text').getComponent(cc.Label).string = "Really want to buy "+ name+" for " + price +" stars?"
         this.promptLayout.position = cc.v2( 7, 30)
         this.buying = name
         
@@ -333,15 +320,19 @@ cc.Class({
 
     },
     closePrompt(){
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.promptLayout.opacity = 0
         this.promptLayout.setLocalZOrder(-14)
         this.promptLayout.position = cc.v2(-1800 , -1800)
     },
     reject(){   
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.closePrompt()
 
     },
     accept(){ 
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
+        
         
         switch (this.buying){
             case "Freeze Booster":
@@ -354,6 +345,7 @@ cc.Class({
                 this.addedSpawn()
                 break
             case "time bonus":
+
                 this.upgradedTIME()
                 break
             case "frenzy bonus":
@@ -413,13 +405,14 @@ cc.Class({
     },
 
     upgradeFrenzy(){ 
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         if(!(this.passiveFrenzyLvl <3) )   this.showerrorPrompt('Maxed Out') 
         else if(this.coins < this.upgradePrice(this.passiveFrenzyLvl , 'frenzy'))   this.showerrorPrompt('Insufficient Stars')  
          
         else if(!this.confirmPrompt("frenzy bonus" , this.upgradePrice(this.passiveFrenzyLvl , 'frenzy')))return
 
     },
-    upgradedFRENZY(){
+    upgradedFRENZY(){ 
         this.passiveFrenzyBoost+=1
         this.storage.passiveFrenzyBoost = this.passiveFrenzyBoost
         this.coins-= this.upgradePrice( this.passiveFrenzyLvl , 'frenzy')
@@ -435,6 +428,7 @@ cc.Class({
     },
 
     upgradeTime(){ 
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
          if(!(this.passiveTimeLvl <10) )   this.showerrorPrompt('Maxed Out') 
          else if(this.coins <  this.upgradePrice(this.passiveTimeLvl , 'time') )   this.showerrorPrompt('Insufficient stars') 
         
@@ -442,7 +436,7 @@ cc.Class({
         else if(!this.confirmPrompt("time bonus" , this.upgradePrice(this.passiveTimeLvl , 'time')))return
 
     },
-    upgradedTIME(){
+    upgradedTIME(){ 
         this.passiveTimeBoost+=0.5
         this.storage.passiveTimeBoost = this.passiveTimeBoost
         this.coins-= this.upgradePrice( this.passiveTimeLvl , 'time')
@@ -458,13 +452,14 @@ cc.Class({
     },
 
     upgradeCombo(){  
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         if(!(this.passiveComboLvl <10) )   this.showerrorPrompt('Maxed Out')  
         else if(this.coins <  this.upgradePrice(this.passiveComboLvl , 'combo') )   this.showerrorPrompt('Insufficient stars') 
         
         else if(!this.confirmPrompt("combo bonus" , this.upgradePrice(this.passiveComboLvl , 'combo')))return
 
     },
-    upgradedCOMBO(){
+    upgradedCOMBO(){ 
         this.passiveComboBoost+=2
         this.storage.passiveComboBoost = this.passiveComboBoost
         this.coins-= this.upgradePrice( this.passiveComboLvl , 'combo')

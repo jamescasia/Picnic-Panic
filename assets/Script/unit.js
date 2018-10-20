@@ -1,4 +1,4 @@
- 
+ var global= require('global')  
 cc.Class({
     extends: cc.Component,
 
@@ -32,7 +32,8 @@ cc.Class({
         healactn:null,
         runonce:false,
         barstu:null, 
-        custo:null
+        custo:null, 
+        
         
 
     },
@@ -139,6 +140,7 @@ cc.Class({
         this.frame.node.runAction(this.frenzySoloFx)
     }, 
     fuse(){
+        // cc.audioEngine.playEffect( this.game.getComponent('Game').fuseFX,false,global.bgVolume) 
         this.selected = false
         
         var a = Math. abs( Math.random () )
@@ -206,6 +208,7 @@ cc.Class({
             var prevNode = this.game.getComponent('Game').prev
            var t  = this 
            var kill = function(){ 
+            cc.audioEngine.playEffect( this.game.getComponent('Game').burstSound,false,0.7*global.bgVolume) 
                t.isEmpty =true
             switch(this.mode){
                 case 'bu': 
@@ -307,7 +310,7 @@ cc.Class({
 
             cc.spawn(
                 cc.scaleTo(2, 2,2),
-                cc.moveBy(2,   as[ parseInt(cc.rand())%2]* (0+cc.rand()%400) ,  as[parseInt(cc.rand())%2]*(0+cc.rand()%400)).easing(cc.easeCircleActionOut())
+                cc.moveBy(2,   as[ parseInt(cc.rand())%2]* (500+cc.rand()%400) ,  as[parseInt(cc.rand())%2]*(500+cc.rand()%400)).easing(cc.easeCircleActionOut())
             ),
             cc.spawn(
                 cc.moveBy(0.4,0,-1000 ).easing(cc.easeExponentialIn()),
@@ -325,8 +328,7 @@ cc.Class({
      
     
 
-    update (dt) { 
-       // console.log(this.node.getChildByName('boostHeal') , 'haha')
+    update (dt) {  
         if(this.game.getComponent('Game').burgEffect >=2) this.spawnFactor = 0.2
         else this.spawnFactor = 1  
         
@@ -335,8 +337,7 @@ cc.Class({
             this.frame.node.runAction(shake)
 
         }
- 
-
+  
         this.gameover = this.game.getComponent('Game').gameover 
         if(this.gameover && !this.runonce) this.gmvrFx()
         //effect on level three burst
@@ -472,7 +473,9 @@ cc.Class({
         var a =    Math.abs(    Math.random ())
         var b =   Math.abs( Math.random ())
          
-
+        var sound = function(){ 
+            // if(this.node._name == "oneone")cc.audioEngine.playEffect(this.game.getComponent('Game').startSound,false,0.7*global.bgVolume) 
+        }
         var firstborn =cc.sequence(
             cc.fadeTo(0, 0),
             cc.moveBy(0.4 , 0, 660), 
@@ -498,7 +501,7 @@ cc.Class({
             cc.spawn(   
                 cc.moveTo(0.042*b  , 0 , 0).easing(cc.easeSineIn()), 
                 cc.skewTo(0.083*b , 0,0).easing(cc.easeSineIn()), 
-            ) 
+            ) ,cc.callFunc(sound, this)
             
 
             

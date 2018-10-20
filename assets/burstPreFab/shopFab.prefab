@@ -386,8 +386,8 @@
     },
     "_rotationX": 0,
     "_rotationY": 0,
-    "_scaleX": 1,
-    "_scaleY": 1,
+    "_scaleX": 0.828,
+    "_scaleY": 0.828,
     "_position": {
       "__type__": "cc.Vec2",
       "x": 256.3,
@@ -3024,7 +3024,7 @@
     "node": {
       "__id__": 86
     },
-    "_enabled": false,
+    "_enabled": true,
     "_type": 0,
     "_segements": 64,
     "_N$spriteFrame": null,
@@ -10681,7 +10681,13 @@
     "passiveTimeLvl": 0,
     "passiveFrenzyLvl": 0,
     "passiveComboLvl": 0,
-    "scrnLabel": null
+    "scrnLabel": null,
+    "uiSound": {
+      "__uuid__": "4e71f4d4-826f-411e-b793-13b02a5514da"
+    },
+    "buysound": {
+      "__uuid__": "84307229-2a6e-4c99-ad45-cfd66dbecbfa"
+    }
   },
   {
     "__type__": "cc.PrefabInfo",

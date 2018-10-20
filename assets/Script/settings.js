@@ -15,6 +15,7 @@ cc.Class({
         bgSlider:cc.Node, 
         storage:null,
         tutsFab:cc.Prefab,
+        uiSound:cc.AudioClip
 
        
     },
@@ -27,30 +28,16 @@ cc.Class({
         
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo')) 
         //this.tutPanel.
-         cc.eventManager.addListener({
-            event: cc.EventListener.KEYBOARD,
-            onKeyPressed: function(keyCode, event) {
-                if (keyCode === cc.KEY.back) {
-
-                        cc.director.loadScene('realhome')
-                    // the back button of Android Device is pressed
-                    // maybe it's not work in Web environment
-                }
-                else if (keyCode === cc.KEY.backspace) {
-                    // the backspace of PC/Mac is pressed
-                }
-                else if (keyCode === cc.KEY.escape) {
-                    // the escape of PC/Mac is pressed
-                }
-            }
-        }, this.node);
+         
 
 
     },
+
     rateGame(){
         cc.sys.openURL("https://play.google.com/store/apps/details?id=aetherapps.picnic.panic")
     },
     showTuts(){
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         var tuts = cc.instantiate(this.tutsFab)
         tuts.position = cc.v2(24, 0 )
         this.node.addChild(tuts)
@@ -60,7 +47,7 @@ cc.Class({
     start () {
 
     },
-    goHome(){
+    goHome(){ 
         this.node.opacity = 0
         this.node.setLocalZOrder(-10)
     },

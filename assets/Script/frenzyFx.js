@@ -14,7 +14,7 @@ cc.Class({
         musicProp: cc.AudioClip 
     }, 
     onLoad () {
-        cc.audioEngine.playEffect(this.musicProp,false,global.sfxVolume) 
+        cc.audioEngine.playEffect(this.musicProp,false,global.bgVolume) 
     },
   
 });

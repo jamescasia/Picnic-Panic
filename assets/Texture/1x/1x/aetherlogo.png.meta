@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "094d95de-f3f1-4d04-97e5-43366dbfdb39",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "aetherlogo": {
+      "ver": "1.0.3",
+      "uuid": "bc5c25a6-5bbf-4c2d-b7ff-73f84fae73d5",
+      "rawTextureUuid": "094d95de-f3f1-4d04-97e5-43366dbfdb39",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 1642,
+      "height": 1319,
+      "rawWidth": 1642,
+      "rawHeight": 1319,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

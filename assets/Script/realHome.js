@@ -26,7 +26,12 @@ cc.Class({
         numOfAchv:13,
         shap:null,
         settingsFab:cc.Prefab,
-        creditPanel:cc.Node
+        creditPanel:cc.Node,
+        bscore:cc.Node,
+        bcombo:cc.Node,
+        quitNode:cc.Node,
+        titleNode:cc.Node,
+        uiSound:cc.AudioClip
 
 
 
@@ -34,15 +39,16 @@ cc.Class({
     }, 
      
     onLoad () {           
+        if (cc.sys.os == cc.sys.OS_ANDROID)jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dismissLoader", "()V");
         this.numOfAchv = 13
-
-        
+        var t = this
        
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed: function(keyCode, event) {
                 if (keyCode === cc.KEY.back) {
-                    cc.game.end()
+                    t.showQuit() 
+                    
                     // the back button of Android Device is pressed
                     // maybe it's not work in Web environment
                 }
@@ -54,6 +60,17 @@ cc.Class({
                 }
             }
         }, this.node);
+        var breathing = cc.repeatForever(
+            cc.sequence(
+                cc.moveBy(2, 0, -12).easing(cc.easeCubicActionOut()),
+                cc.moveBy(2, 0, 6).easing(cc.easeQuarticActionIn()),
+                cc.moveBy(2, 0, 6).easing(cc.easeCubicActionOut())
+            )
+        )
+
+        this.titleNode.runAction(breathing)
+
+        
         this.preloadScenes()
         this.loadShop()
         this.dataLoad()
@@ -67,7 +84,8 @@ cc.Class({
         
          
     },
-    openShop(){ 
+    openShop(){  
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.loadShop()
         this.shap.opacity = 255
         this.shap.scale = cc.v2(1,1)
@@ -85,8 +103,7 @@ cc.Class({
         cc.game.end()
         // cc.director.loadScene('sdk')
     },
-    dataLoad(){
-        console.log("ATAY")
+    dataLoad(){ 
 
         this.storage =  JSON.parse(cc.sys.localStorage.getItem('ampopo'))
         
@@ -110,7 +127,7 @@ cc.Class({
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
                 usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
-                passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
+                passiveTimeLvl:0, bgVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
                 achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12],usedParticle:null,leaf:false,pinkLeaf:false, sakura:false,bong:false
                         } 
                     
@@ -124,7 +141,8 @@ cc.Class({
         this.usingFrenzy = false
         this.usingSpawn = false
         this.coins =JSON.parse(parseInt( this.storage.coins))  
-        this.highestScore =JSON.parse(parseInt( this.storage.highestScore)) 
+        this.highestCombo =JSON.parse  (parseInt(this.storage.highestCombo))
+        this.highestScore =JSON.parse (parseInt( this.storage.highestScore))
         this.usingFrenzy = false
         this.usingFreeze = false
         this.usingSpawn = false
@@ -165,6 +183,7 @@ cc.Class({
         cc.director.preloadScene("main");  
     },
     goSettings(){
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         var set = cc.instantiate(this.settingsFab)
         this.node.addChild(set)
         set.setLocalZOrder(10)
@@ -178,21 +197,25 @@ cc.Class({
 
     },
     share(){
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
 
         cc.sys.openURL("https://play.google.com/store/apps/details?id=aetherapps.picnic.panic")
         //fb shit
 
     },  
     website(){
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
 
-        c.sys.openURL("https://www.facebook.com/aetherapps/")
+        cc.sys.openURL("https://www.facebook.com/aetherapps/")
     },
     shop(){
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         global.wentShop = 'realhome' 
 
         cc.director.loadScene('shop');
     },
     play(){
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
 
         cc.director.loadScene('main');
     },
@@ -209,8 +232,12 @@ cc.Class({
 
     },
     showAchievements(){
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
+        this.bcombo.getComponent(cc.Label).string = this.highestCombo
+        this.bscore.getComponent(cc.Label).string = this.highestScore
         this.achvPanel.opacity = 255
         this.achvPanel.setLocalZOrder(10)
+        this.achvPanel.position =cc.v2(0,0)
         
         var pos = -40
         for(var a in Array.from(Array(this.numOfAchv).keys())){
@@ -225,17 +252,29 @@ cc.Class({
 
 
     },
-    closeAchvmnts(e,a){
-        if(a == "credits") this.creditPanel.opacity = 0, this.creditPanel.setLocalZOrder(-10)
+    closeAchvmnts(e,a){ 
+        if(a == "credits") this.creditPanel.opacity = 0, this.creditPanel.setLocalZOrder(-10) ,this.achvPanel.position =cc.v2(-900,-900)
         this.achvPanel.opacity = 0
         this.achvPanel.setLocalZOrder(-10)
     },
     credits(){
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.creditPanel.position = cc.v2(0,0)
 
         this.creditPanel.opacity = 255
         this.creditPanel.setLocalZOrder(10)
-    }
+    },
+    showQuit(){
+        this.quitNode.position = cc.v2(0,0)
+
+    },
+    cancelQuit(){
+        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
+        this.quitNode.position = cc.v2(-1000,-1000)
+    },
+    reallyQuit(){
+        cc.game.end()
+    },
 
    
 
