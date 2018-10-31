@@ -320,7 +320,7 @@ cc.Class({
 
     },
     closePrompt(){
-        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
+        // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.promptLayout.opacity = 0
         this.promptLayout.setLocalZOrder(-14)
         this.promptLayout.position = cc.v2(-1800 , -1800)
@@ -405,7 +405,7 @@ cc.Class({
     },
 
     upgradeFrenzy(){ 
-        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
+        // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         if(!(this.passiveFrenzyLvl <3) )   this.showerrorPrompt('Maxed Out') 
         else if(this.coins < this.upgradePrice(this.passiveFrenzyLvl , 'frenzy'))   this.showerrorPrompt('Insufficient Stars')  
          
@@ -413,6 +413,7 @@ cc.Class({
 
     },
     upgradedFRENZY(){ 
+        cc.audioEngine.playEffect( this.buysound,false,global.bgVolume) 
         this.passiveFrenzyBoost+=1
         this.storage.passiveFrenzyBoost = this.passiveFrenzyBoost
         this.coins-= this.upgradePrice( this.passiveFrenzyLvl , 'frenzy')
@@ -428,7 +429,7 @@ cc.Class({
     },
 
     upgradeTime(){ 
-        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
+        // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
          if(!(this.passiveTimeLvl <10) )   this.showerrorPrompt('Maxed Out') 
          else if(this.coins <  this.upgradePrice(this.passiveTimeLvl , 'time') )   this.showerrorPrompt('Insufficient stars') 
         
@@ -437,6 +438,7 @@ cc.Class({
 
     },
     upgradedTIME(){ 
+        cc.audioEngine.playEffect( this.buysound,false,global.bgVolume) 
         this.passiveTimeBoost+=0.5
         this.storage.passiveTimeBoost = this.passiveTimeBoost
         this.coins-= this.upgradePrice( this.passiveTimeLvl , 'time')
@@ -452,7 +454,7 @@ cc.Class({
     },
 
     upgradeCombo(){  
-        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
+        // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         if(!(this.passiveComboLvl <10) )   this.showerrorPrompt('Maxed Out')  
         else if(this.coins <  this.upgradePrice(this.passiveComboLvl , 'combo') )   this.showerrorPrompt('Insufficient stars') 
         
@@ -460,6 +462,7 @@ cc.Class({
 
     },
     upgradedCOMBO(){ 
+        cc.audioEngine.playEffect( this.buysound,false,global.bgVolume) 
         this.passiveComboBoost+=2
         this.storage.passiveComboBoost = this.passiveComboBoost
         this.coins-= this.upgradePrice( this.passiveComboLvl , 'combo')
