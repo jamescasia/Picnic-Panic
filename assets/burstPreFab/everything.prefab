@@ -967,13 +967,13 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 148.05,
+      "width": 155.7,
       "height": 18
     },
     "_rotationX": 0,
     "_rotationY": 0,
-    "_scaleX": 1,
-    "_scaleY": 1,
+    "_scaleX": 1.09,
+    "_scaleY": 1.09,
     "_position": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -1004,7 +1004,7 @@
     },
     "_isSystemFontUsed": false,
     "_spacingX": 0,
-    "_N$string": "sounds",
+    "_N$string": "VOLUME",
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
@@ -1064,8 +1064,8 @@
     },
     "_rotationX": 0,
     "_rotationY": 0,
-    "_scaleX": 1.57,
-    "_scaleY": 1.57,
+    "_scaleX": 1.96,
+    "_scaleY": 1.96,
     "_position": {
       "__type__": "cc.Vec2",
       "x": 0,

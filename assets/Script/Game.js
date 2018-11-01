@@ -181,7 +181,7 @@ cc.Class({
     closePanel() {
         this.tuts.setLocalZOrder(-10)
         this.startNow()
-        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
+        // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
 
         // this.initUnit()
 
@@ -190,8 +190,23 @@ cc.Class({
         console.log('SJWOFAODOA')
 
         this.tuts.position = cc.v2(21, -36)
-        this.tuts.setLocalZOrder(10)
+        this.tuts.setLocalZOrder(10) 
+
+
+  
+        this.tuts.opacity = 0
+        this.tuts.scale = cc.v2(0,0)
+        var action = cc.sequence(
+            cc.spawn(
+                cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
+                cc.fadeIn(0.2).easing(cc.easeExponentialIn())
+            ), 
+            cc.callFunc(done, this)
+        )
+        this.tuts.runAction(action)
+        var done  = function(){ 
         this.tuts.opacity = 255
+        this.tuts.scale = cc.v2(1,1)}
 
 
 
@@ -200,6 +215,7 @@ cc.Class({
 
     onLoad() {
         this.soundArr = [this.c1, this.c2, this.c3, this.c4, this.c5, this.c6, this.c7, this.c8]
+        // cc.audioEngine.setMusicVolume(global.bgVolume*0.2) 
 
 
         var randbg = parseInt(cc.rand() % 3)
@@ -215,7 +231,7 @@ cc.Class({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed: function (keyCode, event) {
                 if (keyCode === cc.KEY.back) {
-                    t.onPause()
+                    if(!this.gameover)t.onPause()
                     // the back button of Android Device is pressed
                     // maybe it's not work in Web environment
                 }
@@ -229,7 +245,7 @@ cc.Class({
         }, this.node);
 
 
-        cc.audioEngine.setEffectsVolume(global.bgVolume) 
+        // cc.audioEngine.setEffectsVolume(global.bgVolume) 
 
         this.loadData()
 
@@ -393,10 +409,23 @@ cc.Class({
     },
     onPause() {
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
-        this.pausemenu.setLocalZOrder(20)
-        this.pausemenu.opacity = 255
-        this.pausemenu.position = cc.v2(0, 0) 
-            cc.director.pause() 
+        this.pausemenu.setLocalZOrder(20)  
+        var done  = function(){ 
+            cc.director.pause()  
+            this.pausemenu.opacity = 255
+            this.pausemenu.scale = cc.v2(1,1)}
+            this.pausemenu.position = cc.v2(0,0)  
+            this.pausemenu.opacity = 0
+            this.pausemenu.scale = cc.v2(0,0)
+            var action = cc.sequence(
+                cc.spawn(
+                    cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
+                    cc.fadeIn(0.2).easing(cc.easeExponentialIn())
+                ), 
+                cc.callFunc(done, this)
+            )
+            this.pausemenu.runAction(action)
+            
        
     },
     retry() {
@@ -451,11 +480,11 @@ cc.Class({
 
     },
     closed() {
-        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
+        // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.showPrompt()
     },
     openShop() {
-        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
+        // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.loadShop()
         this.boosterPrompt.getChildByName("all").getChildByName('shop').stopAllActions()
         this.shap.on('destroyed', this.closed, this);
@@ -1190,7 +1219,7 @@ cc.Class({
         this.boosterPrompt.getChildByName("all").scale = cc.v2(0, 0)
         this.boosterPrompt.getChildByName("all").opacity = 0
         var shopshake = function () {
-            cc.log('faf')
+            this.boosterPrompt.getChildByName("all").getChildByName('shop').position = cc.v2(121,-182)
             var shake = cc.repeatForever(
                 cc.sequence(
                     cc.spawn(
@@ -1254,7 +1283,7 @@ cc.Class({
         this.boosterPrompt.position = cc.v2(4, 0)
     },
     closePrompt(a) {
-        cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
+        // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         console.log("closeeeeeeeeeee")
 
         this.ss()

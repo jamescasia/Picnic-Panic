@@ -41,6 +41,22 @@ cc.Class({
         var tuts = cc.instantiate(this.tutsFab)
         tuts.position = cc.v2(24, 0 )
         this.node.addChild(tuts)
+  
+        tuts.opacity = 0
+        tuts.scale = cc.v2(0,0)
+        var action = cc.sequence(
+            cc.spawn(
+                cc.scaleTo(0.2,1, 1).easing(cc.easeExponentialIn()),
+                cc.fadeIn(0.2).easing(cc.easeExponentialIn())
+            ), 
+            cc.callFunc(done, this)
+        )
+        tuts.runAction(action)
+        var done  = function(){ 
+            tuts.opacity = 255
+            tuts.scale = cc.v2(1,1)}
+
+
 
     },
 

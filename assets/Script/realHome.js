@@ -87,9 +87,23 @@ cc.Class({
     openShop(){  
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.loadShop()
+        this.shap.setLocalZOrder(10)
+        this.shap.opacity = 0
+        this.shap.scale = cc.v2(0,0)
+        var action = cc.sequence(
+            cc.spawn(
+                cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
+                cc.fadeIn(0.2).easing(cc.easeExponentialIn())
+            ), 
+            cc.callFunc(done, this)
+        )
+        this.shap.runAction(action)
+        var done  = function(){ 
         this.shap.opacity = 255
         this.shap.scale = cc.v2(1,1)
-        this.shap.setLocalZOrder(10)
+    }
+ 
+
         
     },
     loadShop(){
@@ -186,7 +200,22 @@ cc.Class({
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         var set = cc.instantiate(this.settingsFab)
         this.node.addChild(set)
-        set.setLocalZOrder(10)
+        set.setLocalZOrder(10) 
+        set.opacity = 0
+        set.scale = cc.v2(0,0)
+        var action = cc.sequence(
+            cc.spawn(
+                cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
+                cc.fadeIn(0.2).easing(cc.easeExponentialIn())
+            ), 
+            cc.callFunc(done, this)
+        )
+        set.runAction(action)
+        var done  = function(){ 
+        set.opacity = 255
+        set.scale = cc.v2(1,1)
+        }
+
  
 
     }, 
@@ -235,9 +264,24 @@ cc.Class({
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.bcombo.getComponent(cc.Label).string = this.highestCombo
         this.bscore.getComponent(cc.Label).string = this.highestScore
-        this.achvPanel.opacity = 255
-        this.achvPanel.setLocalZOrder(10)
+        // this.achvPanel.opacity = 255
+        // this.achvPanel.setLocalZOrder(10)
         this.achvPanel.position =cc.v2(0,0)
+        this.achvPanel.setLocalZOrder(10)
+        this.achvPanel.opacity = 0
+        this.achvPanel.scale = cc.v2(0,0)
+        var action = cc.sequence(
+            cc.spawn(
+                cc.scaleTo(0.2, 0.69, 0.69).easing(cc.easeExponentialIn()),
+                cc.fadeIn(0.2).easing(cc.easeExponentialIn())
+            ), 
+            cc.callFunc(done, this)
+        )
+        this.achvPanel.runAction(action)
+        var done  = function(){ 
+        this.achvPanel.opacity = 255
+        this.achvPanel.scale = cc.v2(0.69,0.69)}
+
         
         var pos = -40
         for(var a in Array.from(Array(this.numOfAchv).keys())){
@@ -259,10 +303,27 @@ cc.Class({
     },
     credits(){
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
-        this.creditPanel.position = cc.v2(0,0)
-
+        this.creditPanel.position = cc.v2(0,0) 
+        this.creditPanel.setLocalZOrder(10) 
+        this.creditPanel.opacity = 0
+        this.creditPanel.scale = cc.v2(0,0)
+        var action = cc.sequence(
+            cc.spawn(
+                cc.scaleTo(0.2, 0.69, 0.69).easing(cc.easeExponentialIn()),
+                cc.fadeIn(0.2).easing(cc.easeExponentialIn())
+            ), 
+            cc.callFunc(done, this)
+        )
+        this.creditPanel.runAction(action)
+        var done  = function(){ 
         this.creditPanel.opacity = 255
-        this.creditPanel.setLocalZOrder(10)
+        this.creditPanel.scale = cc.v2(0.69,0.69)}
+
+        
+
+        
+
+
     },
     showQuit(){
         this.quitNode.position = cc.v2(0,0)
