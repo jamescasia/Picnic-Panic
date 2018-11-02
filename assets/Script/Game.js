@@ -291,7 +291,7 @@ cc.Class({
 
             this.storage = {
                 frenzyBoosts: 0, freezeBoosts: 0, spawnBoosts: 0, usingFrenzy: false, usingFreeze: false,
-                usingSpawn: false, coins: 20000, realcoins: 0, passiveComboBoost: 0, passiveTimeBoost: 0,
+                usingSpawn: false, coins: 0, realcoins: 0, passiveComboBoost: 0, passiveTimeBoost: 0,
                 passiveFrenzyBoost: 0, highestScore: 0, highestCombo: 0, numOfGames: 0, passiveComboLvl: 0, passiveFrenzyLvl: 0,
                 passiveTimeLvl: 0, bgVolume: 1, bgVolume: 1, sfxOn: true, bgOn: true,
                 achievements: [a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12], usedParticle: null, leaf: false, pinkLeaf: false, sakura: false, bong: false
@@ -1202,19 +1202,35 @@ cc.Class({
     },
     showPrompt() {
         this.loadData()
-        this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts + " left"
-        this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts + " left"
-        this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts + " left"
 
-        this.boosterFrenzy.getChildByName("New Sprite").color = new cc.Color(255, 255, 255);
-        this.boosterFrenzy.getChildByName("New Button").disabled = false
-        this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = true
+        if(!this.usingFreeze){
+            
+            this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.freezeBoosts + " left"}
+        else {this.boosterTime.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = "using"
         this.boosterTime.getChildByName("New Button").disabled = false
         this.boosterTime.getChildByName("New Button").getComponent(cc.Button).interactable = true
-        this.boosterTime.getChildByName("New Sprite").color = new cc.Color(255, 255, 255);
+        this.boosterTime.getChildByName("New Sprite").color = new cc.Color(255, 255, 255);}
+        if(!this.usingFrenzy){
+            
+            this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts + " left"}
+        else {this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts + "using"
+        this.boosterFrenzy.getChildByName("New Sprite").color = new cc.Color(255, 255, 255);
+        this.boosterFrenzy.getChildByName("New Button").disabled = false
+        this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = true}
+        if(!this.usingSpawn){
+            
+            this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts + " left"}
+        else {this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts + "using"
         this.boosterSpawn.getChildByName("New Sprite").color = new cc.Color(255, 255, 255);
         this.boosterSpawn.getChildByName("New Button").disabled = false
-        this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable = true
+        this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable = true}
+        
+        
+        
+
+        
+        
+        
 
         this.boosterPrompt.getChildByName("all").scale = cc.v2(0, 0)
         this.boosterPrompt.getChildByName("all").opacity = 0
@@ -1265,17 +1281,17 @@ cc.Class({
         this.boosterPrompt.opacity = 255
 
 
-        if (this.frenzyBoosts <= 0) {
+        if (this.frenzyBoosts <= 0 && !this.usingFrenzy) {
             this.boosterFrenzy.getChildByName("New Sprite").color = new cc.Color(110, 110, 110);
             this.boosterFrenzy.getChildByName("New Button").disabled = true
             this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = false
         } else this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = true
-        if (this.freezeBoosts <= 0) {
+        if (this.freezeBoosts <= 0 && !this.usingFreeze) {
             this.boosterTime.getChildByName("New Button").disabled = true
             this.boosterTime.getChildByName("New Button").getComponent(cc.Button).interactable = false
             this.boosterTime.getChildByName("New Sprite").color = new cc.Color(110, 110, 110);
         } else this.boosterTime.getChildByName("New Button").getComponent(cc.Button).interactable = true
-        if (this.spawnBoosts <= 0) {
+        if (this.spawnBoosts <= 0  && !this.usingSpawn) {
             this.boosterSpawn.getChildByName("New Sprite").color = new cc.Color(110, 110, 110);
             this.boosterSpawn.getChildByName("New Button").disabled = true
             this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable = false
