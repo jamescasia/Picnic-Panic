@@ -308,8 +308,8 @@ cc.Class({
     confirmPrompt(name, price){  
  
         this.promptLayout.setLocalZOrder(10)
-        this.promptLayout.opacity = 0
-        this.promptLayout.scale = cc.v2(0,0)
+        this.promptLayout.opacity = 255
+        this.promptLayout.scale = cc.v2(1,1)
         var action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2,1,1).easing(cc.easeExponentialIn()),
@@ -466,6 +466,7 @@ cc.Class({
 
     upgradeTime(){ 
         // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
+        
          if(!(this.passiveTimeLvl <10) )   this.showerrorPrompt('Maxed Out') 
          else if(this.coins <  this.upgradePrice(this.passiveTimeLvl , 'time') )   this.showerrorPrompt('Insufficient stars') 
         

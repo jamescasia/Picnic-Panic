@@ -44,24 +44,33 @@ cc.Class({
         
 
     },
-    showPage(){
+    showPage(dir){
         
         
         if(this.page4 == null )this.pages = [this.page1, this.page2, this.page3 ] 
         else this.pages = [this.page1, this.page2, this.page3, this.page4] 
-        
-        var show = cc.sequence(cc.moveTo(0,0,-29),cc.fadeIn(0.5) , cc.delayTime(0.1)) 
-        
+        let dis = 1000
+        // var show = cc.sequence(cc.moveTo(0,0,-29),cc.fadeIn(0.5) , cc.delayTime(0.1)) 
+        if(dir == "left")  dis = -1000
+        else dis = 1000
+        let show =   cc.sequence( 
+            cc.spawn(
+                cc.moveTo(0.2, 0,-29).easing(cc.easeExponentialIn()) ,
+                cc.delayTime(0)
+                //
+            ), cc.delayTime(0)
+            // cc.fadeOut(0.3), 
+        )
         this.pages[this.pageCtr].runAction(show) 
     },
     panLeft(){
         var hide = cc.sequence(
             cc.spawn(
-                cc.moveBy(0.2, 1000,0).easing(cc.easeQuinticActionOut()) ,
+                cc.moveBy(0.2, 1000,0).easing(cc.easeExponentialIn()) ,
                 cc.delayTime(0)
                 //
-            ), 
-            cc.fadeOut(0.3), 
+            ), cc.delayTime(0)
+            // cc.fadeOut(0.3), 
         )
         this.pages[this.pageCtr].runAction(hide)
 
@@ -71,23 +80,24 @@ cc.Class({
         
         this.currentBob.position  =cc.v2( this.pos[this.pageCtr], 3)
         
-        this.showPage()
+        this.showPage('left')
     },
     panRight(){
         var hide = cc.sequence(
             cc.spawn(
-                cc.moveBy(0.2, -1000,0).easing(cc.easeQuinticActionOut()) ,
+                cc.moveBy(0.2, -1000,0).easing(cc.easeExponentialIn()) ,
                 cc.delayTime(0)
                 // 
             ),
-            cc.fadeOut(0.3), 
+            cc.delayTime(0)
+            // cc.fadeOut(0.3), 
         )
         this.pages[this.pageCtr].runAction(hide)
         this.pageCtr+=1
         if(this.pageCtr >3 && this.page4!= null) this.pageCtr = 0
         else if (this.pageCtr >2 && this.page4== null) this.pageCtr =0
         this.currentBob.position  =cc.v2( this.pos[this.pageCtr], 3)
-        this.showPage()
+        this.showPage('right')
     },
     close(){
         this.open = false

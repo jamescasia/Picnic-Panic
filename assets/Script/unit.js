@@ -478,24 +478,24 @@ cc.Class({
         }
         var firstborn =cc.sequence(
             cc.fadeTo(0, 0),
-            cc.moveBy(0.4 , 0, 660), 
+            cc.moveBy(0.35 , 0, 660), 
             cc.spawn(
                 
                 cc.fadeIn(0),
-                cc.moveTo(0.2 , 0,0).easing(cc.easeSineIn()), 
+                cc.moveTo(0.3 , 0,0).easing(cc.easeCubicActionIn()), 
             ),
             cc.moveBy(0,0,0),
             
             
             cc.spawn(
                 
-                cc.skewTo(0.1 , 0, Math.random ()*7 ).easing(cc.easeCircleActionOut()),
-                cc.moveBy(a *0.1 , 0 , a *80).easing(cc.easeCircleActionOut()),
+                cc.skewTo(0.2 , 0, Math.random ()*7 ).easing(cc.easeCircleActionOut()),
+                cc.moveBy(a *0.2 , 0 , a *80).easing(cc.easeCircleActionOut()),
             ),
             cc.moveTo(0.083 *a , 0 , 0).easing(cc.easeSineIn())  , 
             cc.spawn( 
-                cc.skewTo(  0.2 , 0, Math.random ()*3.5  ).easing(cc.easeCircleActionOut()),
-                cc.moveBy(b *0.06 , 0 , b *55).easing(cc.easeCircleActionOut()), 
+                cc.skewTo(  0.15 , 0, Math.random ()*3.5  ).easing(cc.easeCircleActionOut()),
+                cc.moveBy(b *0.09 , 0 , b *55).easing(cc.easeCircleActionOut()), 
             ),
             cc.moveBy(0,0,0),
             cc.spawn(   

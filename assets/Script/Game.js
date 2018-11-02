@@ -5,6 +5,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        nbNode:cc.Node,
         bongTex: cc.Texture2D,
         sakuraTex: cc.Texture2D,
         blossomTex: cc.Texture2D,
@@ -147,7 +148,8 @@ cc.Class({
         burstSound:cc.AudioClip,
         uiSound:cc.AudioClip,
         startSound:cc.AudioClip,
-        doneAudio:cc.AudioClip
+        doneAudio:cc.AudioClip,
+        newBest:false,
 
 
 
@@ -214,8 +216,7 @@ cc.Class({
 
 
     onLoad() {
-        this.soundArr = [this.c1, this.c2, this.c3, this.c4, this.c5, this.c6, this.c7, this.c8]
-        // cc.audioEngine.setMusicVolume(global.bgVolume*0.2) 
+        this.soundArr = [this.c1, this.c2, this.c3, this.c4, this.c5, this.c6, this.c7, this.c8] 
 
 
         var randbg = parseInt(cc.rand() % 3)
@@ -246,13 +247,15 @@ cc.Class({
 
 
         // cc.audioEngine.setEffectsVolume(global.bgVolume) 
+        cc.audioEngine.setMusicVolume(global.bgVolume*0.5) 
+        // cc.audioEngine.setEffectsVolume(global.bgVolume) 
 
         this.loadData()
 
 
 
 
-        this.initUnit()
+        
         var show = function () {
             if (this.numOfGames == 0) this.showTuts()
             else this.showPrompt()
@@ -265,6 +268,11 @@ cc.Class({
 
         this.preloadParts()
         
+
+
+    },
+    start(){
+        this.initUnit()
 
 
     },
@@ -415,8 +423,8 @@ cc.Class({
             this.pausemenu.opacity = 255
             this.pausemenu.scale = cc.v2(1,1)}
             this.pausemenu.position = cc.v2(0,0)  
-            this.pausemenu.opacity = 0
-            this.pausemenu.scale = cc.v2(0,0)
+            this.pausemenu.opacity = 255
+            this.pausemenu.scale = cc.v2(1,1)
             var action = cc.sequence(
                 cc.spawn(
                     cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
@@ -515,9 +523,15 @@ cc.Class({
 
 
 
-        if (this.score >= this.highestScore) {
+        if (this.score >  this.highestScore) {
+            this.newBest = true
+
+
         this.highestScore = this.score
-            prize += 80
+            prize += 200
+
+        
+
 
         }
         this.storage.freezeBoosts = this.freezeBoosts
@@ -558,7 +572,19 @@ cc.Class({
                 //this.numAnim(this.highestCombo)
                 this.startVal = 0
                 this.endPanel.getChildByName('score').getComponent(cc.Label).string = this.score
-                var call = function () { this.comboAnim(this.highestCombo) }
+                
+                var call = function () {
+                    let nbac = cc.sequence(
+                        cc.delayTime(0.83),
+                        cc.spawn(
+                        
+
+                        cc.fadeIn(0.14),
+                        cc.scaleTo(0.14, 1,1 )
+                    ))
+                   if(this.newBest) this.nbNode.runAction(nbac)
+                    
+                    this.comboAnim(this.highestCombo) }
                 var action = cc.sequence(
                     cc.spawn(
                         cc.fadeOut(0.100),
@@ -688,7 +714,7 @@ cc.Class({
 
     },
     gameOverAnim() {
-        this.endPanel.setLocalZOrder(10)
+        this.endPanel.setLocalZOrder(12)
         this.endPanel.position = cc.v2(0, 0)
 
         //animation 
@@ -719,7 +745,7 @@ cc.Class({
             cc.spawn(
                 cc.scaleTo(0.6, 0.4, 0.4),
                 cc.moveBy(0.6, 0, -1000),
-                cc.rotateBy(0.6, 200)
+                // cc.rotateBy(0.6, 200)
 
             ),
 
@@ -1213,14 +1239,14 @@ cc.Class({
         if(!this.usingFrenzy){
             
             this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts + " left"}
-        else {this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.frenzyBoosts + "using"
+        else {this.boosterFrenzy.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
         this.boosterFrenzy.getChildByName("New Sprite").color = new cc.Color(255, 255, 255);
         this.boosterFrenzy.getChildByName("New Button").disabled = false
         this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = true}
         if(!this.usingSpawn){
             
             this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts + " left"}
-        else {this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string = this.spawnBoosts + "using"
+        else {this.boosterSpawn.getChildByName("New Button").getChildByName("left").getComponent(cc.Label).string =  "using"
         this.boosterSpawn.getChildByName("New Sprite").color = new cc.Color(255, 255, 255);
         this.boosterSpawn.getChildByName("New Button").disabled = false
         this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable = true}
@@ -1285,17 +1311,25 @@ cc.Class({
             this.boosterFrenzy.getChildByName("New Sprite").color = new cc.Color(110, 110, 110);
             this.boosterFrenzy.getChildByName("New Button").disabled = true
             this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = false
-        } else this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = true
+        } else {this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = true
+        this.boosterFrenzy.getChildByName("New Sprite").color = new cc.Color(255, 255, 255);
+        this.boosterFrenzy.getChildByName("New Button").disabled = false
+        this.boosterFrenzy.getChildByName("New Button").getComponent(cc.Button).interactable = true}
         if (this.freezeBoosts <= 0 && !this.usingFreeze) {
             this.boosterTime.getChildByName("New Button").disabled = true
             this.boosterTime.getChildByName("New Button").getComponent(cc.Button).interactable = false
             this.boosterTime.getChildByName("New Sprite").color = new cc.Color(110, 110, 110);
-        } else this.boosterTime.getChildByName("New Button").getComponent(cc.Button).interactable = true
+        } else {this.boosterTime.getChildByName("New Button").getComponent(cc.Button).interactable = true
+        this.boosterTime.getChildByName("New Button").disabled = false 
+        this.boosterTime.getChildByName("New Sprite").color = new cc.Color(255, 255, 255);}
         if (this.spawnBoosts <= 0  && !this.usingSpawn) {
             this.boosterSpawn.getChildByName("New Sprite").color = new cc.Color(110, 110, 110);
             this.boosterSpawn.getChildByName("New Button").disabled = true
             this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable = false
-        } else this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable = true
+        } else{ this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable = true
+        this.boosterSpawn.getChildByName("New Sprite").color = new cc.Color(255, 255, 255);
+        this.boosterSpawn.getChildByName("New Button").disabled = false
+        this.boosterSpawn.getChildByName("New Button").getComponent(cc.Button).interactable = true}
         this.boosterPrompt.position = cc.v2(4, 0)
     },
     closePrompt(a) {

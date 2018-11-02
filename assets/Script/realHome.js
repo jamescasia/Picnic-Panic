@@ -88,8 +88,8 @@ cc.Class({
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.loadShop()
         this.shap.setLocalZOrder(10)
-        this.shap.opacity = 0
-        this.shap.scale = cc.v2(0,0)
+        this.shap.opacity = 255
+        this.shap.scale = cc.v2(1,1)
         var action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
@@ -201,8 +201,8 @@ cc.Class({
         var set = cc.instantiate(this.settingsFab)
         this.node.addChild(set)
         set.setLocalZOrder(10) 
-        set.opacity = 0
-        set.scale = cc.v2(0,0)
+        set.opacity = 255
+        set.scale = cc.v2(1,1)
         var action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
@@ -268,8 +268,8 @@ cc.Class({
         // this.achvPanel.setLocalZOrder(10)
         this.achvPanel.position =cc.v2(0,0)
         this.achvPanel.setLocalZOrder(10)
-        this.achvPanel.opacity = 0
-        this.achvPanel.scale = cc.v2(0,0)
+        this.achvPanel.opacity = 255
+        this.achvPanel.scale = cc.v2(0.69,0.69)
         var action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2, 0.69, 0.69).easing(cc.easeExponentialIn()),
@@ -305,8 +305,8 @@ cc.Class({
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.creditPanel.position = cc.v2(0,0) 
         this.creditPanel.setLocalZOrder(10) 
-        this.creditPanel.opacity = 0
-        this.creditPanel.scale = cc.v2(0,0)
+        this.creditPanel.opacity = 255
+        this.creditPanel.scale = cc.v2(0.69,0.69)
         var action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2, 0.69, 0.69).easing(cc.easeExponentialIn()),
