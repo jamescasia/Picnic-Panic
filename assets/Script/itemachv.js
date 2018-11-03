@@ -16,7 +16,8 @@ cc.Class({
         storage:null,
         achievements:null,
         desc:cc.Node,
-        home:cc.Node
+        home:cc.Node,
+        collectAchieveSound:cc.AudioClip
 
 
 
@@ -69,6 +70,7 @@ cc.Class({
 
     },
     collect(e,a){
+        cc.audioEngine.playEffect(this.collectAchieveSound, false, global.bgVolume*0.6)
         //only collectable if achieved and not collected
         if( ! (this.achievements[parseInt(this.namae)].collected ) && (this.achievements[parseInt(this.namae)].achieved ) ){
            this.storage.achievements[parseInt(this.namae)].collected = true 

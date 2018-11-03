@@ -66,7 +66,10 @@ cc.Class({
   
         }
 
-        // if(cc.director.getScene()._name == "main" ) cc.audioEngine.setMusicVolume(global.bgVolume*0.2) 
+        if(cc.director.getScene()._name == "main" ) {cc.audioEngine.setMusicVolume(global.bgVolume*0.33) 
+        cc.audioEngine.setEffectsVolume(global.bgVolume) }
+
+        if(cc.director.getScene()._name == "realhome" ) {cc.audioEngine.setMusicVolume(global.bgVolume )  }
     },
 
 

@@ -4837,6 +4837,7 @@
     "bgMusic": {
       "__uuid__": "acb038f3-4247-4694-b84f-aa204cde968e"
     },
+    "achievelist": [],
     "achvContent": {
       "__id__": 44
     },
@@ -4868,6 +4869,10 @@
     },
     "uiSound": {
       "__uuid__": "4e71f4d4-826f-411e-b793-13b02a5514da"
+    },
+    "hasOneUncollected": false,
+    "achvBtn": {
+      "__id__": 25
     }
   }
 ]

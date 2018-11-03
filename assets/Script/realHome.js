@@ -20,6 +20,7 @@ cc.Class({
         highestScore:0,
         highestCombo:0,
         bgMusic:cc.AudioClip,
+        achievelist:[],
         achvContent:cc.Node,
         achvPanel:cc.Node,
         itemFab:cc.Prefab,
@@ -31,7 +32,11 @@ cc.Class({
         bcombo:cc.Node,
         quitNode:cc.Node,
         titleNode:cc.Node,
-        uiSound:cc.AudioClip
+        uiSound:cc.AudioClip,
+        hasOneUncollected:false,
+        achvBtn:cc.Node,
+        achPos:cc.v2
+        
 
 
 
@@ -39,6 +44,7 @@ cc.Class({
     }, 
      
     onLoad () {           
+        this.achPos = this.achvBtn.position
         if (cc.sys.os == cc.sys.OS_ANDROID)jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dismissLoader", "()V");
         this.numOfAchv = 13
         var t = this
@@ -160,20 +166,59 @@ cc.Class({
         this.usingFrenzy = false
         this.usingFreeze = false
         this.usingSpawn = false
+        
         this.storage.usingFrenzy = false
         this.storage.usingFreeze = false
-        this.storage.usingSpawn = false
+        this.storage.usingSpawn = false 
+        
+
+        
         this.ss() 
         this.achvPanel.opacity = 0
         this.achvPanel.setLocalZOrder(-10)
 
 
     },
+    shakeAchv(){ 
+         
+            var shake = cc.repeatForever(
+                cc.sequence(
+                    cc.spawn(
+                        cc.moveBy(1.26, 0, 19).easing(cc.easeCubicActionOut()),
+
+                        cc.sequence(
+                            cc.rotateTo(0.2, 4),
+                            cc.rotateTo(0.15, 12),
+                            cc.rotateTo(0.23, 4),
+                            cc.rotateTo(0.14, 1),
+                            cc.rotateTo(0.2, -8),
+                            cc.rotateTo(0.14, -11),
+                            cc.rotateTo(0.2, -16))),
+
+
+                    cc.spawn(
+                        cc.sequence(
+                            cc.rotateTo(0.1, -12),
+                            cc.rotateTo(0.2, -8),
+                            cc.rotateTo(0.2, -3),
+                            cc.rotateTo(0.2, 0),
+                            cc.rotateTo(0.2, 3),
+                            cc.rotateTo(0.1, 0)),
+
+                        cc.moveBy(1, 0, -19)),
+                    cc.delayTime(1.9)
+
+                )
+            ).speed(3)
+            this.achvBtn.runAction(shake)
+
+         
+    },
 
     start () {
 
     },
-    setAchievements(){
+    setAchievements(){ 
         
         console.log("gitaya achieve ba", this.storage)
 
@@ -185,11 +230,23 @@ cc.Class({
             if(   this.storage.achievements[ach].type == "combo" && parseInt( this.storage.achievements[ach].req )<= parseInt(this.storage.highestCombo)  ) console.log("WOW"), console.log("WOW"), this.storage.achievements[ach].achieved = true
             if(   this.storage.achievements[ach].type == "score" && parseInt( this.storage.achievements[ach].req )<= parseInt(this.storage.highestScore)  )   this.storage.achievements[ach].achieved = true
             if(   this.storage.achievements[ach].type == "games" && parseInt( this.storage.achievements[ach].req )<= parseInt(this.storage.numOfGames)  )  this.storage.achievements[ach].achieved = true
-            }
+            
+            
+        }
 
 
         }
+        this.achievelist =  ( (this.storage.achievements)) 
         this.ss()
+        console.log(this.achievelist, 'out')
+        var arrayLength = this.achievelist.length;
+        for (var i = 0; i < arrayLength; i++) {
+            console.log("ASD", this.achievelist[i].collected , this.achievelist[i].achieved )
+            if(   this.achievelist[i].achieved   && !this.achievelist[i].collected) this.hasOneUncollected = true
+            //Do something
+        }
+        console.log(this.hasOneUncollected)
+        if(this.hasOneUncollected) this.shakeAchv() 
 
     },
     preloadScenes(){
@@ -261,6 +318,12 @@ cc.Class({
 
     },
     showAchievements(){
+        this.achvBtn.stopAllActions()
+        this.achvBtn.rotation = 0
+        this.achvBtn.position = this.achPos
+        this.achvBtn.getComponent(cc.Widget).left = 20
+            this.achvBtn.getComponent(cc.Widget).bottom = 130
+        // this.achvBtn.position= cc.v2(-229.8, -279.8)
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.bcombo.getComponent(cc.Label).string = this.highestCombo
         this.bscore.getComponent(cc.Label).string = this.highestScore
@@ -298,8 +361,12 @@ cc.Class({
     },
     closeAchvmnts(e,a){ 
         if(a == "credits") this.creditPanel.opacity = 0, this.creditPanel.setLocalZOrder(-10) ,this.achvPanel.position =cc.v2(-900,-900)
+        this.ss()
         this.achvPanel.opacity = 0
         this.achvPanel.setLocalZOrder(-10)
+       
+        // this.setAchievements()
+        
     },
     credits(){
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 

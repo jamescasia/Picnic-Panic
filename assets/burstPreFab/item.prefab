@@ -519,6 +519,7 @@
       "__id__": 1
     },
     "_enabled": true,
+    "namae": "",
     "collected": {
       "__uuid__": "615ae944-7317-4c7f-ab63-fb790b7e1a1a"
     },
@@ -539,6 +540,10 @@
     "achievements": null,
     "desc": {
       "__id__": 7
+    },
+    "home": null,
+    "collectAchieveSound": {
+      "__uuid__": "cda500b4-ef8c-45d7-bef2-b9dac384b275"
     }
   },
   {

@@ -5831,7 +5831,7 @@
       "__id__": 160
     },
     "_id": "19q/JCc0NHRpTb0fMMGte9",
-    "_opacity": 0,
+    "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
@@ -5922,7 +5922,7 @@
       "__id__": 163
     },
     "_id": "f3bdSOr2JEFbflsgmhrSPw",
-    "_opacity": 0,
+    "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
@@ -5947,7 +5947,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 0,
+      "x": 1000,
       "y": 0
     },
     "_skewX": 0,
@@ -6013,7 +6013,7 @@
       "__id__": 166
     },
     "_id": "50yJZprhNGML1OJVM7NI9G",
-    "_opacity": 0,
+    "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
@@ -6038,7 +6038,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 0,
+      "x": 2000,
       "y": 0
     },
     "_skewX": 0,
@@ -6104,7 +6104,7 @@
       "__id__": 169
     },
     "_id": "c7/EH7xpBL46X2cumVjFlk",
-    "_opacity": 0,
+    "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
@@ -6129,7 +6129,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 0,
+      "x": 3000,
       "y": 0
     },
     "_skewX": 0,
@@ -14392,7 +14392,17 @@
     "doneAudio": {
       "__uuid__": "d953545b-e742-4fc1-9cce-8d689f57c2a2"
     },
-    "newBest": false
+    "timeTick": {
+      "__uuid__": "d9d4c83e-f098-4452-b1f5-28eaa6ee8bae"
+    },
+    "newBestAudio": {
+      "__uuid__": "14e22e33-ece8-40d5-92b6-97a35ef47e00"
+    },
+    "newBest": false,
+    "explodeClip": {
+      "__uuid__": "d9b28539-8fe2-46bc-857d-8bf2cb2c6c9e"
+    },
+    "ticked": false
   },
   {
     "__type__": "cc.Node",

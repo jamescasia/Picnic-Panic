@@ -310,7 +310,7 @@ cc.Class({
 
             cc.spawn(
                 cc.scaleTo(2, 2,2),
-                cc.moveBy(2,   as[ parseInt(cc.rand())%2]* (500+cc.rand()%400) ,  as[parseInt(cc.rand())%2]*(500+cc.rand()%400)).easing(cc.easeCircleActionOut())
+                cc.moveBy(2,   as[ parseInt(cc.rand())%2]* (900+cc.rand()%400) ,  as[parseInt(cc.rand())%2]*(900+cc.rand()%400)).easing(cc.easeCircleActionOut())
             ),
             cc.spawn(
                 cc.moveBy(0.4,0,-1000 ).easing(cc.easeExponentialIn()),

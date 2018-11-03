@@ -149,7 +149,11 @@ cc.Class({
         uiSound:cc.AudioClip,
         startSound:cc.AudioClip,
         doneAudio:cc.AudioClip,
+        timeTick:cc.AudioClip,
+        newBestAudio:cc.AudioClip,
         newBest:false,
+        explodeClip:cc.AudioClip,
+        ticked:false
 
 
 
@@ -181,6 +185,7 @@ cc.Class({
 
     },
     closePanel() {
+        this.tuts.position = cc.v2(-1000, -1000)
         this.tuts.setLocalZOrder(-10)
         this.startNow()
         // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
@@ -191,7 +196,7 @@ cc.Class({
     showTuts() {
         console.log('SJWOFAODOA')
 
-        this.tuts.position = cc.v2(21, -36)
+        this.tuts.position = cc.v2(24, 0)
         this.tuts.setLocalZOrder(10) 
 
 
@@ -245,10 +250,7 @@ cc.Class({
             }
         }, this.node);
 
-
-        // cc.audioEngine.setEffectsVolume(global.bgVolume) 
-        cc.audioEngine.setMusicVolume(global.bgVolume*0.5) 
-        // cc.audioEngine.setEffectsVolume(global.bgVolume) 
+ 
 
         this.loadData()
 
@@ -480,12 +482,17 @@ cc.Class({
             timectr += 0.05
             //0.05
             t.lapse = timectr
+            if (left <= 6 && !this.ticked) this.tick()
             if (left <= 0 && !this.gameover) this.gameOver()
             t.timeLabel.getComponent(cc.Label).string = String(left).replace(".", ':')
         }, 0.05, 1500, del);
 
 
 
+    },
+    tick(){
+        cc.audioEngine.playEffect( this.timeTick,false,global.bgVolume *0.9) 
+        this.ticked = true
     },
     closed() {
         // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
@@ -575,14 +582,14 @@ cc.Class({
                 
                 var call = function () {
                     let nbac = cc.sequence(
-                        cc.delayTime(0.83),
+                        cc.delayTime(0.79),
                         cc.spawn(
                         
 
                         cc.fadeIn(0.14),
                         cc.scaleTo(0.14, 1,1 )
                     ))
-                   if(this.newBest) this.nbNode.runAction(nbac)
+                   if(this.newBest) this.nbNode.runAction(nbac), cc.audioEngine.playEffect( this.newBestAudio,false,global.bgVolume)
                     
                     this.comboAnim(this.highestCombo) }
                 var action = cc.sequence(
@@ -716,6 +723,7 @@ cc.Class({
     gameOverAnim() {
         this.endPanel.setLocalZOrder(12)
         this.endPanel.position = cc.v2(0, 0)
+        cc.audioEngine.playEffect(this.explodeClip, false, global.bgVolume*0.6)
 
         //animation 
         var funcs = function () {

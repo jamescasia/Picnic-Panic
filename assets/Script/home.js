@@ -144,6 +144,7 @@ cc.Class({
         this.node.opacity = 0
         this.node.setLocalZOrder(-10)
         this.node.scale = cc.v2(0,0) 
+        this.node.position = cc.v2(-1000,-1000)
         this.node.emit('destroyed')
         this.node.destroy()
         
@@ -317,7 +318,7 @@ cc.Class({
             ), 
             cc.callFunc(done, this)
         )
-        this.promptLayout.runAction(action)
+        // this.promptLayout.runAction(action)
         var done  = function(){ 
         this.promptLayout.opacity = 255
         this.promptLayout.scale = cc.v2(1,1)}
@@ -390,8 +391,8 @@ cc.Class({
         this.errorPrompt.setLocalZOrder(10)
 
  
-        this.errorPrompt.opacity = 0
-        this.errorPrompt.scale = cc.v2(0,0)
+        this.errorPrompt.opacity = 255
+        this.errorPrompt.scale = cc.v2(1,1)
         var action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
@@ -399,7 +400,7 @@ cc.Class({
             ), 
             cc.callFunc(done, this)
         )
-        this.errorPrompt.runAction(action)
+        // this.errorPrompt.runAction(action)
         var done  = function(){ 
             this.errorPrompt.opacity = 255
             this.errorPrompt.scale = cc.v2(1,1)
