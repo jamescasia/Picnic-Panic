@@ -1,6 +1,6 @@
 
  
-var global = require('global')  
+let global = require('global')  
 cc.Class({
     extends: cc.Component,
 
@@ -41,7 +41,7 @@ cc.Class({
     onLoad () { 
         this.dataLoad()  
         this.prize.getComponent(cc.Label).string = this.achievements[parseInt(this.namae)].prize + ""
-        for (var ach in this.achievements) {
+        for (let ach in this.achievements) {
             if(!ach.achieved){
 
             if(  ach.type == "combo" && parseInt(ach.req )>= parseInt(this.storage.highestCombo)  ) ach.achieved = true

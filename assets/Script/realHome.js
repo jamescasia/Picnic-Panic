@@ -1,5 +1,5 @@
  
-var global = require('global')  
+let global = require('global')  
 cc.Class({
     extends: cc.Component,
 
@@ -35,7 +35,13 @@ cc.Class({
         uiSound:cc.AudioClip,
         hasOneUncollected:false,
         achvBtn:cc.Node,
-        achPos:cc.v2
+        achPos:cc.v2,
+        playBtn:cc.Node, 
+        infBtn:cc.Node,
+        setBtn:cc.Node,
+        shopBtn:cc.Node,
+
+
         
 
 
@@ -43,11 +49,19 @@ cc.Class({
  
     }, 
      
-    onLoad () {           
-        this.achPos = this.achvBtn.position
+    onLoad () {        
+        // this.achvBtn.scale = cc.v2(0,0)
+        // this.playBtn.scale = cc.v2(0,0)
+        // this.infBtn.scale = cc.v2(0,0)
+        // this.setBtn.scale = cc.v2(0,0)
+        // this.infBtn.scale = cc.v2(0,0)
+        // this.shopBtn.scale = cc.v2(0,0)   
+        // this.titleNode.scale = cc.v2(0,0)
+        this.titleNode.position  = cc.v2(0 ,700)    
+        
         if (cc.sys.os == cc.sys.OS_ANDROID)jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dismissLoader", "()V");
         this.numOfAchv = 13
-        var t = this
+        let t = this
        
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
@@ -66,7 +80,7 @@ cc.Class({
                 }
             }
         }, this.node);
-        var breathing = cc.repeatForever(
+        let breathing = cc.repeatForever(
             cc.sequence(
                 cc.moveBy(2, 0, -12).easing(cc.easeCubicActionOut()),
                 cc.moveBy(2, 0, 6).easing(cc.easeQuarticActionIn()),
@@ -96,7 +110,7 @@ cc.Class({
         this.shap.setLocalZOrder(10)
         this.shap.opacity = 255
         this.shap.scale = cc.v2(1,1)
-        var action = cc.sequence(
+        let action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
                 cc.fadeIn(0.2).easing(cc.easeExponentialIn())
@@ -104,7 +118,7 @@ cc.Class({
             cc.callFunc(done, this)
         )
         this.shap.runAction(action)
-        var done  = function(){ 
+        let done  = function(){ 
         this.shap.opacity = 255
         this.shap.scale = cc.v2(1,1)
     }
@@ -130,19 +144,19 @@ cc.Class({
         // this.storage = null
         if(  this.storage == null  ){
             
-            var a0={collected:false,prize:100,achieved:false,desc:"Score 100 points!", type:"score", req:100 }
-            var a1={collected:false,prize:100,achieved:false ,desc:"Achieve a 20-long combo" , type:"combo", req:20 }
-            var a2={collected:false,prize:200,achieved:false ,desc:"Score 500 points!", type:"score", req:500 }
-            var a3={collected:false,prize:200,achieved:false ,desc:"Achieve a 30-long combo" , type:"combo", req:30 }
-            var a4={collected:false,prize:500,achieved:false ,desc:"Score 1000 points!" , type:"score", req:1000 }
-            var a5={collected:false,prize:500,achieved:false ,desc:"Achieve a 40-long combo" , type:"combo", req:40 }
-            var a6={collected:false,prize:1000,achieved:false ,desc:"Score 2000 points!" , type:"score", req:2000 }
-            var a7={collected:false,prize:1000,achieved:false, desc:"Achieve a 60-long combo" , type:"combo", req:60 }
-            var a8={collected:false,prize:2000,achieved:false ,desc:"Score 5000 points!" , type:"score", req:5000 }
-            var a9={collected:false,prize:3000,achieved:false,desc:"Play 100 games" , type:"games", req:100 }
-            var a10={collected:false,prize:5000,achieved:false,desc:"Play 200 games" , type:"games", req:200 }
-            var a11={collected:false,prize:7000,achieved:false,desc:"Play 500 games" , type:"games", req:500 }
-            var a12={collected:false,prize:10000,achieved:false,desc:"Play 1000 games" , type:"games", req:1000 }
+            let a0={collected:false,prize:100,achieved:false,desc:"Score 100 points!", type:"score", req:100 }
+            let a1={collected:false,prize:100,achieved:false ,desc:"Achieve a 20-long combo" , type:"combo", req:20 }
+            let a2={collected:false,prize:200,achieved:false ,desc:"Score 500 points!", type:"score", req:500 }
+            let a3={collected:false,prize:200,achieved:false ,desc:"Achieve a 30-long combo" , type:"combo", req:30 }
+            let a4={collected:false,prize:500,achieved:false ,desc:"Score 1000 points!" , type:"score", req:1000 }
+            let a5={collected:false,prize:500,achieved:false ,desc:"Achieve a 40-long combo" , type:"combo", req:40 }
+            let a6={collected:false,prize:1000,achieved:false ,desc:"Score 2000 points!" , type:"score", req:2000 }
+            let a7={collected:false,prize:1000,achieved:false, desc:"Achieve a 60-long combo" , type:"combo", req:60 }
+            let a8={collected:false,prize:2000,achieved:false ,desc:"Score 5000 points!" , type:"score", req:5000 }
+            let a9={collected:false,prize:3000,achieved:false,desc:"Play 100 games" , type:"games", req:100 }
+            let a10={collected:false,prize:5000,achieved:false,desc:"Play 200 games" , type:"games", req:200 }
+            let a11={collected:false,prize:7000,achieved:false,desc:"Play 500 games" , type:"games", req:500 }
+            let a12={collected:false,prize:10000,achieved:false,desc:"Play 1000 games" , type:"games", req:1000 }
             
             this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
                 usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
@@ -181,35 +195,22 @@ cc.Class({
     },
     shakeAchv(){ 
          
-            var shake = cc.repeatForever(
+            let shake = cc.repeatForever(
                 cc.sequence(
                     cc.spawn(
-                        cc.moveBy(1.26, 0, 19).easing(cc.easeCubicActionOut()),
+                            cc.fadeTo(0.7,155)  ,
+                            cc.delayTime(0)
+                            // cc.scaleTo(0.7, 1.34, 1.34)
+                        ),
+                            
+                    cc.spawn( 
+                        cc.fadeTo(0.7, 255)  ,
+                            // cc.scaleBy(0.7, 1.3, 1.3),
+                        cc.delayTime(0)),
+                ), 
 
-                        cc.sequence(
-                            cc.rotateTo(0.2, 4),
-                            cc.rotateTo(0.15, 12),
-                            cc.rotateTo(0.23, 4),
-                            cc.rotateTo(0.14, 1),
-                            cc.rotateTo(0.2, -8),
-                            cc.rotateTo(0.14, -11),
-                            cc.rotateTo(0.2, -16))),
-
-
-                    cc.spawn(
-                        cc.sequence(
-                            cc.rotateTo(0.1, -12),
-                            cc.rotateTo(0.2, -8),
-                            cc.rotateTo(0.2, -3),
-                            cc.rotateTo(0.2, 0),
-                            cc.rotateTo(0.2, 3),
-                            cc.rotateTo(0.1, 0)),
-
-                        cc.moveBy(1, 0, -19)),
-                    cc.delayTime(1.9)
-
-                )
-            ).speed(3)
+                
+            )
             this.achvBtn.runAction(shake)
 
          
@@ -217,12 +218,40 @@ cc.Class({
 
     start () {
 
+        let a = cc.sequence(   cc.scaleTo(0,0,0), cc.delayTime(0.4), cc.spawn(cc.fadeIn(0.4),cc.scaleTo(0.4,0.76271,0.76271).easing(cc.easeCubicActionOut()))  )
+        let b = cc.sequence(   cc.scaleTo(0,0,0), cc.delayTime(0.4), cc.spawn(cc.fadeIn(0.4),cc.scaleTo(0.4,1.3,1.3).easing(cc.easeCubicActionOut()) ) )
+        let c = cc.sequence(   cc.scaleTo(0,0,0), cc.delayTime(0.4),  cc.spawn(cc.fadeIn(0.4),cc.scaleTo(0.4,1.3,1.3).easing(cc.easeCubicActionOut()) )  )
+        let d = cc.sequence(   cc.scaleTo(0,0,0), cc.delayTime(0.4),  cc.spawn(cc.fadeIn(0.4),cc.scaleTo(0.4,1.3,1.3).easing(cc.easeCubicActionOut()) )  )
+        let e = cc.sequence(   cc.scaleTo(0,0,0), cc.delayTime(0.4),  cc.spawn(cc.fadeIn(0.4),cc.scaleTo(0.4,1.3,1.3).easing(cc.easeCubicActionOut()) ) )
+        
+        
+
+        this.playBtn.runAction(a)
+        this.achvBtn.runAction(b)
+        this.setBtn.runAction(c)
+        this.shopBtn.runAction(d)
+        this.infBtn.runAction(e)
+
+        // let f = cc.sequence(    
+        //     cc.scaleTo(0,0.5,0.5),
+        //     cc.delayTime(0.4), 
+        //     cc.spawn(cc.delayTime(0),cc.moveTo(0.4 , 0 , 160*(cc.director.getWinSize().height/cc.director.getWinSize().width) + 20).easing(cc.easeCubicActionOut()), 
+        //     // cc.scaleTo(0.4,0.5,0.5).easing(cc.easeCubicActionOut())
+        // )  
+        // )
+        
+        this.titleNode.position  = cc.v2(0 , 160*(cc.director.getWinSize().height/cc.director.getWinSize().width) + 20)
+        let f = cc.sequence(   cc.scaleTo(0,0,0), cc.delayTime(0.4),  cc.spawn(cc.fadeIn(0.4),cc.scaleTo(0.4,.5,.5).easing(cc.easeCubicActionOut())   ))
+            
+        this.titleNode.runAction(f)
+
+
     },
     setAchievements(){ 
         
         console.log("gitaya achieve ba", this.storage)
 
-        for (var ach in this.storage.achievements) {
+        for (let ach in this.storage.achievements) {
             if(! this.storage.achievements[ach].achieved){
 
             console.log("ach", this.storage.achievements[ach])
@@ -239,14 +268,15 @@ cc.Class({
         this.achievelist =  ( (this.storage.achievements)) 
         this.ss()
         console.log(this.achievelist, 'out')
-        var arrayLength = this.achievelist.length;
-        for (var i = 0; i < arrayLength; i++) {
+        let arrayLength = this.achievelist.length;
+        for (let i = 0; i < arrayLength; i++) {
             console.log("ASD", this.achievelist[i].collected , this.achievelist[i].achieved )
             if(   this.achievelist[i].achieved   && !this.achievelist[i].collected) this.hasOneUncollected = true
             //Do something
         }
         console.log(this.hasOneUncollected)
-        if(this.hasOneUncollected) this.shakeAchv() 
+        // this.achPos = this.achvBtn.position
+        // if(this.hasOneUncollected) this.shakeAchv() 
 
     },
     preloadScenes(){
@@ -255,12 +285,12 @@ cc.Class({
     },
     goSettings(){
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
-        var set = cc.instantiate(this.settingsFab)
+        let set = cc.instantiate(this.settingsFab)
         this.node.addChild(set)
         set.setLocalZOrder(10) 
         set.opacity = 255
         set.scale = cc.v2(1,1)
-        var action = cc.sequence(
+        let action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
                 cc.fadeIn(0.2).easing(cc.easeExponentialIn())
@@ -268,7 +298,7 @@ cc.Class({
             cc.callFunc(done, this)
         )
         set.runAction(action)
-        var done  = function(){ 
+        let done  = function(){ 
         set.opacity = 255
         set.scale = cc.v2(1,1)
         }
@@ -319,10 +349,10 @@ cc.Class({
     },
     showAchievements(){
         this.achvBtn.stopAllActions()
-        this.achvBtn.rotation = 0
-        this.achvBtn.position = this.achPos
-        this.achvBtn.getComponent(cc.Widget).left = 20
-            this.achvBtn.getComponent(cc.Widget).bottom = 130
+        // this.achvBtn.rotation = 0
+        // this.achvBtn.position = this.achPos
+        // this.achvBtn.getComponent(cc.Widget).left = 20
+        //     this.achvBtn.getComponent(cc.Widget).bottom = 130
         // this.achvBtn.position= cc.v2(-229.8, -279.8)
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.bcombo.getComponent(cc.Label).string = this.highestCombo
@@ -333,7 +363,7 @@ cc.Class({
         this.achvPanel.setLocalZOrder(10)
         this.achvPanel.opacity = 255
         this.achvPanel.scale = cc.v2(0.69,0.69)
-        var action = cc.sequence(
+        let action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2, 0.69, 0.69).easing(cc.easeExponentialIn()),
                 cc.fadeIn(0.2).easing(cc.easeExponentialIn())
@@ -341,14 +371,14 @@ cc.Class({
             cc.callFunc(done, this)
         )
         this.achvPanel.runAction(action)
-        var done  = function(){ 
+        let done  = function(){ 
         this.achvPanel.opacity = 255
         this.achvPanel.scale = cc.v2(0.69,0.69)}
 
         
-        var pos = -40
-        for(var a in Array.from(Array(this.numOfAchv).keys())){
-            var item = cc.instantiate(this.itemFab)
+        let pos = -40
+        for(let a in Array.from(Array(this.numOfAchv).keys())){
+            let item = cc.instantiate(this.itemFab)
             item.getComponent('itemachv').namae = ""+ a
             item.position = cc.v2(-300 , pos)
             this.achvContent.addChild(item)
@@ -374,7 +404,7 @@ cc.Class({
         this.creditPanel.setLocalZOrder(10) 
         this.creditPanel.opacity = 255
         this.creditPanel.scale = cc.v2(0.69,0.69)
-        var action = cc.sequence(
+        let action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2, 0.69, 0.69).easing(cc.easeExponentialIn()),
                 cc.fadeIn(0.2).easing(cc.easeExponentialIn())
@@ -382,7 +412,7 @@ cc.Class({
             cc.callFunc(done, this)
         )
         this.creditPanel.runAction(action)
-        var done  = function(){ 
+        let done  = function(){ 
         this.creditPanel.opacity = 255
         this.creditPanel.scale = cc.v2(0.69,0.69)}
 

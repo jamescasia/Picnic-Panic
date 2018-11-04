@@ -7,7 +7,7 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
-var global  = require('global')
+let global  = require('global')
 cc.Class({
     extends: cc.Component,
 
@@ -38,13 +38,13 @@ cc.Class({
     },
     showTuts(){
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
-        var tuts = cc.instantiate(this.tutsFab)
+        let tuts = cc.instantiate(this.tutsFab)
         tuts.position = cc.v2(24, 0 )
         this.node.addChild(tuts)
   
         tuts.opacity = 0
         tuts.scale = cc.v2(0,0)
-        var action = cc.sequence(
+        let action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2,1, 1).easing(cc.easeExponentialIn()),
                 cc.fadeIn(0.2).easing(cc.easeExponentialIn())
@@ -52,7 +52,7 @@ cc.Class({
             cc.callFunc(done, this)
         )
         tuts.runAction(action)
-        var done  = function(){ 
+        let done  = function(){ 
             tuts.opacity = 255
             tuts.scale = cc.v2(1,1)}
 

@@ -1,5 +1,5 @@
 
-var global = require('global')
+let global = require('global')
 
 cc.Class({
     extends: cc.Component,
@@ -172,7 +172,7 @@ cc.Class({
     setEnemy() {
         if (typeof FBInstant === 'undefined') return;
 
-        var enemyImage = new Image();
+        let enemyImage = new Image();
         enemyImage.crossOrigin = 'anonymous';
         enemyImage.src = FBInstant.player.getPhoto();
         cc.loader.load(enemyImage.src, (err, texture) => {
@@ -187,10 +187,7 @@ cc.Class({
     closePanel() {
         this.tuts.position = cc.v2(-1000, -1000)
         this.tuts.setLocalZOrder(-10)
-        this.startNow()
-        // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
-
-        // this.initUnit()
+        this.startNow() 
 
     },
     showTuts() {
@@ -203,7 +200,7 @@ cc.Class({
   
         this.tuts.opacity = 0
         this.tuts.scale = cc.v2(0,0)
-        var action = cc.sequence(
+        let action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
                 cc.fadeIn(0.2).easing(cc.easeExponentialIn())
@@ -211,7 +208,7 @@ cc.Class({
             cc.callFunc(done, this)
         )
         this.tuts.runAction(action)
-        var done  = function(){ 
+        let done  = function(){ 
         this.tuts.opacity = 255
         this.tuts.scale = cc.v2(1,1)}
 
@@ -224,15 +221,15 @@ cc.Class({
         this.soundArr = [this.c1, this.c2, this.c3, this.c4, this.c5, this.c6, this.c7, this.c8] 
 
 
-        var randbg = parseInt(cc.rand() % 3)
-        var bgs = [this.bg1, this.bg3, this.bg4]
+        let randbg = parseInt(cc.rand() % 3)
+        let bgs = [this.bg1, this.bg3, this.bg4]
 
         this.bg.position = cc.v2(Math.random() * (1550) - 775, -28)
         if (randbg == 1) this.bg.position = cc.v2(Math.random() * (905) - 775, -28)
         this.bg.getComponent(cc.Sprite).spriteFrame = bgs[randbg]
 
 
-        var t = this
+        let t = this
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed: function (keyCode, event) {
@@ -258,12 +255,12 @@ cc.Class({
 
 
         
-        var show = function () {
+        let show = function () {
             if (this.numOfGames == 0) this.showTuts()
             else this.showPrompt()
 
         }
-        var delay = cc.sequence(cc.delayTime(1.2), cc.callFunc(show, this))
+        let delay = cc.sequence(cc.delayTime(1.2), cc.callFunc(show, this))
         this.node.runAction(delay)
 
 
@@ -274,7 +271,11 @@ cc.Class({
 
     },
     start(){
-        this.initUnit()
+        this.hud.opacity = 0
+        this.matrix.getChildByName('table').scale = cc.v2(0,0)
+        this.hud.position = cc.v2(this.hud.position.x, this.hud.position.y +400)
+        let del = cc.sequence(cc.delayTime(0.15), cc.callFunc(this.initUnit, this))
+        this.bg.runAction(del)
 
 
     },
@@ -285,19 +286,19 @@ cc.Class({
         console.log('fiiirst ', this.storage)
 
         if (this.storage == null) {
-            var a0 = { collected: false, prize: 100, achieved: false, desc: "Score 100 points!", type: "score", req: 100 }
-            var a1 = { collected: false, prize: 100, achieved: false, desc: "Achieve a 20-long combo", type: "combo", req: 20 }
-            var a2 = { collected: false, prize: 200, achieved: false, desc: "Score 500 points!", type: "score", req: 500 }
-            var a3 = { collected: false, prize: 200, achieved: false, desc: "Achieve a 30-long combo", type: "combo", req: 30 }
-            var a4 = { collected: false, prize: 500, achieved: false, desc: "Score 1000 points!", type: "score", req: 1000 }
-            var a5 = { collected: false, prize: 500, achieved: false, desc: "Achieve a 40-long combo", type: "combo", req: 40 }
-            var a6 = { collected: false, prize: 1000, achieved: false, desc: "Score 2000 points!", type: "score", req: 2000 }
-            var a7 = { collected: false, prize: 1000, achieved: false, desc: "Achieve a 60-long combo", type: "combo", req: 60 }
-            var a8 = { collected: false, prize: 2000, achieved: false, desc: "Score 5000 points!", type: "score", req: 5000 }
-            var a9 = { collected: false, prize: 3000, achieved: false, desc: "Play 100 games", type: "games", req: 100 }
-            var a10 = { collected: false, prize: 5000, achieved: false, desc: "Play 200 games", type: "games", req: 200 }
-            var a11 = { collected: false, prize: 7000, achieved: false, desc: "Play 500 games", type: "games", req: 500 }
-            var a12 = { collected: false, prize: 10000, achieved: false, desc: "Play 1000 games", type: "games", req: 1000 }
+            let a0 = { collected: false, prize: 100, achieved: false, desc: "Score 100 points!", type: "score", req: 100 }
+            let a1 = { collected: false, prize: 100, achieved: false, desc: "Achieve a 20-long combo", type: "combo", req: 20 }
+            let a2 = { collected: false, prize: 200, achieved: false, desc: "Score 500 points!", type: "score", req: 500 }
+            let a3 = { collected: false, prize: 200, achieved: false, desc: "Achieve a 30-long combo", type: "combo", req: 30 }
+            let a4 = { collected: false, prize: 500, achieved: false, desc: "Score 1000 points!", type: "score", req: 1000 }
+            let a5 = { collected: false, prize: 500, achieved: false, desc: "Achieve a 40-long combo", type: "combo", req: 40 }
+            let a6 = { collected: false, prize: 1000, achieved: false, desc: "Score 2000 points!", type: "score", req: 2000 }
+            let a7 = { collected: false, prize: 1000, achieved: false, desc: "Achieve a 60-long combo", type: "combo", req: 60 }
+            let a8 = { collected: false, prize: 2000, achieved: false, desc: "Score 5000 points!", type: "score", req: 5000 }
+            let a9 = { collected: false, prize: 3000, achieved: false, desc: "Play 100 games", type: "games", req: 100 }
+            let a10 = { collected: false, prize: 5000, achieved: false, desc: "Play 200 games", type: "games", req: 200 }
+            let a11 = { collected: false, prize: 7000, achieved: false, desc: "Play 500 games", type: "games", req: 500 }
+            let a12 = { collected: false, prize: 10000, achieved: false, desc: "Play 1000 games", type: "games", req: 1000 }
 
             this.storage = {
                 frenzyBoosts: 0, freezeBoosts: 0, spawnBoosts: 0, usingFrenzy: false, usingFreeze: false,
@@ -364,28 +365,28 @@ cc.Class({
         this.shap.scale = cc.v2(0, 0)
     },
     boosterShow() {
-        var aa = cc.sequence(cc.delayTime(0.15), cc.spawn(cc.fadeIn(1), cc.moveBy(1, 0, 155)).easing(cc.easeCubicActionOut()),
+        let aa = cc.sequence(cc.delayTime(0.15), cc.spawn(cc.fadeIn(1), cc.moveBy(1, 0, 155)).easing(cc.easeCubicActionOut()),
             cc.moveBy(1, 0, 0), cc.spawn(cc.fadeOut(1), cc.moveBy(1, 0, -155)).easing(cc.easeQuinticActionIn())
         ).speed(2)
-        var ssf = cc.sequence(cc.delayTime(0.3), cc.spawn(cc.fadeIn(1), cc.moveBy(1, 0, 155)).easing(cc.easeCubicActionOut()),
+        let ssf = cc.sequence(cc.delayTime(0.3), cc.spawn(cc.fadeIn(1), cc.moveBy(1, 0, 155)).easing(cc.easeCubicActionOut()),
             cc.moveBy(1, 0, 0), cc.spawn(cc.fadeOut(1), cc.moveBy(1, 0, -155)).easing(cc.easeQuinticActionIn())
         ).speed(2)
-        var bb = cc.sequence(cc.spawn(cc.fadeIn(1), cc.moveBy(1, 0, 155)).easing(cc.easeCubicActionOut()),
+        let bb = cc.sequence(cc.spawn(cc.fadeIn(1), cc.moveBy(1, 0, 155)).easing(cc.easeCubicActionOut()),
             cc.moveBy(1, 0, 0), cc.spawn(cc.fadeOut(1), cc.moveBy(1, 0, -155)).easing(cc.easeQuinticActionIn())
         ).speed(2)
-        var flash = cc.sequence(cc.spawn(cc.fadeIn(1), cc.moveBy(1, 759, 0)).easing(cc.easeCubicActionOut()),
+        let flash = cc.sequence(cc.spawn(cc.fadeIn(1), cc.moveBy(1, 759, 0)).easing(cc.easeCubicActionOut()),
             cc.moveBy(1, 0, 0), cc.spawn(cc.fadeOut(1), cc.moveBy(1, 759, 0)).easing(cc.easeQuinticActionIn())
         ).speed(2)
         let children = []
         if (this.usingFrenzy) {
 
-            var frenzyBoostSprt = cc.instantiate(this.frenzyBoostSprt);
+            let frenzyBoostSprt = cc.instantiate(this.frenzyBoostSprt);
             this.boostersPanel.addChild(frenzyBoostSprt);
             children.push(frenzyBoostSprt)
         }
 
         if (this.usingFreeze) {
-            var timeBoostSprt = cc.instantiate(this.timeBoostSprt);
+            let timeBoostSprt = cc.instantiate(this.timeBoostSprt);
             this.boostersPanel.addChild(timeBoostSprt);
             this.useFreezeBoost()
             children.push(timeBoostSprt)
@@ -393,7 +394,7 @@ cc.Class({
         }
 
         if (this.usingSpawn) {
-            var spawnBoostSpr = cc.instantiate(this.spawnBoostSpr);
+            let spawnBoostSpr = cc.instantiate(this.spawnBoostSpr);
             this.boostersPanel.addChild(spawnBoostSpr);
             children.push(spawnBoostSpr)
         }
@@ -420,14 +421,14 @@ cc.Class({
     onPause() {
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.pausemenu.setLocalZOrder(20)  
-        var done  = function(){ 
+        let done  = function(){ 
             cc.director.pause()  
             this.pausemenu.opacity = 255
             this.pausemenu.scale = cc.v2(1,1)}
             this.pausemenu.position = cc.v2(0,0)  
             this.pausemenu.opacity = 255
             this.pausemenu.scale = cc.v2(1,1)
-            var action = cc.sequence(
+            let action = cc.sequence(
                 cc.spawn(
                     cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
                     cc.fadeIn(0.2).easing(cc.easeExponentialIn())
@@ -462,13 +463,13 @@ cc.Class({
 
         this.highestCombo = 0
         this.comboctr = 0
-        var timectr = 0
-        var t = this
-        var left = 60
-        var del = 0.5
+        let timectr = 0
+        let t = this
+        let left = 60
+        let del = 0.5
         if(this.usingFreeze || this.usingFrenzy ||this.usingSpawn)  del = 1.65
         
-        var gameTimer = t.schedule(function () {
+        let gameTimer = t.schedule(function () {
 
             if (t.usingFreeze) t.timelmt = 60 + t.passiveTimeBoost
             else t.timelmt = 50 + t.passiveTimeBoost
@@ -508,24 +509,28 @@ cc.Class({
         this.shap.setLocalZOrder(200)
     },
     gameOver() {
-        var flash  = cc.sequence(
-            cc.delayTime(0.2),  
+        let flash  = cc.sequence( 
             cc.fadeOut(0.5),
             cc.fadeIn(0.5)
         )
         this.node.runAction(flash)
         
-        var hideHud = cc.sequence(
-            cc.delayTime(0.5),
-            cc.moveBy(0.16, 0, -6).easing(cc.easeCubicActionOut()),
-            cc.moveBy(0.28, 0, 400).easing(cc.easeExponentialIn())
+         
+ 
+        let hideHud = cc.sequence(
+            cc.delayTime(0.2),
 
+            cc.spawn(
+                cc.scaleTo(0.8, 2,2),
+                cc.moveBy(0.8,   0 ,  1*(900+cc.rand()%400)).easing(cc.easeCircleActionOut())
+            ), 
+            
         )
         this.hud.runAction(hideHud)
         this.pauseBtn.interactable = false
         this.pauseBtn.position = cc.v2(-800, -800)
         // this.sdkWork() 
-        var prize = Math.round(Math.random() * 200)
+        let prize = Math.round(Math.random() * 200)
         if (prize <= 100) prize = 100 + Math.floor(Math.random() * 22)
 
 
@@ -573,14 +578,14 @@ cc.Class({
         // this.endPanel.getChildByName('combo').string = 
         // this.endPanel.getChildByName('score').string = 
         // this.endPanel.getChildByName('coins').string =
-        var proceed = function () {
+        let proceed = function () {
             if (this.startVal <= score) this.numAnim(score)
             else {
                 //this.numAnim(this.highestCombo)
                 this.startVal = 0
                 this.endPanel.getChildByName('score').getComponent(cc.Label).string = this.score
                 
-                var call = function () {
+                let call = function () {
                     let nbac = cc.sequence(
                         cc.delayTime(0.79),
                         cc.spawn(
@@ -592,7 +597,7 @@ cc.Class({
                    if(this.newBest) this.nbNode.runAction(nbac), cc.audioEngine.playEffect( this.newBestAudio,false,global.bgVolume)
                     
                     this.comboAnim(this.highestCombo) }
-                var action = cc.sequence(
+                let action = cc.sequence(
                     cc.spawn(
                         cc.fadeOut(0.100),
                         cc.scaleTo(0.1, 1.4, 1.4)
@@ -608,9 +613,9 @@ cc.Class({
                 this.endPanel.getChildByName('score').runAction(action)
             }
         }
-        var add = Math.floor(score / 30)
+        let add = Math.floor(score / 30)
         if (add <= 1) add = 1
-        var anim = cc.sequence(cc.delayTime(0.025), cc.callFunc(proceed, this))
+        let anim = cc.sequence(cc.delayTime(0.025), cc.callFunc(proceed, this))
         this.endPanel.runAction(anim)
         this.startVal += add
         this.endPanel.getChildByName('score').getComponent(cc.Label).string = this.startVal
@@ -619,14 +624,14 @@ cc.Class({
         // this.endPanel.getChildByName('combo').string = 
         // this.endPanel.getChildByName('score').string = 
         // this.endPanel.getChildByName('coins').string =
-        var proceed = function () {
+        let proceed = function () {
             if (this.startVal <= score) this.comboAnim(score)
             else {
 
                 this.startVal = 0
                 this.endPanel.getChildByName('combo').getComponent(cc.Label).string = this.highestCombo
-                var call = function () { this.coinAnim(this.prize),cc.audioEngine.playEffect( this.doneAudio,false,global.bgVolume)  }
-                var action = cc.sequence(
+                let call = function () { this.coinAnim(this.prize),cc.audioEngine.playEffect( this.doneAudio,false,global.bgVolume)  }
+                let action = cc.sequence(
                     cc.spawn(
                         cc.fadeOut(0.100),
                         cc.scaleTo(0.1, 1.4, 1.4)
@@ -643,15 +648,15 @@ cc.Class({
 
             }
         }
-        var add = Math.floor(score / 15)
+        let add = Math.floor(score / 15)
         if (add <= 1) add = 1
-        var anim = cc.sequence(cc.delayTime(0.025), cc.callFunc(proceed, this))
+        let anim = cc.sequence(cc.delayTime(0.025), cc.callFunc(proceed, this))
         this.endPanel.runAction(anim)
         this.startVal += add
         this.endPanel.getChildByName('combo').getComponent(cc.Label).string = this.startVal
     },
     coinAnim(score) {
-        var proceed = function () {
+        let proceed = function () {
             if (this.startVal <= score) this.coinAnim(score)
             else {
                 //this.numAnim(this.highestCombo)
@@ -662,15 +667,15 @@ cc.Class({
 
             }
         }
-        var add = Math.floor(score / 15)
+        let add = Math.floor(score / 15)
         if (add <= 1) add = 1
-        var anim = cc.sequence(cc.delayTime(0.025), cc.callFunc(proceed, this))
+        let anim = cc.sequence(cc.delayTime(0.025), cc.callFunc(proceed, this))
         this.endPanel.runAction(anim)
         this.startVal += add
         this.endPanel.getChildByName('coins').getComponent(cc.Label).string = this.startVal
     },
     afterInc() {
-        var breathing = cc.repeatForever(
+        let breathing = cc.repeatForever(
             cc.sequence(
                 cc.moveTo(2, 0, -12).easing(cc.easeCubicActionOut()),
                 cc.moveTo(2, 0, -6).easing(cc.easeQuarticActionIn()),
@@ -679,21 +684,21 @@ cc.Class({
         )
         this.endPanel.runAction(breathing)
 
-        var star = cc.instantiate(this.starFab);
+        let star = cc.instantiate(this.starFab);
 
 
         star.position = cc.v2(-110, 46)
-        var star2 = cc.instantiate(this.starFab);
+        let star2 = cc.instantiate(this.starFab);
         star2.position = cc.v2(110, 46)
 
-        var emit = function () {
+        let emit = function () {
             this.starParts.addChild(star2);
             this.starParts.addChild(star);
             this.starParts.getChildByName('a').opacity = 255
             this.starParts.getChildByName('b').opacity = 255
 
         }
-        var action = cc.sequence(
+        let action = cc.sequence(
             // cc.moveBy(0.05, 8,6),
             // cc.moveBy(0.05, -4,6),
             // cc.moveBy(0.05, 0,3),
@@ -726,37 +731,51 @@ cc.Class({
         cc.audioEngine.playEffect(this.explodeClip, false, global.bgVolume*0.6)
 
         //animation 
-        var funcs = function () {
+        let funcs = function () {
             console.log('hoyotoy')
             this.matrix.destroy()
             this.startVal = 0
             //animation for showing panel make this better later include score movement animations and coins
-            var panel = cc.sequence(cc.delayTime(0.1),
+            let panel = cc.sequence(cc.delayTime(0.1),
                 cc.spawn(
                     cc.scaleTo(0.4, 0.9, 0.9),
-                    cc.rotateBy(0.4, 720),
+                    // cc.rotateBy(0.4, 720),
                     cc.fadeIn(0.4)
-                ),
+                ).easing(cc.easeCubicActionOut()),
                 cc.delayTime(500),
                 cc.callFunc(this.numAnim(this.score), this))
+
+                
+
+                
             this.endPanel.runAction(panel)
 
 
         }
-        var end = cc.sequence(
-            //animatiom explosion here  for the table
-            cc.spawn(
-                cc.delayTime(0.01),
-                cc.scaleTo(0.3, 1.4, 1.4).easing(cc.easeExponentialIn()),
-            ),
-            cc.delayTime(0.3),
-            cc.spawn(
-                cc.scaleTo(0.6, 0.4, 0.4),
-                cc.moveBy(0.6, 0, -1000),
-                // cc.rotateBy(0.6, 200)
+        // let end = cc.sequence(
+        //     //animatiom explosion here  for the table
+        //     cc.spawn(
+        //         cc.delayTime(0.01),
+        //         cc.scaleTo(0.3, 1.4, 1.4).easing(cc.easeExponentialIn()),
+        //     ),
+        //     cc.delayTime(0.3),
+        //     cc.spawn(
+        //         cc.scaleTo(0.6, 0.4, 0.4),
+        //         cc.moveBy(0.6, 0, -1000),
+        //         // cc.rotateBy(0.6, 200)
 
-            ),
+        //     ),
 
+        //     cc.callFunc(funcs, this)
+        // )
+ 
+        let end = cc.sequence(
+            cc.delayTime(0.2),
+
+            cc.spawn(
+                cc.scaleTo(0.8, 1.2,1.2),
+                cc.moveBy(0.8,  0 ,  1*(1500+cc.rand()%400)).easing(cc.easeCircleActionOut())
+            ), 
             cc.callFunc(funcs, this)
         )
         this.matrix.getChildByName('table').runAction(end)
@@ -772,15 +791,15 @@ cc.Class({
     },
     frenzyEffect() {
         console.log('whyy')
-        var frenzyburn = cc.instantiate(this.frenzyburn);
+        let frenzyburn = cc.instantiate(this.frenzyburn);
         this.node.addChild(frenzyburn);
 
-        var slowburn = cc.moveTo(4.8, 0, -1200).easing(cc.easeQuarticActionIn())
+        let slowburn = cc.moveTo(4.8, 0, -1200).easing(cc.easeQuarticActionIn())
         //this.node.getChildByName('frenzyburn').runAction(slowburn)
 
 
 
-        var t = this
+        let t = this
         t.frenzying = true
 
         t.burgEffect = 3 + t.passiveFrenzyBoost
@@ -792,7 +811,7 @@ cc.Class({
             t.pizEffect = 4 + t.passiveFrenzyBoost
 
         }
-        var ends = function () {
+        let ends = function () {
             this.node.getChildByName('frenzyburn').stopAllActions()
             this.node.getChildByName('frenzyburn').destroy()
             t.frenzying = false
@@ -818,7 +837,7 @@ cc.Class({
             t.fourthree.getComponent('unit').frenzySoloEnd()
             t.fourfour.getComponent('unit').frenzySoloEnd()
         }
-        var frenzyTime = cc.sequence(cc.delayTime(5), cc.callFunc(ends, t))
+        let frenzyTime = cc.sequence(cc.delayTime(5), cc.callFunc(ends, t))
         this.matrix.runAction(frenzyTime)
         t.oneone.getComponent('unit').frenzySolo()
         t.onetwo.getComponent('unit').frenzySolo()
@@ -843,7 +862,7 @@ cc.Class({
     useFreezeBoost() {
         this.freezeonce = true
         this.freezing = true
-        var unfreeze = function () {
+        let unfreeze = function () {
             this.freezing = false
         }
         this.matrix.runAction(cc.sequence(cc.delayTime(5), cc.callFunc(unfreeze, this)))
@@ -854,7 +873,7 @@ cc.Class({
 
     showIndic(t) {
 
-        var fadeInOut = cc.sequence(cc.fadeIn(0), cc.fadeOut(4.98))
+        let fadeInOut = cc.sequence(cc.fadeIn(0), cc.fadeOut(4.98))
         switch (t.mode) {
             case 'bu':
                 this.indics.getChildByName('indicBurg').runAction(fadeInOut)
@@ -883,7 +902,7 @@ cc.Class({
         this.healPizz()
         if (!this.frenzying && this.pizzing && this.panzing && this.burging) this.frenzyEffect()
         if (!this.frenzying) this.pizEffect = 2
-        var pizEnd = function () {
+        let pizEnd = function () {
             this.pizzing = false
             if (!this.frenzying) this.pizEffect = 1
             this.oneone.getComponent('unit').turnOnHeal()
@@ -903,8 +922,8 @@ cc.Class({
             this.fourthree.getComponent('unit').turnOnHeal()
             this.fourfour.getComponent('unit').turnOnHeal()
         }
-        var t = this
-        var t3 = cc.sequence(cc.delayTime(5), cc.callFunc(pizEnd, t))
+        let t = this
+        let t3 = cc.sequence(cc.delayTime(5), cc.callFunc(pizEnd, t))
         t.matrix.runAction(t3)
     },
     panTwoing() {
@@ -912,7 +931,7 @@ cc.Class({
         this.healPan()
         if (!this.frenzying && this.pizzing && this.panzing && this.burging) this.frenzyEffect()
         if (!this.frenzying) this.panEffect = 2
-        var panEnd = function () {
+        let panEnd = function () {
             this.panzing = false
             if (!this.frenzying) this.panEffect = 1
             this.oneone.getComponent('unit').turnOnHeal()
@@ -932,8 +951,8 @@ cc.Class({
             this.fourthree.getComponent('unit').turnOnHeal()
             this.fourfour.getComponent('unit').turnOnHeal()
         }
-        var t = this
-        var t2 = cc.sequence(cc.delayTime(5), cc.callFunc(panEnd, t))
+        let t = this
+        let t2 = cc.sequence(cc.delayTime(5), cc.callFunc(panEnd, t))
         t.matrix.runAction(t2)
     },
     burgTwoing() {
@@ -942,7 +961,7 @@ cc.Class({
         if (!this.frenzying && this.pizzing && this.panzing && this.burging) this.frenzyEffect()
         // console.log('sana is pabo')
         if (!this.frenzying) this.burgEffect = 2
-        var burgEnd = function () {
+        let burgEnd = function () {
             this.burging = false
             this.oneone.getComponent('unit').turnOnHeal()
             this.onetwo.getComponent('unit').turnOnHeal()
@@ -964,8 +983,8 @@ cc.Class({
 
 
         }
-        var t = this
-        var t1 = cc.sequence(cc.delayTime(5), cc.callFunc(burgEnd, t))
+        let t = this
+        let t1 = cc.sequence(cc.delayTime(5), cc.callFunc(burgEnd, t))
         t.matrix.runAction(t1)
     },
     healPan() {
@@ -1089,7 +1108,7 @@ cc.Class({
                     }
 
                     this.comboLabel.position = x.node.position
-                    var comboFade = cc.sequence(cc.fadeIn(0), cc.spawn(cc.moveBy(0.6, 0, 90), cc.fadeOut(0.6)))
+                    let comboFade = cc.sequence(cc.fadeIn(0), cc.spawn(cc.moveBy(0.6, 0, 90), cc.fadeOut(0.6)))
                     this.comboLabel.runAction(comboFade)
 
 
@@ -1108,11 +1127,11 @@ cc.Class({
                 this.list = [] 
  
                 this.node.stopAllActions()
-                var comboEnd = function () {
+                let comboEnd = function () {
                     this.comboctr = 0
 
                 } 
-                var times = cc.sequence(cc.delayTime(1), cc.callFunc(comboEnd, this))
+                let times = cc.sequence(cc.delayTime(1), cc.callFunc(comboEnd, this))
                 this.node.runAction(times)
 
 
@@ -1151,7 +1170,7 @@ cc.Class({
 
 
 
-        var wrong = cc.sequence(
+        let wrong = cc.sequence(
             cc.spawn(
                 cc.tintTo(0.3, 222, 0, 0),
                 cc.fadeTo(0.3, 144),
@@ -1170,7 +1189,7 @@ cc.Class({
 
             //callabck func
         )
-        var wrongs = cc.sequence(
+        let wrongs = cc.sequence(
             cc.spawn(
                 cc.tintTo(0.3, 222, 0, 0),
                 cc.fadeTo(0.3, 144),
@@ -1268,9 +1287,9 @@ cc.Class({
 
         this.boosterPrompt.getChildByName("all").scale = cc.v2(0, 0)
         this.boosterPrompt.getChildByName("all").opacity = 0
-        var shopshake = function () {
+        let shopshake = function () {
             this.boosterPrompt.getChildByName("all").getChildByName('shop').position = cc.v2(121,-182)
-            var shake = cc.repeatForever(
+            let shake = cc.repeatForever(
                 cc.sequence(
                     cc.spawn(
                         cc.moveBy(1.26, 0, 13).easing(cc.easeCubicActionOut()),
@@ -1302,10 +1321,10 @@ cc.Class({
             this.boosterPrompt.getChildByName("all").getChildByName('shop').runAction(shake)
 
         }
-        var action = cc.sequence(
+        let action = cc.sequence(
             cc.spawn(
-                cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
-                cc.fadeIn(0.2).easing(cc.easeExponentialIn())
+                cc.scaleTo(0.2, 1, 1).easing(cc.easeCubicActionOut()),
+                cc.fadeIn(0.2).easing(cc.easeCubicActionOut())
             ),
             cc.callFunc(shopshake, this)
         )
@@ -1347,8 +1366,7 @@ cc.Class({
         this.ss()
         //insert closing action here 
         this.boosterPrompt.setLocalZOrder(-10)
-        this.boosterPrompt.opacity = 0
-        // this.initUnit()
+        this.boosterPrompt.opacity = 0 
         if (a != "a") this.startNow()
     },
 
@@ -1414,6 +1432,27 @@ cc.Class({
     //==============================================================================
 
     initUnit() {
+ 
+        
+        let showHud = cc.sequence( 
+            cc.delayTime(0.4),
+            cc.spawn(
+            cc.fadeIn(0.3),   
+            cc.moveBy(0.3, 0, -70).easing(cc.easeCubicActionOut())),
+            cc.moveBy(0.2, 0, 70).easing(cc.easeCubicActionOut()),
+             
+        )
+        this.hud.runAction(showHud)
+
+        let showmat = cc.sequence(
+
+            cc.scaleTo(0,0,0),
+            cc.delayTime(0.4),
+            cc.scaleTo(0.4,1,1).easing(cc.easeCubicActionOut())
+        )
+
+        
+        this.matrix.getChildByName('table').runAction(showmat   )
         this.oneone.getComponent('unit').startNow()
         this.onetwo.getComponent('unit').startNow()
         this.onethree.getComponent('unit').startNow()

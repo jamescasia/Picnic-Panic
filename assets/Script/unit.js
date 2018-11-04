@@ -1,4 +1,4 @@
- var global= require('global')  
+ let global= require('global')  
 cc.Class({
     extends: cc.Component,
 
@@ -143,10 +143,10 @@ cc.Class({
         // cc.audioEngine.playEffect( this.game.getComponent('Game').fuseFX,false,global.bgVolume) 
         this.selected = false
         
-        var a = Math. abs( Math.random () )
+        let a = Math. abs( Math.random () )
 
         
-        var pumpUp = cc.sequence(
+        let pumpUp = cc.sequence(
             cc.spawn(
                 cc.moveTo(0.1  , 0 ,a* 8.5) ,
                 cc.scaleTo(0.1, 1.4, 1.4) ,
@@ -205,9 +205,9 @@ cc.Class({
              
              
 
-            var prevNode = this.game.getComponent('Game').prev
-           var t  = this 
-           var kill = function(){ 
+            let prevNode = this.game.getComponent('Game').prev
+           let t  = this 
+           let kill = function(){ 
             cc.audioEngine.playEffect( this.game.getComponent('Game').burstSound,false,0.7*global.bgVolume) 
                t.isEmpty =true
             switch(this.mode){
@@ -246,7 +246,7 @@ cc.Class({
 
         } 
 
-            var explode = cc.sequence(  
+            let explode = cc.sequence(  
                 cc.spawn(
                     // cc.follow(1, prevNode.node), 
                     cc.moveTo(0.52,  (prevNode.node.x -t.node.x)/2, (prevNode.node.y -t.node.y)/2 ).easing(cc.easeExponentialIn()),                  
@@ -255,7 +255,7 @@ cc.Class({
                 
                       
             ) 
-            var explode2 = cc.sequence(  
+            let explode2 = cc.sequence(  
                 cc.spawn(
                     cc.moveTo(0.52 ,    0.5*( t.node.x -prevNode.node.x) ,0.5*(t.node.y -prevNode.node.y)).easing(cc.easeExponentialIn()),
                     cc.fadeTo(0.3 ,145)
@@ -282,7 +282,7 @@ cc.Class({
         if(x == this.mode&& !this.healOnce) {
             this.node.runAction(this.healactn)
             this.healOnce = true
-            var healu = cc.instantiate( this.game.getComponent('Game').boostHeal); 
+            let healu = cc.instantiate( this.game.getComponent('Game').boostHeal); 
             this.node.addChild(healu);  
             //console.log(this.node.getChildByName('healu'))
 
@@ -304,8 +304,8 @@ cc.Class({
         this.runonce = true
 
         //this.frame.node.stopAllActions()
-        var as = [1,-1]
-        var gmvr = cc.sequence(
+        let as = [1,-1]
+        let gmvr = cc.sequence(
             cc.delayTime(0.2),
 
             cc.spawn(
@@ -333,7 +333,7 @@ cc.Class({
         else this.spawnFactor = 1  
         
         if(this.game.getComponent('Game').lapse >=   this.game.getComponent('Game').timelmt-6 &&  this.game.getComponent('Game').lapse!=60 && !this.gameover ){ 
-            var shake = cc.sequence(cc.skewTo(0.1 ,  cc.randomMinus1To1    ()*16 , cc.randomMinus1To1 ()*16 )  , cc.skewTo(0.1 , 0,0 ) ) 
+            let shake = cc.sequence(cc.skewTo(0.1 ,  cc.randomMinus1To1    ()*16 , cc.randomMinus1To1 ()*16 )  , cc.skewTo(0.1 , 0,0 ) ) 
             this.frame.node.runAction(shake)
 
         }
@@ -442,10 +442,10 @@ cc.Class({
         if(this.isEmpty){ 
             
 
-        var rand =  parseInt( cc.rand() )%3 
+        let rand =  parseInt( cc.rand() )%3 
         //console.log("random" + rand) 0 1 2 3 4 5 
         if (this.game.getComponent('Game').usingSpawn ) {
-            var r= parseInt( cc.rand() )%11
+            let r= parseInt( cc.rand() )%11
             if(r===3) this.level =2
         }
         //this. frame.spriteFrame = this.choices[Math.floor(Math.random()) % (this.choices.length)]
@@ -465,18 +465,18 @@ cc.Class({
         this.frame.node.position = cc.v2(0,0)
     
         
-        var born =cc.spawn(
+        let born =cc.spawn(
             cc.scaleTo(0.17 , 1,1)  ,
             cc.fadeIn(0.17  ).easing(cc.easeBackIn()),
              
         ) 
-        var a =    Math.abs(    Math.random ())
-        var b =   Math.abs( Math.random ())
+        let a =    Math.abs(    Math.random ())
+        let b =   Math.abs( Math.random ())
          
-        var sound = function(){ 
+        let sound = function(){ 
             // if(this.node._name == "oneone")cc.audioEngine.playEffect(this.game.getComponent('Game').startSound,false,0.7*global.bgVolume) 
         }
-        var firstborn =cc.sequence(
+        let firstborn =cc.sequence(
             cc.fadeTo(0, 0),
             cc.moveBy(0.35 , 0, 660), 
             cc.spawn(

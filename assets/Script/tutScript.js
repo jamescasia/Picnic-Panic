@@ -50,7 +50,7 @@ cc.Class({
         if(this.page4 == null )this.pages = [this.page1, this.page2, this.page3 ] 
         else this.pages = [this.page1, this.page2, this.page3, this.page4] 
         let dis = 1000
-        // var show = cc.sequence(cc.moveTo(0,0,-29),cc.fadeIn(0.5) , cc.delayTime(0.1)) 
+        // let show = cc.sequence(cc.moveTo(0,0,-29),cc.fadeIn(0.5) , cc.delayTime(0.1)) 
         if(dir == "left")  dis = -1000
         else dis = 1000
         let show =   cc.sequence( 
@@ -64,7 +64,7 @@ cc.Class({
         this.pages[this.pageCtr].runAction(show) 
     },
     panLeft(){
-        var hide = cc.sequence(
+        let hide = cc.sequence(
             cc.spawn(
                 cc.moveBy(0.2, 1000,0).easing(cc.easeExponentialIn()) ,
                 cc.delayTime(0)
@@ -83,7 +83,7 @@ cc.Class({
         this.showPage('left')
     },
     panRight(){
-        var hide = cc.sequence(
+        let hide = cc.sequence(
             cc.spawn(
                 cc.moveBy(0.2, -1000,0).easing(cc.easeExponentialIn()) ,
                 cc.delayTime(0)
