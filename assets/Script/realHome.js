@@ -40,6 +40,50 @@ cc.Class({
         infBtn:cc.Node,
         setBtn:cc.Node,
         shopBtn:cc.Node,
+        bonusBtn:cc.Node,
+        bonusScene:cc.Node,
+        pressesCtr:0,
+        foodBtn:cc.Node,
+        comboctr:0,
+        pressRequired:0,
+        tapsLabel:cc.Node,
+        tapsReqLabel:cc.Node,
+        pressSound:cc.AudioClip,
+        bonusTaps:0,
+        bonusCollected:false,
+        soundArr:[],
+        subtrahend:0,
+        bu1: cc.SpriteFrame,
+        pa1: cc.SpriteFrame,
+        pi1: cc.SpriteFrame, 
+
+        bu2: cc.SpriteFrame,
+        pa2: cc.SpriteFrame,
+        pi2: cc.SpriteFrame,
+  
+        bu3: cc.SpriteFrame,
+        pa3: cc.SpriteFrame,
+        pi3: cc.SpriteFrame,
+        c1:cc.AudioClip,
+        c2:cc.AudioClip,
+        c3:cc.AudioClip,
+        c4:cc.AudioClip,
+        c5:cc.AudioClip,
+        c6:cc.AudioClip,
+        c7:cc.AudioClip,
+        c8:cc.AudioClip,
+        foodArr:[],
+        explode:cc.Prefab,
+        prizeSfx:cc.AudioClip,
+        prizeStar:cc.Node,
+        prizeSpawn:cc.Node,
+        prizeFrenzy:cc.Node,
+        prizeFreeze:cc.Node,
+        collectBtn:cc.Node,
+        collectSfx:cc.AudioClip, 
+
+
+
 
 
         
@@ -50,6 +94,8 @@ cc.Class({
     }, 
      
     onLoad () {        
+        this.foodArr = [this.bu1, this.bu2, this.bu3, this.pi1, this.pi2, this.pi3, this.pa1, this.pa2, this.pa3]
+        this.soundArr = [this.c1, this.c2, this.c3, this.c4, this.c5, this.c6, this.c7, this.c8] 
         // this.achvBtn.scale = cc.v2(0,0)
         // this.playBtn.scale = cc.v2(0,0)
         // this.infBtn.scale = cc.v2(0,0)
@@ -59,7 +105,7 @@ cc.Class({
         // this.titleNode.scale = cc.v2(0,0)
         this.titleNode.position  = cc.v2(0 ,700)    
         
-        if (cc.sys.os == cc.sys.OS_ANDROID)jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dismissLoader", "()V");
+        // if (cc.sys.os == cc.sys.OS_ANDROID)jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dismissLoader", "()V");
         this.numOfAchv = 13
         let t = this
        
@@ -163,7 +209,7 @@ cc.Class({
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
                 passiveTimeLvl:0, bgVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 
                 achievements:[a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12],usedParticle:null,leaf:false,pinkLeaf:false, sakura:false,bong:false
-                        } 
+                ,bonusTaps:0,bonusCollected:false,        } 
                     
         cc.sys.localStorage.setItem('ampopo', JSON.stringify (this.storage) )
         global.storage = this.storage
@@ -175,6 +221,8 @@ cc.Class({
         this.usingFrenzy = false
         this.usingSpawn = false
         this.coins =JSON.parse(parseInt( this.storage.coins))  
+        this.bonusCollected =JSON.parse(this.storage.bonusCollected) 
+        this.bonusTaps = JSON.parse(parseInt( this.storage.bonusTaps)) 
         this.highestCombo =JSON.parse  (parseInt(this.storage.highestCombo))
         this.highestScore =JSON.parse (parseInt( this.storage.highestScore))
         this.usingFrenzy = false
@@ -184,9 +232,12 @@ cc.Class({
         this.storage.usingFrenzy = false
         this.storage.usingFreeze = false
         this.storage.usingSpawn = false 
-        
+        this.pressesCtr = this.bonusTaps
 
-        
+        this.subtrahend = (5000*(1+ Math.floor(this.pressesCtr/5000)))
+        this.foodBtn.getChildByName('a').getComponent(cc.Sprite).spriteFrame =this.foodArr[ Math.floor(this.pressesCtr/5000)]
+
+        this.tapsLabel.getComponent(cc.Label).string = " TAPS left until\n bonus: "+ (this.subtrahend- this.pressesCtr)  
         this.ss() 
         this.achvPanel.opacity = 0
         this.achvPanel.setLocalZOrder(-10)
@@ -432,7 +483,318 @@ cc.Class({
     },
     reallyQuit(){
         cc.game.end()
+    },  
+    goToBonus(){
+        this.bonusScene.runAction(cc.moveTo(0.4,0,77).easing(cc.easeCubicActionOut()))
+
+        this.switchScreen()
     },
+    resetPrizes(){
+
+        this.prizeSpawn.stopAllActions()
+        this.prizeSpawn.scale = cc.v2(0.08,0.08)
+        this.prizeSpawn.position = cc.v2(0,0)
+        this.prizeSpawn.opacity = 0
+
+        this.prizeFreeze.stopAllActions()
+        this.prizeFreeze.scale = cc.v2(0.08,0.08)
+        this.prizeFreeze.position = cc.v2(0,0)
+        this.prizeFreeze.opacity = 0
+
+        this.prizeFrenzy.stopAllActions()
+        this.prizeFrenzy.scale = cc.v2(0.08,0.08)
+        this.prizeFrenzy.position = cc.v2(0,0)
+        this.prizeFrenzy.opacity = 0
+
+        this.prizeStar.stopAllActions()
+        this.prizeStar.scale = cc.v2(0.14,0.14)
+        this.prizeStar.position = cc.v2(0,0)
+        this.prizeStar.opacity = 0
+
+    },
+    collectPrize(){ 
+        cc.audioEngine.playEffect( this.collectSfx,false,global.bgVolume) 
+        this.collectBtn.stopAllActions()
+        this.collectBtn.runAction(  cc.sequence(cc.delayTime(0),cc.scaleTo(0.15,0, 0).easing(cc.easeCubicActionOut())  ))
+        let suyop = function(){this.resetPrizes()
+            this.foodBtn.getComponent(cc.Button).interactable  = true
+            this.foodBtn.getComponent(cc.Button).disabled = false}
+        // let suyop = cc.spawn(cc.scaleTo(0.4,0,0),cc.moveTo(0.4, this.collectBtn.position.x, this.collectBtn.position.y)).easing(cc.easeCubicActionOut())  
+        let kolekta = cc.sequence(cc.moveBy(0.2, 0, -16), cc.spawn(cc.moveBy(0.4, 0 ,64), cc.sequence(cc.delayTime(0 ),cc.fadeOut(0.3)))).easing(cc.easeQuadraticActionIn())  
+        let kolekta1 = cc.sequence(cc.moveBy(0.2, 0, -16), cc.spawn(cc.moveBy(0.4, 0 ,64), cc.sequence(cc.delayTime(0 ),cc.fadeOut(0.3)))).easing(cc.easeQuadraticActionIn())  
+        let kolekta2= cc.sequence(cc.moveBy(0.2, 0, -16), cc.spawn(cc.moveBy(0.4, 0 ,64), cc.sequence(cc.delayTime(0 ),cc.fadeOut(0.3)))).easing(cc.easeQuadraticActionIn())  
+        let kolekta3 =cc.sequence(cc.moveBy(0.2, 0, -16), cc.spawn(cc.moveBy(0.4, 0 ,64), cc.sequence(cc.delayTime(0 ),cc.fadeOut(0.3)))).easing(cc.easeQuadraticActionIn  ())   
+        this.prizeStar.runAction( kolekta )
+        this.prizeFreeze.runAction(kolekta1 )
+        this.prizeFrenzy.runAction(kolekta2  )
+        this.prizeSpawn.runAction(kolekta3  )
+        this.node.runAction(cc.sequence(cc.delayTime(0.8), cc.callFunc(suyop, this)))
+        // let done = function(){
+            
+    // }
+        let spewOut = cc.sequence(
+            cc.scaleTo(0.8, 0 ,0).easing(cc.easeSineIn()) ,
+            cc.delayTime(0.6),
+            cc.scaleTo(0.07 , 1.87,1.87)  ,
+            // cc.callFunc(done, this)
+
+
+        )
+        this.ss()
+        // this.foodBtn.getChildByName('a').runAction(spewOut)
+    },
+    spewPrizes(){ 
+        let done = function(){
+            this.prizeSpawn.runAction(cc.repeatForever(cc.sequence(cc.moveBy(1, 0, 8) ,cc.moveBy(1, 0, -8) ) ))
+        }
+        let spew = cc.sequence(
+            cc.fadeIn(0),
+            cc.spawn(
+                cc.moveBy(0.2, 50,0),
+                cc.moveBy(0.2, 0, 60).easing(cc.easeQuadraticActionOut()),
+
+            ),
+            
+            cc.spawn(
+                cc.moveBy(0.3, 50,0),
+                cc.moveBy(0.3, 0, -100).easing(cc.easeQuadraticActionIn()),
+
+            ),
+            cc.delayTime(0.85),
+            cc.callFunc(done, this)
+        )
+
+        let done2 = function(){
+            this.prizeFreeze.runAction(cc.repeatForever(cc.sequence(cc.moveBy(1, 0, 8) ,cc.moveBy(1, 0, -8) ) ))
+        }
+        let spew2 = cc.sequence(
+            cc.fadeIn(0),
+            cc.spawn(
+                cc.moveBy(0.2, -50,0),
+                cc.moveBy(0.2, 0, 60).easing(cc.easeQuadraticActionOut()),
+
+            ),
+            
+            cc.spawn(
+                cc.moveBy(0.3, -50,0),
+                cc.moveBy(0.3, 0, -100).easing(cc.easeQuadraticActionIn()),
+
+            ),
+            cc.delayTime(0.75),
+            cc.callFunc(done2, this)
+        )
+
+
+        let done3 = function(){
+            this.prizeFrenzy.runAction(cc.repeatForever(cc.sequence(cc.moveBy(1, 0, 8) ,cc.moveBy(1, 0, -8) ) ))
+        }
+        let spew3 = cc.sequence(
+            cc.fadeIn(0),
+            cc.spawn(
+                cc.moveBy(0.2, 20,0),
+                cc.moveBy(0.2, 0, 65).easing(cc.easeQuadraticActionOut()),
+
+            ),
+            
+            cc.spawn(
+                cc.moveBy(0.3, 20,0),
+                cc.moveBy(0.3, 0, -100).easing(cc.easeQuadraticActionIn()),
+
+            ),
+            cc.delayTime(0.7),
+            cc.callFunc(done3, this)
+        )
+
+        let done4 = function(){
+            this.prizeStar.runAction(cc.repeatForever(cc.sequence(cc.moveBy(1, 0, 8) ,cc.moveBy(1, 0, -8) ) ))
+        }
+        let spew4 = cc.sequence(
+            cc.fadeIn(0),
+            cc.spawn(
+                cc.moveBy(0.2, -20,0),
+                cc.moveBy(0.2, 0, 65).easing(cc.easeQuadraticActionOut()),
+
+            ),
+            
+            cc.spawn(
+                cc.moveBy(0.3, -20,0),
+                cc.moveBy(0.3, 0, -100).easing(cc.easeQuadraticActionIn()),
+
+            ),
+            cc.delayTime(0.8),
+            cc.callFunc(done4, this)
+        )
+
+        
+        
+        // this.prizeSpawn.runAction(spew)
+        // this.prizeFreeze.runAction(spew2)
+        // this.prizeFrenzy.runAction(spew3)
+        // this.prizeStar.runAction(spew4)
+        
+        var  p = Math.floor(cc.rand())%3 
+        var prize = 0
+        console.log("THIS IS THE PRIZE", p)
+        if(p==0 ){
+              prize = parseInt (2000* Math.floor(1+cc.rand()%4)) 
+            this.coins += prize
+            this.prizeStar.getChildByName('a').getComponent(cc.Label).string = prize
+            this.prizeStar.getChildByName('b').getComponent(cc.Label).string = prize
+            this.prizeStar.runAction(spew4)
+        }
+        if (p ==1){
+            let a =1+Math.floor(cc.rand())%6
+            let b = 1+Math.floor(cc.rand())%6
+            let c= 1+Math.floor(cc.rand())%6
+            this.frenzyBoosts +=a
+            this.freezeBoosts +=b
+            this.spawnBoosts +=c
+
+            this.prizeSpawn.getChildByName('a').getComponent(cc.Label).string = a
+            this.prizeFreeze.getChildByName('a').getComponent(cc.Label).string = b
+            this.prizeFrenzy.getChildByName('a').getComponent(cc.Label).string = c
+            this.prizeSpawn.getChildByName('b').getComponent(cc.Label).string = a
+            this.prizeFreeze.getChildByName('b').getComponent(cc.Label).string = b
+            this.prizeFrenzy.getChildByName('b').getComponent(cc.Label).string = c
+             
+            this.prizeSpawn.runAction(spew)
+            this.prizeFreeze.runAction(spew2)
+            this.prizeFrenzy.runAction(spew3) 
+
+        }
+        if(p == 2) {
+
+            this.prizeSpawn.runAction(spew)
+            this.prizeFreeze.runAction(spew2)
+            this.prizeFrenzy.runAction(spew3)
+            this.prizeStar.runAction(spew4)
+            let a =1+Math.floor(cc.rand())%4
+            let b = 1+Math.floor(cc.rand())%4
+            let c= 1+Math.floor(cc.rand())%4
+            this.frenzyBoosts +=a
+            this.freezeBoosts +=b
+            this.spawnBoosts += c
+            prize = parseInt(500* Math.floor(1+cc.rand()%3))
+            this.coins += prize
+            this.prizeSpawn.getChildByName('a').getComponent(cc.Label).string = a
+            this.prizeFreeze.getChildByName('a').getComponent(cc.Label).string = b
+            this.prizeFrenzy.getChildByName('a').getComponent(cc.Label).string = c
+            this.prizeStar.getChildByName('a').getComponent(cc.Label).string = prize
+            this.prizeStar.getChildByName('b').getComponent(cc.Label).string = prize
+            this.prizeSpawn.getChildByName('b').getComponent(cc.Label).string = a
+            this.prizeFreeze.getChildByName('b').getComponent(cc.Label).string = b
+            this.prizeFrenzy.getChildByName('b').getComponent(cc.Label).string = c
+             
+            
+        }
+        console.log(prize, "coins", this.coins)
+        this.storage.coins = this.coins 
+        this.storage.frenzyBoosts = this.frenzyBoosts
+        this.storage.freezeBoosts = this.freezeBoosts
+        this.storage.spawnBoosts = this.spawnBoosts
+        
+        this.ss()
+
+
+        let a = cc.sequence(
+
+            cc.scaleTo(0.03, 0.08, 0.08),
+            cc.spawn(
+                cc.moveBy(0.2, 500,500),
+                cc.delayTime(0)
+
+                // you know what it's gonna be fucking linear so what the hell do you have to do 
+            ),
+        )
+    },
+    transition(){
+        console.log('wtf    ')
+        this.foodBtn.getComponent(cc.Button).interactable  = false
+        this.foodBtn.getComponent(cc.Button).disabled = true
+        this.foodBtn.getChildByName('a').scale = cc.v2(0,0)
+        cc.audioEngine.playEffect(this.prizeSfx, false, global.bgVolume)
+        // this.foodBtn.getChildByName('a').getComponent(cc.Sprite).spriteFrame =this.foodArr[1+ Math.floor(this.pressesCtr/5000)]
+        let oknow = function(){
+            let s = cc.instantiate(this.explode)
+            console.log("added child")
+            s.scale = cc.v2(4,4)
+            s.position = cc.v2(0,0)
+            s.setLocalZOrder(10)
+            // this.collectBtn.runAction(  cc.scaleTo(0.4, 1.08, 1.08).easing(cc.easeCubicActionOut()) )
+            this.collectBtn.runAction(  cc.repeatForever(cc.sequence(cc.scaleTo(0.4, 1.1, 1.1) , cc.scaleTo(0.4, 1,1) )) )
+            // s.getComponent(cc.ParticleSystem).texture = this.foodArr[ Math.floor(this.pressesCtr/5000)]
+            s.getComponent(cc.ParticleSystem).resetSystem()
+            this.foodBtn.getChildByName('a').addChild(s)
+            this.spewPrizes()
+
+            
+            
+
+        }
+        let glowup = cc.sequence(
+            cc.delayTime(0.6),
+            cc.scaleTo(0.15, 1.87, 1.87), 
+            cc.callFunc(oknow, this)
+            
+
+
+        )
+
+        this.foodBtn.getChildByName('a').runAction(glowup)
+    },
+    pressFood(){
+        this.pressesCtr+=1000
+        // cc.audioEngine.playEffect( this.pressSound, false, global.bgVolume)
+        this.subtrahend = (5000*(1+ Math.floor(this.pressesCtr/5000)))
+        this.foodBtn.getChildByName('a').getComponent(cc.Sprite).spriteFrame =this.foodArr[ Math.floor(this.pressesCtr/5000)]
+        console.log(this.pressesCtr ,  Math.floor(this.pressesCtr/5000) , this.foodArr[ Math.floor(this.pressesCtr/5000)] )
+        
+        
+        if(this.subtrahend- this.pressesCtr-5000 == 0)  this.transition(), console.log('otoy')
+        this.tapsLabel.getComponent(cc.Label).string =  " TAPS left until\n bonus: "+ (this.subtrahend- this.pressesCtr)
+
+        this.comboctr += 1 
+        // console.log(this.comboctr)
+        if(this.comboctr >=  32) cc.audioEngine.playEffect( this.soundArr[7],false ,global.bgVolume) 
+        else  cc.audioEngine.playEffect( this.soundArr[Math.floor(this.comboctr/4) ],false ,global.bgVolume) 
+                 
+        this.node.stopAllActions()
+        let comboEnd = function () {this.comboctr = 0} 
+        let times = cc.sequence(cc.delayTime(0.35), cc.callFunc(comboEnd, this))
+        this.node.runAction(times)
+ 
+        this.storage.bonusTaps = this.pressesCtr
+        if(this.pressesCtr >=45000 )this.pressesCtr = 0, this.foodBtn.getChildByName('a').getComponent(cc.Sprite).spriteFrame =this.foodArr[ 0]
+        this.ss()
+
+
+
+    },
+    closeBonusScreen(){
+        this.storage.bonusTaps = this.pressesCtr
+        this.ss()
+
+        this.achvBtn.runAction(cc.moveBy(0.4, -800, 0).easing(cc.easeCubicActionOut()))
+        this.playBtn.runAction(cc.moveBy(0.4, -800, 0).easing(cc.easeCubicActionOut()))
+        this.bonusBtn.runAction(cc.moveBy(0.4, -800, 0).easing(cc.easeCubicActionOut()))
+        this.setBtn.runAction(cc.moveBy(0.4, -800, 0).easing(cc.easeCubicActionOut()))
+        this.infBtn.runAction(cc.moveBy(0.4, -800, 0).easing(cc.easeCubicActionOut()))
+        this.shopBtn.runAction(cc.moveBy(0.4, -800, 0).easing(cc.easeCubicActionOut()))
+        this.titleNode.runAction(cc.moveBy(0.4, -800, 0).easing(cc.easeCubicActionOut()))
+        this.bonusScene.runAction(cc.moveBy(0.4, 800, 0).easing(cc.easeCubicActionOut()))
+
+
+    },
+    switchScreen(){
+        this.achvBtn.runAction(cc.moveBy(0.4, 800, 0).easing(cc.easeCubicActionOut()))
+        this.playBtn.runAction(cc.moveBy(0.4, 800, 0).easing(cc.easeCubicActionOut()))
+        this.bonusBtn.runAction(cc.moveBy(0.4, 800, 0).easing(cc.easeCubicActionOut()))
+        this.setBtn.runAction(cc.moveBy(0.4, 800, 0).easing(cc.easeCubicActionOut()))
+        this.infBtn.runAction(cc.moveBy(0.4, 800, 0).easing(cc.easeCubicActionOut()))
+        this.shopBtn.runAction(cc.moveBy(0.4, 800, 0).easing(cc.easeCubicActionOut()))
+        this.titleNode.runAction(cc.moveBy(0.4, 800, 0).easing(cc.easeCubicActionOut()))
+ 
+    }
 
    
 

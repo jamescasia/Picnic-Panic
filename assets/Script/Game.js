@@ -195,18 +195,21 @@ cc.Class({
 
         this.tuts.position = cc.v2(24, 0)
         this.tuts.setLocalZOrder(10) 
+        
 
 
-  
         this.tuts.opacity = 0
         this.tuts.scale = cc.v2(0,0)
+
+        // this.tuts.opacity = 0
+        // this.tuts.scale = cc.v2(0,0)
         let action = cc.sequence(
             cc.spawn(
                 cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
-                cc.fadeIn(0.2).easing(cc.easeExponentialIn())
+                cc.fadeIn(0.2).easing(cc.easeExponentialIn()) 
             ), 
             cc.callFunc(done, this)
-        )
+        ) 
         this.tuts.runAction(action)
         let done  = function(){ 
         this.tuts.opacity = 255
@@ -218,6 +221,9 @@ cc.Class({
 
 
     onLoad() {
+        console.log("PausedLKKK")
+        if(cc.director.isPaused) console.log("Paused")
+        else console.log("NOT PAUSED")
         this.soundArr = [this.c1, this.c2, this.c3, this.c4, this.c5, this.c6, this.c7, this.c8] 
 
 
@@ -235,6 +241,7 @@ cc.Class({
             onKeyPressed: function (keyCode, event) {
                 if (keyCode === cc.KEY.back) {
                     if(!this.gameover)t.onPause()
+                    if(cc.director.isPaused) t.resume()
                     // the back button of Android Device is pressed
                     // maybe it's not work in Web environment
                 }
@@ -383,6 +390,7 @@ cc.Class({
             let frenzyBoostSprt = cc.instantiate(this.frenzyBoostSprt);
             this.boostersPanel.addChild(frenzyBoostSprt);
             children.push(frenzyBoostSprt)
+            frenzyBoostSprt.runAction(bb)
         }
 
         if (this.usingFreeze) {
@@ -390,6 +398,7 @@ cc.Class({
             this.boostersPanel.addChild(timeBoostSprt);
             this.useFreezeBoost()
             children.push(timeBoostSprt)
+            timeBoostSprt.runAction(aa)
 
         }
 
@@ -397,6 +406,7 @@ cc.Class({
             let spawnBoostSpr = cc.instantiate(this.spawnBoostSpr);
             this.boostersPanel.addChild(spawnBoostSpr);
             children.push(spawnBoostSpr)
+            spawnBoostSpr.runAction(ssf)
         }
         if (children.length >= 1) this.abText.runAction(flash)
         if (children.length == 1) children[0].position = cc.v2(0, 0)
@@ -405,9 +415,9 @@ cc.Class({
 
 
 
-        if (this.usingFrenzy) frenzyBoostSprt.runAction(bb)
-        if (this.usingSpawn) spawnBoostSpr.runAction(ssf)
-        if (this.usingFreeze) timeBoostSprt.runAction(aa)
+        // if (this.usingFrenzy) frenzyBoostSprt.runAction(bb)
+        // if (this.usingSpawn) spawnBoostSpr.runAction(ssf)
+        // if (this.usingFreeze) timeBoostSprt.runAction(aa)
 
 
         console.log('my child', this.boostersPanel.childrenCount)
@@ -419,6 +429,9 @@ cc.Class({
         cc.director.loadScene('realhome');
     },
     onPause() {
+        console.log("PausedLKKK")
+        if(cc.director.isPaused) console.log("Paused")
+        else console.log("NOT PAUSED")
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.pausemenu.setLocalZOrder(20)  
         let done  = function(){ 
@@ -447,6 +460,9 @@ cc.Class({
     }, 
 
     startNow() {
+        console.log("PausedLKKK")
+        if(cc.director.isPaused) console.log("Paused")
+        else console.log("NOT PAUSED")
         
 
         this.endPanel.setLocalZOrder(-10)
@@ -492,7 +508,7 @@ cc.Class({
 
     },
     tick(){
-        cc.audioEngine.playEffect( this.timeTick,false,global.bgVolume *0.9) 
+        cc.audioEngine.playEffect( this.timeTick,false,global.bgVolume  ) 
         this.ticked = true
     },
     closed() {
