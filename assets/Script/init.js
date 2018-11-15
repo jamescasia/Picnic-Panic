@@ -14,7 +14,7 @@ cc.Class({
     },  
     readData(){
         this.storage = JSON.parse (cc.sys.localStorage.getItem('ampopo'))  
-        // this.storage = null
+        this.storage = null
         if(  this.storage == null  ){
             let a0={collected:false,prize:100,achieved:false,desc:"Score 100 points!", type:"score", req:100 }
             let a1={collected:false,prize:100,achieved:false ,desc:"Achieve a 20-long combo" , type:"combo", req:20 }
@@ -31,7 +31,7 @@ cc.Class({
             let a12={collected:false,prize:10000,achieved:false,desc:"Play 1000 games" , type:"games", req:1000 }
             
 
-            this.storage = {frenzyBoosts : 0, freezeBoosts:0 , spawnBoosts:0 , usingFrenzy:false , usingFreeze:false,
+            this.storage = {frenzyBoosts :1, freezeBoosts:1 , spawnBoosts:1 , usingFrenzy:false , usingFreeze:false,
                 usingSpawn:false , coins:0 , realcoins :0 , passiveComboBoost:0 , passiveTimeBoost:0 , 
                 passiveFrenzyBoost:0,highestScore:0 , highestCombo:0,numOfGames:0,passiveComboLvl:0 , passiveFrenzyLvl:0,
                 passiveTimeLvl:0, sfxVolume:1, bgVolume:1,sfxOn:true, bgOn:true, 

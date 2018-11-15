@@ -153,7 +153,9 @@ cc.Class({
         newBestAudio:cc.AudioClip,
         newBest:false,
         explodeClip:cc.AudioClip,
-        ticked:false
+        ticked:false,
+        tutoryoul:cc.Node,
+        
 
 
 
@@ -263,8 +265,11 @@ cc.Class({
 
         
         let show = function () {
-            if (this.numOfGames == 0) this.showTuts()
-            else this.showPrompt()
+
+            if (this.numOfGames == 0) this.showTutoryoul() ,this.showPrompt()
+
+            // if (this.numOfGames == 0) this.showTuts()
+            // else this.showPrompt()
 
         }
         let delay = cc.sequence(cc.delayTime(1.2), cc.callFunc(show, this))
@@ -276,6 +281,11 @@ cc.Class({
         
 
 
+    },
+    showTutoryoul(){
+        this.tutoryoul.setLocalZOrder(20)
+        this.tutoryoul.position = cc.v2(0,0)
+        
     },
     start(){
         this.hud.opacity = 0
@@ -516,13 +526,14 @@ cc.Class({
         this.showPrompt()
     },
     openShop() {
+        // this.tutoryoul.opacity = 0
         // cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         this.loadShop()
         this.boosterPrompt.getChildByName("all").getChildByName('shop').stopAllActions()
         this.shap.on('destroyed', this.closed, this);
         this.shap.opacity = 255
         this.shap.scale = cc.v2(1, 1)
-        this.shap.setLocalZOrder(200)
+        this.shap.setLocalZOrder(220)
     },
     gameOver() {
         let flash  = cc.sequence( 
@@ -1380,6 +1391,8 @@ cc.Class({
         console.log("closeeeeeeeeeee")
 
         this.ss()
+        if (a != "a")this.tutoryoul.destroy(), this.showTuts()
+        // else this.tutoryoul.opacity = 255
         //insert closing action here 
         this.boosterPrompt.setLocalZOrder(-10)
         this.boosterPrompt.opacity = 0 
