@@ -77,7 +77,7 @@ cc.Class({
         fuseFX:cc.AudioClip,
         timelmt: 60,
         pauseBtn: cc.Node,
-        frenzyburn: cc.Prefab,
+        frenzyburn: cc.Prefab, 
         usedParticle: "none",
 
         passiveComboBoost: 0,
@@ -195,7 +195,7 @@ cc.Class({
     showTuts() {
         console.log('SJWOFAODOA')
 
-        this.tuts.position = cc.v2(24, 0)
+        this.tuts.position = cc.v2(24, -15)
         this.tuts.setLocalZOrder(10) 
         
 
@@ -207,8 +207,8 @@ cc.Class({
         // this.tuts.scale = cc.v2(0,0)
         let action = cc.sequence(
             cc.spawn(
-                cc.scaleTo(0.2, 1, 1).easing(cc.easeExponentialIn()),
-                cc.fadeIn(0.2).easing(cc.easeExponentialIn()) 
+                cc.scaleTo(0.2, 1, 1).easing(cc.easeCircleActionOut()),
+                cc.fadeIn(0.2).easing(cc.easeCubicActionOut()) 
             ), 
             cc.callFunc(done, this)
         ) 
@@ -242,8 +242,8 @@ cc.Class({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed: function (keyCode, event) {
                 if (keyCode === cc.KEY.back) {
-                    if(!this.gameover)t.onPause()
-                    if(cc.director.isPaused) t.resume()
+                    if(!this.gameover && !this.pausing)t.onPause()
+                    // if(this.pausing) t.resume()
                     // the back button of Android Device is pressed
                     // maybe it's not work in Web environment
                 }
@@ -267,6 +267,7 @@ cc.Class({
         let show = function () {
 
             if (this.numOfGames == 0) this.showTutoryoul() ,this.showPrompt()
+            else this.showPrompt()
 
             // if (this.numOfGames == 0) this.showTuts()
             // else this.showPrompt()
@@ -435,11 +436,13 @@ cc.Class({
     onHome() {
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         cc.director.resume()
+        this.pausing = false
         this.pauseBtn.interactable = true
         cc.director.loadScene('realhome');
     },
     onPause() {
         console.log("PausedLKKK")
+        this.pausing = true
         if(cc.director.isPaused) console.log("Paused")
         else console.log("NOT PAUSED")
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
@@ -465,6 +468,7 @@ cc.Class({
     retry() {
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         cc.director.resume()
+        this.pausing = false
         this.pauseBtn.interactable = true
         cc.director.loadScene('main')
     }, 
@@ -1274,6 +1278,7 @@ cc.Class({
     resume() {
         cc.audioEngine.playEffect( this.uiSound,false,global.bgVolume) 
         cc.director.resume()
+        this.pausing= false
         this.pauseBtn.interactable = true
         this.pausemenu.opacity = 255
         this.pausemenu.position = cc.v2(-800, -800)
@@ -1391,12 +1396,12 @@ cc.Class({
         console.log("closeeeeeeeeeee")
 
         this.ss()
-        if (a != "a")this.tutoryoul.destroy(), this.showTuts()
+        if (a != "a" && this.numOfGames ==0)this.tutoryoul.destroy(), this.showTuts()
         // else this.tutoryoul.opacity = 255
         //insert closing action here 
         this.boosterPrompt.setLocalZOrder(-10)
         this.boosterPrompt.opacity = 0 
-        if (a != "a") this.startNow()
+        if (a != "a" && this.numOfGames !=0) this.startNow()
     },
 
     Goplay() {

@@ -14,7 +14,7 @@ cc.Class({
     },  
     readData(){
         this.storage = JSON.parse (cc.sys.localStorage.getItem('ampopo'))  
-        this.storage = null
+        // this.storage = null
         if(  this.storage == null  ){
             let a0={collected:false,prize:100,achieved:false,desc:"Score 100 points!", type:"score", req:100 }
             let a1={collected:false,prize:100,achieved:false ,desc:"Achieve a 20-long combo" , type:"combo", req:20 }

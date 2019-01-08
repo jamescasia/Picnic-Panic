@@ -105,7 +105,7 @@ cc.Class({
         // this.titleNode.scale = cc.v2(0,0)
         this.titleNode.position  = cc.v2(0 ,700)    
         
-        // if (cc.sys.os == cc.sys.OS_ANDROID)jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dismissLoader", "()V");
+        if (cc.sys.os == cc.sys.OS_ANDROID)jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dismissLoader", "()V");
         this.numOfAchv = 13
         let t = this
        
@@ -232,12 +232,13 @@ cc.Class({
         this.storage.usingFrenzy = false
         this.storage.usingFreeze = false
         this.storage.usingSpawn = false 
-        this.pressesCtr = this.bonusTaps
+        // this.pressesCtr = this.bonusTaps
+        this.pressesCtr = 4982
 
         this.subtrahend = (5000*(1+ Math.floor(this.pressesCtr/5000)))
         this.foodBtn.getChildByName('a').getComponent(cc.Sprite).spriteFrame =this.foodArr[ Math.floor(this.pressesCtr/5000)]
 
-        this.tapsLabel.getComponent(cc.Label).string = " TAPS left until\n bonus: "+ (this.subtrahend- this.pressesCtr)  
+        // this.tapsLabel.getComponent(cc.Label).string = " TAPS left until\n bonus: "+ (this.subtrahend- this.pressesCtr)  
         this.ss() 
         this.achvPanel.opacity = 0
         this.achvPanel.setLocalZOrder(-10)
@@ -274,6 +275,7 @@ cc.Class({
         let c = cc.sequence(   cc.scaleTo(0,0,0), cc.delayTime(0.4),  cc.spawn(cc.fadeIn(0.4),cc.scaleTo(0.4,1.3,1.3).easing(cc.easeCubicActionOut()) )  )
         let d = cc.sequence(   cc.scaleTo(0,0,0), cc.delayTime(0.4),  cc.spawn(cc.fadeIn(0.4),cc.scaleTo(0.4,1.3,1.3).easing(cc.easeCubicActionOut()) )  )
         let e = cc.sequence(   cc.scaleTo(0,0,0), cc.delayTime(0.4),  cc.spawn(cc.fadeIn(0.4),cc.scaleTo(0.4,1.3,1.3).easing(cc.easeCubicActionOut()) ) )
+        let zz = cc.sequence(   cc.scaleTo(0,0,0), cc.delayTime(0.4),  cc.spawn(cc.fadeIn(0.4),cc.scaleTo(0.4,1.17,1.17).easing(cc.easeCubicActionOut()) ) )
         
         
 
@@ -282,6 +284,7 @@ cc.Class({
         this.setBtn.runAction(c)
         this.shopBtn.runAction(d)
         this.infBtn.runAction(e)
+        this.bonusBtn.runAction(zz)
 
         // let f = cc.sequence(    
         //     cc.scaleTo(0,0.5,0.5),
@@ -743,7 +746,7 @@ cc.Class({
         this.foodBtn.getChildByName('a').runAction(glowup)
     },
     pressFood(){
-        this.pressesCtr+=1000
+        this.pressesCtr+=1
         // cc.audioEngine.playEffect( this.pressSound, false, global.bgVolume)
         this.subtrahend = (5000*(1+ Math.floor(this.pressesCtr/5000)))
         this.foodBtn.getChildByName('a').getComponent(cc.Sprite).spriteFrame =this.foodArr[ Math.floor(this.pressesCtr/5000)]
