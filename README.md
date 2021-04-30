@@ -2,6 +2,10 @@
 
 Picnic Panic is a finger-busting food game about stacking burgers, flipping pancakes, and topping pizza! This game was created for fun and submitted to Android Masters 2018 - Game Category and won the grand prize. The game is made with Cocos Creator, and Javascript.
 
+## Demo
+
+![Demo](picnic-panic.gif)
+
 ## Screenshots
 
 ![Screenshot Image](https://play-lh.googleusercontent.com/694R3zd29swJ4DsTB7txwgCksy9TExuv-fkc0JsWxTvWChBUvnzMFSEeTUj2HT54A6k=w1080-h1813-rw)
